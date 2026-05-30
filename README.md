@@ -17,8 +17,6 @@ The goal of this project is to perform a fully reproducible empirical study that
 
 ## 2. Repository Structure
 
-```text
-sentiment-analysis-for-banks-mobile-app-review/
 │
 ├── Dataset/
 │   ├── data_old_approach/
@@ -53,18 +51,16 @@ sentiment-analysis-for-banks-mobile-app-review/
 │       # Lexicon + transformer analysis on old data
 │
 ├── Model (new data)/
-│   ├── new_preprocessing.ipynb       # Preprocessing for the new dataset (lexicon + transformer)
+│   ├── new_preprocessing.ipynb       # Preprocessing for the new dataset 
 │   └── new_data_sentiment_analysis.ipynb
 │       # Lexicon + transformer analysis on new data
 │
-├── report.qmd                        # Quarto report for the project
+├── report.qmd                        
 ├── requirements.txt                  # Python dependencies 
-├── .gitignore
 └── README.md                         
-```
 ---
 
-## 3. How to Reproduce
+## 3. How to reproduce  
 
 ### 3.1 Clone the Repository
 
@@ -87,15 +83,7 @@ Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-
-Typical dependencies:
-
-- `pandas`, `numpy`
-- `matplotlib`, `seaborn`
-- `scipy`
-- `nltk`, `wordcloud`, `langdetect`
-- `scikit-learn`
-- `torch`, `transformers`
+The `requirements.txt` file captures all packages used in the notebooks (data handling, NLP, plotting, transformers, scraping)
 
 ### 3.3 Reproduce Old-Data Analysis (Python)
 
@@ -116,11 +104,10 @@ Typical dependencies:
    - apply lexicon methods to the new dataset
    - train and evaluate the transformer model
 
-```
 
 ---
 
-## 7. Generative AI & Academic Integrity
+## 4. Generative AI & Academic Integrity
 
 In accordance with the Reproducible Research 2026 course rules, generative AI
 (Claude AI) was used only to assist with coding and documentation.
@@ -130,10 +117,10 @@ write-up were carried out by our team.
 
 ---
 
-## 8. Team
+## 5. Team member
 
 - Chi Dao 
-- I Putu Agastya Pratama
+- I Putu Agastya Harta Pratama
 - Si Tang Lin
 - Zuzanna Uljasz
 
