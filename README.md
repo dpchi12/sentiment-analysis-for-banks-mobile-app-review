@@ -17,6 +17,8 @@ The goal of this project is to perform a fully reproducible empirical study that
 
 ## 2. Repository Structure
 
+```text
+sentiment-analysis-for-banks-mobile-app-review/
 │
 ├── Dataset/
 │   ├── data_old_approach/
@@ -58,6 +60,7 @@ The goal of this project is to perform a fully reproducible empirical study that
 ├── report.qmd                        
 ├── requirements.txt                  # Python dependencies 
 └── README.md                         
+```
 ---
 
 ## 3. How to reproduce  
