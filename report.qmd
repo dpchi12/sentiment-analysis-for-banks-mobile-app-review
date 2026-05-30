@@ -60,9 +60,15 @@ The project is inspired by the tidytext-based workflow popularised by @silge2017
 
 ## 2. Data
 
+Dataset is obtained with the means of scrapping reviews from the App Store and Google Play for the five major banks in US. The original dataset was collected in 2023, while the new dataset was scraped in mid-2026. Both datasets contain reviews in English, with metadata including star ratings, review text, date, platform, and storefront. The data is stored as CSV files per bank and platform, which are combined and preprocessed for analysis.
+
+The major banks included in the dataset are some of the largest US financial institutions, which are: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo. Each has a significant mobile banking user base. The platforms covered are the two dominant mobile ecosystems: Apple's App Store (iOS) and Google's Play Store (Android). This allows for cross-platform comparisons and insights into whether user sentiment differs by operating system.
+
+The method of scrapping differs for each platform due to their distinct APIs and structures. For the iOS App Store, the script uses Python's requests library to directly parse Apple's publicly accessible XML/JSON RSS feed endpoints, which are ordered by the most recent submissions. For the Google Play Store, it leverages an open-source web scraping library (google-play-scraper) that mimics browser requests to dynamically fetch and page through raw review payloads using continuation tokens. Both approaches process these external data streams in real time, converting the raw JSON responses into structured Pandas DataFrames before exporting them to CSV files.
+
 ### 2.1 Original Dataset (Old Data)
 
-The original dataset consists of reviews scraped from the App Store and Google Play for five US banks: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo. The data is stored as one CSV per bank (`{bank_name}_combined_us.csv`), with each row representing a single review and columns including `title`, `review`, `rating` (1–5 stars), `date`, `platform`, and `storefront`. After combining the files and filtering for English-language reviews (using language detection), approximately 4,213 English reviews remain in the original dataset.
+The original dataset was collected in 2023 using a combination of web scraping and API access methods. It includes reviews from the same five banks and both platforms, but covers a different time period than the new data. The dataset is stored as CSV files, one per bank and platform, with columns for review text, star rating, date, and other metadata. The original analysis applied lexicon-based sentiment scoring to this dataset to derive insights about user sentiment and its relationship to star ratings.
 
 ```{python}
 #| label: tbl-old-overview
