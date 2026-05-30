@@ -29,62 +29,44 @@ execute:
   echo: true
   warning: false
   message: false
-  eval: false        
-jupyter: python3
+  eval: false      
+jupyter:
+  kernelspec:
+    name: venv
+    language: python
+    display_name: "Python (.venv)"
 bibliography: references.bib
 ---
 
-# Introduction
+## Summary
 
-## Research Context
-
-Customer reviews on mobile app stores represent a rich, continuously updated
-source of unstructured opinion data. For the banking sector, app reviews offer
-direct evidence of customer satisfaction, pain points, and competitive
-positioning — feedback that is often faster and more granular than traditional
-survey methods.
-
-This project performs a **text-based sentiment analysis** of customer reviews
-for five major US banks' mobile applications scraped from the Apple App Store
-and Google Play Store:
-
-- Bank of America
-- Chase
-- Citi
-- Marcus by Goldman Sachs
-- Wells Fargo
-
-## Research Questions
-
-The study addresses three core questions:
-
-1. Can the original R-based analysis be faithfully reproduced in Python?
-2. Do results change with a newly scraped dataset?
-3. Does a transformer (BERT) model produce sentiment classifications consistent
-   with the lexicon-based approach?
-
-## Inspiration
-
-The project is inspired by the tidytext workflow of @silge2017text, which
-applies lexicon-based sentiment scoring to tokenised text in a tidy data
-format. The original analysis (`analysis.Rmd`) follows this approach and
-serves as the source of truth for the Python replication.
+This report documents a reproducible research project that translates an original R-based sentiment analysis of mobile banking app reviews into Python, extends it with newly scraped data, and augments the lexicon-based methods with a transformer (BERT) approach. The project covers five major US banks: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo across the Apple App Store (iOS) and Google Play (Android). The core research questions are: (1) Can the original R findings be faithfully reproduced in Python? (2) Do the results change with a fresh data scrape? (3) Does a transformer model produce sentiment classifications consistent with the lexicon approach?
 
 ---
 
-# Data
+## 1. Introduction and Motivation
 
-## Original Dataset (Old Data)
+### 1.1 Research Context
 
-The original dataset consists of reviews scraped from the App Store and Google
-Play for the five banks listed above. Data is stored as one CSV per bank
-(`{bank_name}__combined_us.csv`), with columns: `title`, `review`, `rating`
-(1–5 stars), `date`, `platform`, and `storefront`.
+Customer reviews on mobile app stores represent a rich, continuously updated source of unstructured opinion data. For the banking sector, app reviews offer direct evidence of customer satisfaction, pain points, and competitive positioning — feedback that often offers a faster point of view and is more granular than traditional survey methods. Sentiment analysis of these reviews can help researchers and practitioners understand how user experience varies across institutions and platforms, and whether negative signals co-occur with specific feature complaints or rating patterns.
+
+There are two motivations for this study. Academically, it provides an opportunity to practice reproducible research: taking an existing empirical study, replicating it in a different computational environment, and evaluating whether the results remain the same. Practically, it investigates whether mobile banking sentiment has shifted between the original data collection window and a fresh scrape in 2026, and whether more sophisticated deep learning methods agree with classic dictionary-based approaches.
+
+### 1.2 Inspiration and Source Study
+
+The project is inspired by the tidytext-based workflow popularised by @silge2017text, which applies lexicon-based sentiment scoring to tokenised text in a tidy data format. The original analysis follows this approach: it imports and cleans review data, performs unigram sentiment analysis using three lexicons (Bing, AFINN, NRC), constructs bigrams with negator-aware scoring, and evaluates results statistically. The goal of this project is to demonstrate that these findings are reproducible — the same pipeline, implemented in Python with equivalent libraries, produces consistent conclusions — and then to extend the study in two directions: new data and a transformer model.
+
+---
+
+## 2. Data
+
+### 2.1 Original Dataset (Old Data)
+
+The original dataset consists of reviews scraped from the App Store and Google Play for five US banks: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo. The data is stored as one CSV per bank (`{bank_name}_combined_us.csv`), with each row representing a single review and columns including `title`, `review`, `rating` (1–5 stars), `date`, `platform`, and `storefront`. After combining the files and filtering for English-language reviews (using language detection), approximately 4,213 English reviews remain in the original dataset.
 
 ```{python}
 #| label: tbl-old-overview
 #| tbl-cap: "Overview of the original dataset"
-#| echo: false
 
 from pathlib import Path
 import pandas as pd
@@ -96,28 +78,24 @@ raw_old = pd.concat(
     ignore_index=True
 )
 
-summary = pd.DataFrame({
-    "Total reviews": [len(raw_old)],
-    "Banks": [raw_old["source_file"].nunique()],
-    "Platforms": [raw_old["platform"].nunique()],
+pd.DataFrame({
+    "Total reviews":  [len(raw_old)],
+    "Banks":          [raw_old["source_file"].nunique()],
+    "Platforms":      [raw_old["platform"].nunique()],
     "Date range": [
         f"{pd.to_datetime(raw_old['date'], errors='coerce').min().date()} – "
         f"{pd.to_datetime(raw_old['date'], errors='coerce').max().date()}"
     ]
 })
-
-summary
 ```
 
-## Newly Scraped Dataset (New Data)
+### 2.2 Newly Scraped Dataset (New Data)
 
-The new dataset was collected using `Dataset/scraper.ipynb`, targeting the
-same five banks and both platforms over a more recent time window.
+The new dataset was collected using a dedicated scraper (`Dataset/scraper.ipynb`) targeting the same five banks and both platforms. The scraping window covers a more recent period than the original data. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window.
 
 ```{python}
 #| label: tbl-new-overview
 #| tbl-cap: "Overview of the newly scraped dataset"
-#| echo: false
 
 DATA_NEW = Path("Dataset/data_new_approach")
 raw_new = pd.concat(
@@ -126,53 +104,26 @@ raw_new = pd.concat(
     ignore_index=True
 )
 
-summary_new = pd.DataFrame({
+pd.DataFrame({
     "Total reviews": [len(raw_new)],
-    "Banks": [raw_new["source_file"].nunique()],
-    "Platforms": [raw_new["platform"].nunique()],
+    "Banks":         [raw_new["source_file"].nunique()],
+    "Platforms":     [raw_new["platform"].nunique()],
 })
-
-summary_new
 ```
 
-## Preprocessing Pipeline
+### 2.3 Data Preprocessing
 
-Both datasets go through the same seven-step pipeline:
+Preprocessing follows the same logical steps in both the R original and the Python replications:
 
-1. Import and combine per-bank CSVs
-2. Standardise bank names and platform labels (`iOS` / `Android`)
-3. Cast `rating` to numeric, `date` to datetime
-4. Detect language — remove non-English reviews (`langdetect` in Python,
-   `cld3` in R)
-5. Construct `raw_text` = `title` + `review`
-6. Tokenise and remove stopwords (NLTK English stopwords + domain terms:
-   *app, bank, banking, mobile, iphone, apple, android, phone*)
-7. Build bigrams, preserving negators (*not, never, no, cannot*, etc.)
+1. **Import and combine** — all per-bank CSVs are concatenated into a single dataframe
+2. **Bank and platform standardisation** — filenames are parsed to extract bank names; platform codes (`app_store` → `iOS`, `google_play` → `Android`) are mapped to readable labels
+3. **Type coercion** — `rating` is cast to numeric; `date` is parsed to datetime
+4. **Language detection** — reviews not detected as English are removed (using `langdetect` in Python)
+5. **Raw text construction** — `title` and `review` fields are concatenated into `raw_text`
+6. **Tokenisation and stopword removal** — words are extracted using regex; a custom stopword list (NLTK English stopwords + domain terms: *app, bank, banking, mobile, iphone, apple, android, phone*) is applied
+7. **Bigram construction** — adjacent word pairs are extracted from cleaned text, with negators (*not, never, no, cannot*, etc.) explicitly excluded from the stopword filter so they are preserved in bigrams
 
-```{python}
-#| label: fig-rating-dist
-#| fig-cap: "Rating distribution by platform (old data)"
-
-import matplotlib.pyplot as plt
-
-raw_old["rating"] = pd.to_numeric(raw_old["rating"], errors="coerce")
-rating_counts = (
-    raw_old.groupby(["platform", "rating"])
-    .size().reset_index(name="n_reviews")
-)
-
-platforms = rating_counts["platform"].unique()
-fig, axes = plt.subplots(1, len(platforms), figsize=(10, 4), sharey=True)
-for ax, plat in zip(axes, platforms):
-    data = rating_counts[rating_counts["platform"] == plat]
-    ax.bar(data["rating"], data["n_reviews"])
-    ax.set_title(plat)
-    ax.set_xlabel("Star rating")
-    ax.set_ylabel("Number of reviews")
-fig.suptitle("Rating distribution by platform (raw data)")
-plt.tight_layout()
-plt.show()
-```
+For the transformer approach, an additional cleaning step keeps punctuation intact (since BERT tokenisers handle it natively) and removes URLs.
 
 ---
 
