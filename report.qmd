@@ -1,0 +1,588 @@
+---
+title: "Sentiment Analysis of Mobile Banking App Reviews"
+subtitle: "A Reproducible Study: R to Python, Old Data to New Data, Lexicon to Transformer"
+author:
+  - name: "Chi Dao"
+  - name: "I Putu Agastya Pratama"
+  - name: "Si Tang Lin"
+  - name: "Zuzanna Uljasz"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-float: true
+    toc-title: "Contents"
+    theme: lumen
+    smooth-scroll: true
+    code-fold: true
+    code-tools: true
+    number-sections: true
+    fig-width: 9
+    fig-height: 5
+  pdf:
+    toc: true
+    number-sections: true
+    fig-width: 7
+    fig-height: 4
+execute:
+  echo: true
+  warning: false
+  message: false
+  eval: false        
+jupyter: python3
+bibliography: references.bib
+---
+
+# Introduction
+
+## Research Context
+
+Customer reviews on mobile app stores represent a rich, continuously updated
+source of unstructured opinion data. For the banking sector, app reviews offer
+direct evidence of customer satisfaction, pain points, and competitive
+positioning — feedback that is often faster and more granular than traditional
+survey methods.
+
+This project performs a **text-based sentiment analysis** of customer reviews
+for five major US banks' mobile applications scraped from the Apple App Store
+and Google Play Store:
+
+- Bank of America
+- Chase
+- Citi
+- Marcus by Goldman Sachs
+- Wells Fargo
+
+## Research Questions
+
+The study addresses three core questions:
+
+1. Can the original R-based analysis be faithfully reproduced in Python?
+2. Do results change with a newly scraped dataset?
+3. Does a transformer (BERT) model produce sentiment classifications consistent
+   with the lexicon-based approach?
+
+## Inspiration
+
+The project is inspired by the tidytext workflow of @silge2017text, which
+applies lexicon-based sentiment scoring to tokenised text in a tidy data
+format. The original analysis (`analysis.Rmd`) follows this approach and
+serves as the source of truth for the Python replication.
+
+---
+
+# Data
+
+## Original Dataset (Old Data)
+
+The original dataset consists of reviews scraped from the App Store and Google
+Play for the five banks listed above. Data is stored as one CSV per bank
+(`{bank_name}__combined_us.csv`), with columns: `title`, `review`, `rating`
+(1–5 stars), `date`, `platform`, and `storefront`.
+
+```{python}
+#| label: tbl-old-overview
+#| tbl-cap: "Overview of the original dataset"
+#| echo: false
+
+from pathlib import Path
+import pandas as pd
+
+DATA_OLD = Path("Dataset/data_old_approach")
+raw_old = pd.concat(
+    [pd.read_csv(p, dtype=str).assign(source_file=p.name)
+     for p in DATA_OLD.glob("*.csv")],
+    ignore_index=True
+)
+
+summary = pd.DataFrame({
+    "Total reviews": [len(raw_old)],
+    "Banks": [raw_old["source_file"].nunique()],
+    "Platforms": [raw_old["platform"].nunique()],
+    "Date range": [
+        f"{pd.to_datetime(raw_old['date'], errors='coerce').min().date()} – "
+        f"{pd.to_datetime(raw_old['date'], errors='coerce').max().date()}"
+    ]
+})
+
+summary
+```
+
+## Newly Scraped Dataset (New Data)
+
+The new dataset was collected using `Dataset/scraper.ipynb`, targeting the
+same five banks and both platforms over a more recent time window.
+
+```{python}
+#| label: tbl-new-overview
+#| tbl-cap: "Overview of the newly scraped dataset"
+#| echo: false
+
+DATA_NEW = Path("Dataset/data_new_approach")
+raw_new = pd.concat(
+    [pd.read_csv(p, dtype=str).assign(source_file=p.name)
+     for p in DATA_NEW.glob("*.csv")],
+    ignore_index=True
+)
+
+summary_new = pd.DataFrame({
+    "Total reviews": [len(raw_new)],
+    "Banks": [raw_new["source_file"].nunique()],
+    "Platforms": [raw_new["platform"].nunique()],
+})
+
+summary_new
+```
+
+## Preprocessing Pipeline
+
+Both datasets go through the same seven-step pipeline:
+
+1. Import and combine per-bank CSVs
+2. Standardise bank names and platform labels (`iOS` / `Android`)
+3. Cast `rating` to numeric, `date` to datetime
+4. Detect language — remove non-English reviews (`langdetect` in Python,
+   `cld3` in R)
+5. Construct `raw_text` = `title` + `review`
+6. Tokenise and remove stopwords (NLTK English stopwords + domain terms:
+   *app, bank, banking, mobile, iphone, apple, android, phone*)
+7. Build bigrams, preserving negators (*not, never, no, cannot*, etc.)
+
+```{python}
+#| label: fig-rating-dist
+#| fig-cap: "Rating distribution by platform (old data)"
+
+import matplotlib.pyplot as plt
+
+raw_old["rating"] = pd.to_numeric(raw_old["rating"], errors="coerce")
+rating_counts = (
+    raw_old.groupby(["platform", "rating"])
+    .size().reset_index(name="n_reviews")
+)
+
+platforms = rating_counts["platform"].unique()
+fig, axes = plt.subplots(1, len(platforms), figsize=(10, 4), sharey=True)
+for ax, plat in zip(axes, platforms):
+    data = rating_counts[rating_counts["platform"] == plat]
+    ax.bar(data["rating"], data["n_reviews"])
+    ax.set_title(plat)
+    ax.set_xlabel("Star rating")
+    ax.set_ylabel("Number of reviews")
+fig.suptitle("Rating distribution by platform (raw data)")
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+# Methodology
+
+## Lexicon-Based Sentiment Analysis
+
+Three established sentiment lexicons are applied to the tokenised reviews.
+
+### Bing (Opinion Lexicon)
+
+A binary lexicon assigning words to "positive" or "negative". Review-level
+sentiment = positive word count − negative word count.
+
+### AFINN
+
+An integer-scored lexicon (−5 to +5) by @nielsen2011new. Review-level score
+= sum of word scores. Pearson correlation with star ratings serves as a
+validity check.
+
+### NRC Emotion Lexicon
+
+Developed by @mohammad2013crowdsourcing, this lexicon assigns words to 8
+emotion categories (anger, anticipation, disgust, fear, joy, sadness,
+surprise, trust) plus positive/negative. One word can belong to multiple
+categories.
+
+## Negation Correction
+
+To address the unigram limitation (e.g. "not good" scored as positive), bigrams
+where `word1` is a negator and `word2` has an AFINN score have their score
+flipped (multiplied by −1). The aggregate correction is added to the classic
+AFINN score to produce a *negation-aware* score.
+
+## Transformer Model
+
+For the new data, a BERT-based model classifies reviews into:
+
+- **Negative** — 1–2 stars
+- **Neutral** — 3 stars
+- **Positive** — 4–5 stars
+
+Split: 80% train / 10% validation / 10% test, stratified by label.
+
+## Statistical Evaluation
+
+| Test | Purpose |
+|------|---------|
+| Mann-Whitney U | Whether AFINN scores differ between iOS and Android |
+| Pearson $r$ comparison | Whether negation-awareness improves alignment with star ratings |
+
+---
+
+# Results: Old Data (Python Replication of R)
+
+## Translation from R to Python
+
+The table below summarises the key translation decisions:
+
+| R (original) | Python (replication) | Notes |
+|---|---|---|
+| `get_sentiments("bing")` | `nltk.opinion_lexicon` | Same Hu & Liu lexicon |
+| `get_sentiments("afinn")` | AFINN-111.txt | Identical word list |
+| `get_sentiments("nrc")` | NRC-Emotion-Lexicon-v0.92.txt | Official NRC file |
+| `cld3::detect_language()` | `langdetect` | Different engine — minor differences possible |
+| `tidytext::stop_words` | `nltk.stopwords("english")` | Similar coverage |
+| `ggplot2` | `matplotlib` | Same chart types, different style |
+| `cor.test()` | `scipy.stats.pearsonr()` | Identical output |
+| `wilcox.test()` | `scipy.stats.mannwhitneyu()` | Equivalent two-sided test |
+
+## BING Sentiment
+
+```{python}
+#| label: fig-bing-dist
+#| fig-cap: "Distribution of Bing sentiment words (old data)"
+
+# Load preprocessed data
+PROCESSED_OLD = Path("Dataset/data_old_approach/processed_data")
+lexicon_df = pd.read_csv(PROCESSED_OLD / "old_preprocessed_lexicon.csv")
+
+import nltk
+from nltk.corpus import opinion_lexicon
+import re, numpy as np
+
+nltk.download("opinion_lexicon", quiet=True)
+nltk.download("stopwords", quiet=True)
+from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
+
+custom_stop = set(stopwords.words("english")) | {
+    "app", "bank", "banking", "mobile", "iphone", "apple", "android", "phone"
+}
+
+pos_words = set(opinion_lexicon.positive())
+neg_words = set(opinion_lexicon.negative())
+
+df_english = lexicon_df.copy().reset_index(drop=True)
+df_english["review_id"] = df_english.index
+
+reviews_before_sw = df_english.copy()
+reviews_before_sw["word"] = (
+    reviews_before_sw["raw_text"].fillna("").str.lower()
+    .apply(lambda x: re.findall(r"\b[a-z]+\b", x))
+)
+reviews_before_sw = reviews_before_sw.explode("word").dropna(subset=["word"])
+reviews_after_sw = reviews_before_sw[
+    ~reviews_before_sw["word"].isin(custom_stop)
+].copy()
+
+bing = pd.DataFrame({
+    "word": list(pos_words) + list(neg_words),
+    "sentiment": ["positive"] * len(pos_words) + ["negative"] * len(neg_words)
+})
+bing_words = reviews_after_sw.merge(bing, on="word", how="inner")
+
+counts = bing_words["sentiment"].value_counts().reset_index()
+counts.columns = ["sentiment", "n"]
+
+fig, ax = plt.subplots(figsize=(5, 4))
+ax.bar(counts["sentiment"], counts["n"],
+       color=["salmon", "steelblue"])
+ax.set_title("Distribution of Bing sentiment words")
+ax.set_xlabel("Sentiment"); ax.set_ylabel("Word count")
+plt.tight_layout(); plt.show()
+```
+
+## AFINN Sentiment
+
+```{python}
+#| label: fig-afinn-rating
+#| fig-cap: "AFINN sentiment score by star rating (old data)"
+
+import urllib.request
+afinn_path = Path("AFINN-111.txt")
+if not afinn_path.exists():
+    urllib.request.urlretrieve(
+        "https://raw.githubusercontent.com/fnielsen/afinn/master/afinn/data/AFINN-111.txt",
+        afinn_path
+    )
+afinn = pd.read_csv(afinn_path, sep="\t", names=["word", "value"])
+afinn["word"] = afinn["word"].str.lower()
+
+afinn_words = reviews_after_sw.merge(afinn, on="word", how="inner")
+afinn_review = (
+    afinn_words.groupby(["bank", "platform", "review_id"])
+    .agg(afinn_sum=("value", "sum"), afinn_mean=("value", "mean"),
+         n_afinn=("value", "count")).reset_index()
+)
+df_afinn = df_english.copy()
+df_afinn["rating"] = pd.to_numeric(df_afinn["rating"], errors="coerce")
+df_afinn = df_afinn.merge(afinn_review, on=["bank", "platform", "review_id"], how="left")
+
+df_plot = df_afinn.dropna(subset=["rating", "afinn_sum"])
+ratings = sorted(df_plot["rating"].unique())
+groups = [df_plot[df_plot["rating"] == r]["afinn_sum"] for r in ratings]
+
+fig, ax = plt.subplots(figsize=(7, 4))
+bp = ax.boxplot(groups, labels=[int(r) for r in ratings], patch_artist=True)
+for patch in bp["boxes"]:
+    patch.set_facecolor("lightblue"); patch.set_alpha(0.7)
+ax.axhline(0, linestyle="--")
+ax.set_title("AFINN sentiment by star rating")
+ax.set_xlabel("Star rating"); ax.set_ylabel("AFINN sum score")
+plt.tight_layout(); plt.show()
+```
+
+```{python}
+#| label: tbl-correlation
+#| tbl-cap: "Pearson correlation: AFINN score vs star rating"
+
+from scipy import stats
+
+cor_data = df_plot[["rating", "afinn_sum"]].dropna()
+r, p = stats.pearsonr(cor_data["rating"], cor_data["afinn_sum"])
+print(f"r = {r:.4f}, p = {p:.4e}")
+```
+
+## NRC Emotion Profile
+
+```{python}
+#| label: fig-nrc-bank
+#| fig-cap: "NRC emotion composition by bank (old data)"
+
+nrc_path = Path("NRC-Emotion-Lexicon-Wordlevel-v0.92.txt")
+if not nrc_path.exists():
+    urllib.request.urlretrieve(
+        "https://raw.githubusercontent.com/dinbav/LeXmo/master/NRC-Emotion-Lexicon-Wordlevel-v0.92.txt",
+        nrc_path
+    )
+nrc = pd.read_csv(nrc_path, sep="\t", names=["word", "sentiment", "association"])
+nrc = nrc[nrc["association"] == 1][["word", "sentiment"]].copy()
+nrc["word"] = nrc["word"].str.lower()
+
+nrc_words = reviews_after_sw.merge(nrc, on="word", how="inner")
+nrc_by_bank = (
+    nrc_words.groupby(["bank", "sentiment"]).size().reset_index(name="n")
+)
+nrc_by_bank["pct"] = nrc_by_bank.groupby("bank")["n"].transform(lambda x: x / x.sum())
+
+banks = sorted(nrc_by_bank["bank"].unique())
+fig, axes = plt.subplots(1, len(banks), figsize=(5 * len(banks), 5), sharey=True)
+for ax, bank in zip(axes, banks):
+    data = nrc_by_bank[nrc_by_bank["bank"] == bank].sort_values("pct")
+    ax.barh(data["sentiment"], data["pct"])
+    ax.set_title(bank, fontsize=9); ax.set_xlabel("Proportion")
+fig.suptitle("Emotion composition by bank (NRC)")
+plt.tight_layout(); plt.show()
+```
+
+## Negation Effect
+
+```{python}
+#| label: fig-negation
+#| fig-cap: "Negation-induced sentiment correction by star rating"
+
+negators = {
+    "no", "not", "nor", "never", "none", "neither", "cannot",
+    "hardly", "rarely", "barely", "dont", "isn't", "wasn't",
+    "aren't", "won't", "shouldn't", "couldn't", "wouldn't",
+    "doesn't", "didn't", "haven't", "hasn't", "hadn't", "can't", "cant"
+}
+from nltk.util import ngrams
+
+bigram_stop = (set(stopwords.words("english")) - negators) | {
+    "app", "bank", "banking", "mobile", "iphone", "apple", "android", "phone"
+}
+
+def make_bigrams(text):
+    text = re.sub(r"[^a-z\s']", " ", text.lower())
+    return list(ngrams(re.sub(r"\s+", " ", text).strip().split(), 2))
+
+bigram_rows = []
+for _, row in df_english.iterrows():
+    for w1, w2 in make_bigrams(str(row.get("raw_text", ""))):
+        if w1 not in bigram_stop and w2 not in bigram_stop:
+            bigram_rows.append({"review_id": row["review_id"],
+                                "bank": row["bank"], "platform": row["platform"],
+                                "rating": row["rating"], "word1": w1, "word2": w2})
+
+bigrams = pd.DataFrame(bigram_rows)
+negated_afinn = (
+    bigrams[bigrams["word1"].isin(negators)]
+    .merge(afinn, left_on="word2", right_on="word", how="inner")
+)
+negated_afinn["negated_value"] = -negated_afinn["value"]
+negated_afinn["rating"] = pd.to_numeric(negated_afinn["rating"], errors="coerce")
+
+neg_by_rating = (
+    negated_afinn.dropna(subset=["rating"])
+    .groupby("rating")
+    .agg(total_negation_shift=("negated_value", "sum"),
+         n_negated_bigrams=("negated_value", "count")).reset_index()
+)
+reviews_per_rating = (
+    df_english.assign(rating=pd.to_numeric(df_english["rating"], errors="coerce"))
+    .dropna(subset=["rating"]).groupby("rating").size().reset_index(name="n_reviews")
+)
+norm = neg_by_rating.merge(reviews_per_rating, on="rating")
+norm["shift_per_review"] = norm["total_negation_shift"] / norm["n_reviews"]
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.bar(norm["rating"].astype(str), norm["shift_per_review"], color="firebrick")
+ax.axhline(0, linestyle="--")
+ax.set_title("Average negation-induced sentiment correction by star rating")
+ax.set_xlabel("Star rating"); ax.set_ylabel("Negation adjustment per review (AFINN)")
+plt.tight_layout(); plt.show()
+```
+
+## Evaluation
+
+```{python}
+#| label: tbl-eval
+#| tbl-cap: "Statistical evaluation results"
+
+# Platform comparison (Mann-Whitney U)
+ios = df_afinn[df_afinn["platform"] == "iOS"]["afinn_sum"].dropna()
+android = df_afinn[df_afinn["platform"] == "Android"]["afinn_sum"].dropna()
+u_stat, p_mw = stats.mannwhitneyu(ios, android, alternative="two-sided")
+
+# Correlation comparison
+afinn_classic = (
+    reviews_after_sw.merge(afinn, on="word", how="inner")
+    .groupby(["review_id", "bank", "platform", "rating"])
+    .agg(afinn_sum=("value", "sum")).reset_index()
+)
+neg_review = (
+    negated_afinn.groupby("review_id")
+    .agg(negated_sum=("negated_value", "sum")).reset_index()
+)
+sc = afinn_classic.merge(neg_review, on="review_id", how="left")
+sc["negated_sum"] = sc["negated_sum"].fillna(0)
+sc["afinn_negation"] = sc["afinn_sum"] + sc["negated_sum"]
+sc["rating"] = pd.to_numeric(sc["rating"], errors="coerce")
+sc_clean = sc.dropna(subset=["rating", "afinn_sum", "afinn_negation"])
+
+r_classic, _ = stats.pearsonr(sc_clean["rating"], sc_clean["afinn_sum"])
+r_negaware, _ = stats.pearsonr(sc_clean["rating"], sc_clean["afinn_negation"])
+
+pd.DataFrame({
+    "Test": ["Mann-Whitney U (iOS vs Android)", "Pearson r — Classic AFINN",
+             "Pearson r — Negation-aware AFINN"],
+    "Statistic": [f"U = {u_stat:.0f}", f"r = {r_classic:.4f}",
+                  f"r = {r_negaware:.4f}"],
+    "p-value": [f"{p_mw:.4e}", "—", "—"]
+})
+```
+
+---
+
+# Results: New Data
+
+## What Changed with the New Scrape
+
+> **[Fill in after running the analysis]**
+> Describe key differences: review volume per bank, rating distribution shifts,
+> new vocabulary in top BING/AFINN words, changes in mean sentiment by bank.
+
+```{python}
+#| label: fig-new-rating-dist
+#| fig-cap: "Rating distribution — new data vs old data"
+
+# Load new data
+PROCESSED_NEW = Path("Dataset/data_new_approach/processed_data")
+lexicon_new = pd.read_csv(PROCESSED_NEW / "new_preprocessed_lexicon.csv")
+
+# Plot side by side
+raw_new["rating"] = pd.to_numeric(raw_new["rating"], errors="coerce")
+fig, axes = plt.subplots(1, 2, figsize=(10, 4), sharey=False)
+for ax, (df, label) in zip(axes, [(raw_old, "Old data"), (raw_new, "New data")]):
+    df["rating"] = pd.to_numeric(df["rating"], errors="coerce")
+    df["rating"].value_counts().sort_index().plot(kind="bar", ax=ax, color="steelblue")
+    ax.set_title(label); ax.set_xlabel("Star rating"); ax.set_ylabel("Count")
+plt.suptitle("Rating distribution: old vs new data")
+plt.tight_layout(); plt.show()
+```
+
+## Lexicon Results on New Data
+
+> **[Fill in after running new_data_lexicon_analysis.ipynb]**
+> Summarise BING, AFINN, NRC findings on the new dataset. Note any banks
+> where sentiment direction reversed or NRC emotion profiles shifted.
+
+## Transformer Model Results
+
+> **[Fill in after running new_approach_sentiment_analysis.ipynb]**
+> Report accuracy, F1 per class, and agreement rate with lexicon labels.
+
+```{python}
+#| label: tbl-transformer
+#| tbl-cap: "Transformer model performance (placeholder)"
+
+# Replace with actual results from your BERT notebook
+pd.DataFrame({
+    "Class": ["Negative", "Neutral", "Positive", "Weighted avg"],
+    "Precision": ["—", "—", "—", "—"],
+    "Recall":    ["—", "—", "—", "—"],
+    "F1":        ["—", "—", "—", "—"]
+})
+```
+
+---
+
+# Discussion
+
+## Reproducibility Assessment
+
+The R-to-Python translation demonstrates that the core analytical conclusions
+of the original study are reproducible across languages. Minor numerical
+differences arise from:
+
+- **Language detection:** `langdetect` vs `cld3` use different underlying
+  models; the set of English-classified reviews may differ slightly
+- **Stopword lists:** `tidytext::stop_words` differs from NLTK's English list
+- **Bing lexicon size:** NLTK `opinion_lexicon` covers more words than the
+  Bing lexicon embedded in tidytext
+
+These are expected cross-language reproducibility gaps and do not undermine
+the directional conclusions.
+
+## Limitations
+
+- **Lexicon coverage:** All three lexicons were built for general English, not
+  financial app reviews — domain terms (*overdraft, Zelle, wire transfer*) may
+  be absent
+- **Negation scope:** The bigram correction handles only two-word negation;
+  longer-range negation is not captured
+- **Temporal confounding:** Old and new data cover different time windows, so
+  observed differences may reflect temporal trends, not genuine quality changes
+- **Label imbalance:** App Store reviews skew heavily toward 5 stars; without
+  class-weighting, the transformer may over-predict "positive"
+
+## Generative AI Disclosure
+
+In accordance with course policy (dr Jakub Michańków, Reproducible Research
+2026), generative AI (Claude AI) was used to assist with coding tasks, refine the code.
+
+```
+
+All analytical decisions, interpretations, and research design are the
+team's own work.
+
+---
+
+# Conclusion
+
+
+
+---
+
+# References
+
+::: {#refs}
+:::
