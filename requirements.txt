@@ -1,0 +1,28 @@
+# Install:  
+pip install -r requirements.txt
+
+# Data manipulation 
+pandas>=2.0.0
+numpy>=1.26.0
+
+# Visualisation 
+matplotlib>=3.8.0
+seaborn>=0.13.0
+wordcloud>=1.9.0
+
+# NLP & text processing
+nltk>=3.8.0
+langdetect>=1.0.9
+emoji>=2.10.0
+scikit-learn>=1.4.0
+
+# Transformer model
+torch>=2.2.0
+transformers>=4.39.0
+
+# Statistical tests
+scipy>=1.12.0
+
+# App store scraping
+google-play-scraper>=1.2.0
+requests>=2.31.0
