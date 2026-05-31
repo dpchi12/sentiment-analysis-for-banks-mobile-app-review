@@ -29,13 +29,8 @@ execute:
   echo: true
   warning: false
   message: false
-  eval: false      
-jupyter:
-  kernelspec:
-    name: venv
-    language: python
-    display_name: "Python (.venv)"
-bibliography: references.bib
+  eval: false
+jupyter: python3
 ---
 
 ## Summary
@@ -103,6 +98,7 @@ The new dataset was collected using a dedicated scraper (`Dataset/scraper.ipynb`
 ```{python}
 #| label: tbl-new-overview
 #| tbl-cap: "Overview of the newly scraped dataset"
+#| echo: false
 
 DATA_NEW = Path("Dataset/data_new_approach")
 raw_new = pd.concat(
@@ -133,6 +129,7 @@ Preprocessing follows the same logical steps in both the R original and the Pyth
 For the transformer approach, an additional cleaning step keeps punctuation intact (since BERT tokenisers handle it natively) and removes URLs.
 
 ---
+
 ## 3. Methodology
 ### 3.1 Lexicon-Based Sentiment Analysis
 
@@ -145,11 +142,13 @@ Three lexicons are applied to the filtered tokens. Scores are computed at the re
 **NRC Emotion Lexicon:** Developed by @mohammad2013crowdsourcing, this lexicon maps words to 8 emotion categories (anger, anticipation, disgust, fear, joy, sadness, surprise, trust) and 2 polarity categories. One word may belong to multiple categories, enabling nuanced emotion profiling.
 
 ---
+
 ### 3.2 Bigram Analysis and Negation Correction
 
 Unigram methods cannot handle negation: *not good* is scored as positive because *good* carries a positive AFINN score. To quantify this limitation, bigrams are constructed from the raw review text, with negators explicitly retained in the stopword filter. A set of 22 negators is defined (e.g., *no*, *not*, *n't*, *never*, *cannot*). Where the first token of a bigram is a negator and the second has an AFINN score, the score is sign-flipped. The magnitude of the resulting correction is reported by star-rating group.
 
 ---
+
 ### 3.3 Transformer-Based Sentiment Analysis
 
 As a complement to the lexicon methods, the pre-trained model `nlptown/bert-base-multilingual-uncased-sentiment` [@nlptown2019] is applied via the Hugging Face `transformers` pipeline. The model predicts a 1–5 star rating for each review; predictions are normalised to a continuous sentiment score:
@@ -157,6 +156,7 @@ As a complement to the lexicon methods, the pre-trained model `nlptown/bert-base
 $$\text{bert\_score} = \frac{\text{bert\_stars} - 1}{4} \in [0, 1]$$
 
 Model validity is assessed by (1) Pearson correlation between `bert_score` and the actual star rating (95% CI via Fisher's *z*-transformation), (2) boxplots of `bert_score` stratified by star rating, bank, and platform, (3) exact star-level agreement and a full confusion matrix, and (4) a Mann–Whitney U test comparing platform distributions.
+
 ---
 
 ## 4. Results: Old Data
@@ -393,8 +393,6 @@ the directional conclusions.
 
 In accordance with course policy (dr Jakub Michańków, Reproducible Research
 2026), generative AI (Claude AI) was used to assist with coding tasks, refine the code.
-
-```
 
 All analytical decisions, interpretations, and research design are the
 team's own work.
