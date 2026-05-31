@@ -110,7 +110,7 @@ The `requirements.txt` file captures all packages used in the notebooks (data ha
 
 ---
 
-## 4. Generative AI & Academic Integrity
+## 4. Generative AI 
 
 In accordance with the Reproducible Research 2026 course rules, generative AI
 (Claude AI) was used only to assist with coding and documentation.
