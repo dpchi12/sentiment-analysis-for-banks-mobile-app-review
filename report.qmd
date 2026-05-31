@@ -3,7 +3,7 @@ title: "Sentiment Analysis of Mobile Banking App Reviews"
 subtitle: "A Reproducible Study: R to Python, Old Data to New Data, Lexicon to Transformer"
 author:
   - name: "Chi Dao"
-  - name: "I Putu Agastya Pratama"
+  - name: "I Putu Agastya Harta Pratama"
   - name: "Si Tang Lin"
   - name: "Zuzanna Uljasz"
 date: today
