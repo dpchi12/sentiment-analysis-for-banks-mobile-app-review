@@ -133,25 +133,29 @@ For the transformer approach, an additional cleaning step keeps punctuation inta
 
 ---
 ## 3. Methodology
-
 ### 3.1 Lexicon-Based Sentiment Analysis
 
-Three established sentiment lexicons are applied to the tokenised reviews:
+Three lexicons are applied to the filtered tokens. Scores are computed at the review level and disaggregated by bank and platform.
 
-**Bing (Opinion Lexicon):** A binary lexicon that assigns words to either "positive" or "negative" categories. Review-level sentiment is computed as the count of positive words minus the count of negative words.
+**Bing (Opinion Lexicon):** A binary lexicon classifying words as positive or negative [@hu2004mining]. Review sentiment is the count of positive words minus negative words.
 
-**AFINN:** An integer-scored lexicon (−5 to +5) [@nielsen2011new]. The review-level scores are computed as the sum and mean of word scores. The AFINN-111 word list is downloaded from the project's GitHub repository. Pearson correlation between AFINN scores and star ratings serves as a validity check.
+**AFINN:** An integer-scored lexicon (−5 to +5) [@nielsen2011new]. Review scores are the sum of matched word scores. Pearson correlation between AFINN scores and star ratings serves as a validity check.
 
-**NRC Emotion Lexicon:** Developed by @mohammad2013crowdsourcing, this lexicon assigns words to 8 emotion categories (anger, anticipation, disgust, fear, joy, sadness, surprise, trust) and 2 sentiment categories (positive, negative). Unlike Bing and AFINN, one word can belong to multiple categories, making this lexicon suitable for nuanced emotion profiling.
+**NRC Emotion Lexicon:** Developed by @mohammad2013crowdsourcing, this lexicon maps words to 8 emotion categories (anger, anticipation, disgust, fear, joy, sadness, surprise, trust) and 2 polarity categories. One word may belong to multiple categories, enabling nuanced emotion profiling.
 
+---
 ### 3.2 Bigram Analysis and Negation Correction
 
-A known limitation of unigram sentiment analysis is its inability to handle negation: the phrase "not good" is scored as positive (the word "good" has a positive AFINN score) when it should be negative. To address this, bigrams are constructed from the review text, and any bigram where the first word is a negator and the second word has an AFINN score has its score flipped (multiplied by −1). The aggregate negation adjustment is then added to the classic AFINN score to produce a "negation-aware" score per review.
+Unigram methods cannot handle negation: *not good* is scored as positive because *good* carries a positive AFINN score. To quantify this limitation, bigrams are constructed from the raw review text, with negators explicitly retained in the stopword filter. A set of 22 negators is defined (e.g., *no*, *not*, *n't*, *never*, *cannot*). Where the first token of a bigram is a negator and the second has an AFINN score, the score is sign-flipped. The magnitude of the resulting correction is reported by star-rating group.
 
+---
 ### 3.3 Transformer-Based Sentiment Analysis
 
-For the new data, a transformer model (FinBERT or distilBERT fine-tuned for sentiment) is applied as an alternative to the lexicon approach. Reviews are assigned one of three labels — **negative** (1–2 stars), **neutral** (3 stars), **positive** (4–5 stars) — based on their star rating, and the model is trained to predict these labels from the cleaned review text. The dataset is split 80/10/10 (train/validation/test), stratified by label.
+As a complement to the lexicon methods, the pre-trained model `nlptown/bert-base-multilingual-uncased-sentiment` [@nlptown2019] is applied via the Hugging Face `transformers` pipeline. The model predicts a 1–5 star rating for each review; predictions are normalised to a continuous sentiment score:
 
+$$\text{bert\_score} = \frac{\text{bert\_stars} - 1}{4} \in [0, 1]$$
+
+Model validity is assessed by (1) Pearson correlation between `bert_score` and the actual star rating (95% CI via Fisher's *z*-transformation), (2) boxplots of `bert_score` stratified by star rating, bank, and platform, (3) exact star-level agreement and a full confusion matrix, and (4) a Mann–Whitney U test comparing platform distributions.
 ---
 
 ## 4. Results: Old Data
