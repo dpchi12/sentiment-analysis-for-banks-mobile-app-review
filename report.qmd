@@ -73,6 +73,7 @@ The original dataset was collected in 2023 using a combination of web scraping a
 ```{python}
 #| label: tbl-old-overview
 #| tbl-cap: "Overview of the original dataset"
+#| echo: false
 
 from pathlib import Path
 import pandas as pd
@@ -97,7 +98,7 @@ pd.DataFrame({
 
 ### 2.2 Newly Scraped Dataset (New Data)
 
-The new dataset was collected using a dedicated scraper (`Dataset/scraper.ipynb`) targeting the same five banks and both platforms. The scraping window covers a more recent period than the original data. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window.
+The new dataset was collected using a dedicated scraper (`Dataset/scraper.ipynb`) targeting the same five banks and both platforms. The scraping window covers a more recent period *(2024-2026)* than the original data. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window.
 
 ```{python}
 #| label: tbl-new-overview
