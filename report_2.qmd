@@ -168,7 +168,7 @@ Yap yap yap here
 
 
 ## 4.2 Results Old Data vs New Data - Lexicon Analysis
-## 4.2 Results Old Data vs New Data - Transformer Analysis
+## 4.2 Results Old Data vs New Data - Transformer Analysis - AGAS
 ## 4.2 Results AFINN vs BERT - New Data
 
 
@@ -197,7 +197,7 @@ differences arise from:
 These are expected cross-language reproducibility gaps and do not undermine
 the directional conclusions.
 
-# 6 Limitations
+# 6 Limitations - AGAS
 
 - **Lexicon coverage:** All three lexicons were built for general English, not
   financial app reviews — domain terms (*overdraft, Zelle, wire transfer*) may
