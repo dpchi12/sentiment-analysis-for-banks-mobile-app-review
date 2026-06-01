@@ -10,7 +10,7 @@
 <meta name="author" content="I Putu Agastya Harta Pratama">
 <meta name="author" content="Si Tang Lin">
 <meta name="author" content="Zuzanna Uljasz">
-<meta name="dcterms.date" content="2026-05-31">
+<meta name="dcterms.date" content="2026-06-01">
 
 <title>Sentiment Analysis of Mobile Banking App Reviews</title>
 <style>
@@ -138,34 +138,42 @@ window.Quarto = {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary"><span class="header-section-number">0.1</span> Summary</a></li>
-  <li><a href="#introduction-and-motivation" id="toc-introduction-and-motivation" class="nav-link" data-scroll-target="#introduction-and-motivation"><span class="header-section-number">0.2</span> 1. Introduction and Motivation</a>
+  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#introduction-and-motivation" id="toc-introduction-and-motivation" class="nav-link" data-scroll-target="#introduction-and-motivation">1. Introduction and Motivation</a>
   <ul class="collapse">
-  <li><a href="#research-context" id="toc-research-context" class="nav-link" data-scroll-target="#research-context"><span class="header-section-number">0.2.1</span> 1.1 Research Context</a></li>
-  <li><a href="#inspiration-and-source-study" id="toc-inspiration-and-source-study" class="nav-link" data-scroll-target="#inspiration-and-source-study"><span class="header-section-number">0.2.2</span> 1.2 Inspiration and Source Study</a></li>
+  <li><a href="#research-context" id="toc-research-context" class="nav-link" data-scroll-target="#research-context">1.1 Research Context</a></li>
+  <li><a href="#inspiration-and-source-study" id="toc-inspiration-and-source-study" class="nav-link" data-scroll-target="#inspiration-and-source-study">1.2 Inspiration and Source Study</a></li>
   </ul></li>
-  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data"><span class="header-section-number">0.3</span> 2. Data</a>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">2. Data</a>
   <ul class="collapse">
-  <li><a href="#original-dataset-old-data" id="toc-original-dataset-old-data" class="nav-link" data-scroll-target="#original-dataset-old-data"><span class="header-section-number">0.3.1</span> 2.1 Original Dataset (Old Data)</a></li>
-  <li><a href="#newly-scraped-dataset-new-data" id="toc-newly-scraped-dataset-new-data" class="nav-link" data-scroll-target="#newly-scraped-dataset-new-data"><span class="header-section-number">0.3.2</span> 2.2 Newly Scraped Dataset (New Data)</a></li>
-  <li><a href="#data-preprocessing" id="toc-data-preprocessing" class="nav-link" data-scroll-target="#data-preprocessing"><span class="header-section-number">0.3.3</span> 2.3 Data Preprocessing</a></li>
-  </ul></li>
-  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology"><span class="header-section-number">0.4</span> 3. Methodology</a>
+  <li><a href="#exploratory-data-analysis-of-the-original-dataset-old-data" id="toc-exploratory-data-analysis-of-the-original-dataset-old-data" class="nav-link" data-scroll-target="#exploratory-data-analysis-of-the-original-dataset-old-data">2.1 Exploratory Data Analysis of the Original Dataset (Old Data)</a></li>
+  <li><a href="#exploratory-data-analysis-of-the-new-dataset-new-data" id="toc-exploratory-data-analysis-of-the-new-dataset-new-data" class="nav-link" data-scroll-target="#exploratory-data-analysis-of-the-new-dataset-new-data">2.2 Exploratory Data Analysis of the New Dataset (New Data)</a></li>
+  <li><a href="#data-preprocessing" id="toc-data-preprocessing" class="nav-link" data-scroll-target="#data-preprocessing">2.3 Data Preprocessing</a>
   <ul class="collapse">
-  <li><a href="#lexicon-based-sentiment-analysis" id="toc-lexicon-based-sentiment-analysis" class="nav-link" data-scroll-target="#lexicon-based-sentiment-analysis"><span class="header-section-number">0.4.1</span> 3.1 Lexicon-Based Sentiment Analysis</a></li>
-  <li><a href="#bigram-analysis-and-negation-correction" id="toc-bigram-analysis-and-negation-correction" class="nav-link" data-scroll-target="#bigram-analysis-and-negation-correction"><span class="header-section-number">0.4.2</span> 3.2 Bigram Analysis and Negation Correction</a></li>
-  <li><a href="#transformer-based-sentiment-analysis" id="toc-transformer-based-sentiment-analysis" class="nav-link" data-scroll-target="#transformer-based-sentiment-analysis"><span class="header-section-number">0.4.3</span> 3.3 Transformer-Based Sentiment Analysis</a></li>
+  <li><a href="#data-preprocessing-for-lexicon-based-methods" id="toc-data-preprocessing-for-lexicon-based-methods" class="nav-link" data-scroll-target="#data-preprocessing-for-lexicon-based-methods">2.3 Data Preprocessing for Lexicon-Based Methods</a></li>
+  <li><a href="#data-preprocessing-for-lexicon-based-methods-1" id="toc-data-preprocessing-for-lexicon-based-methods-1" class="nav-link" data-scroll-target="#data-preprocessing-for-lexicon-based-methods-1">2.3 Data Preprocessing for Lexicon-Based Methods</a></li>
   </ul></li>
-  <li><a href="#results-old-data" id="toc-results-old-data" class="nav-link" data-scroll-target="#results-old-data"><span class="header-section-number">0.5</span> 4. Results: Old Data</a></li>
-  <li><a href="#results-new-data" id="toc-results-new-data" class="nav-link" data-scroll-target="#results-new-data"><span class="header-section-number">0.6</span> 5. Results: New Data</a></li>
-  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion"><span class="header-section-number">1</span> Discussion</a>
+  </ul></li>
+  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology">3. Methodology</a>
   <ul class="collapse">
-  <li><a href="#reproducibility-assessment" id="toc-reproducibility-assessment" class="nav-link" data-scroll-target="#reproducibility-assessment"><span class="header-section-number">1.1</span> Reproducibility Assessment</a></li>
-  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations"><span class="header-section-number">1.2</span> Limitations</a></li>
-  <li><a href="#generative-ai-disclosure" id="toc-generative-ai-disclosure" class="nav-link" data-scroll-target="#generative-ai-disclosure"><span class="header-section-number">1.3</span> Generative AI Disclosure</a></li>
+  <li><a href="#lexicon-based-sentiment-analysis" id="toc-lexicon-based-sentiment-analysis" class="nav-link" data-scroll-target="#lexicon-based-sentiment-analysis">3.1 Lexicon-Based Sentiment Analysis</a></li>
+  <li><a href="#bigram-analysis-and-negation-correction" id="toc-bigram-analysis-and-negation-correction" class="nav-link" data-scroll-target="#bigram-analysis-and-negation-correction">3.2 Bigram Analysis and Negation Correction</a></li>
+  <li><a href="#transformer-based-sentiment-analysis" id="toc-transformer-based-sentiment-analysis" class="nav-link" data-scroll-target="#transformer-based-sentiment-analysis">3.3 Transformer-Based Sentiment Analysis</a></li>
   </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">2</span> Conclusion</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">3</span> References</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">4. Results</a>
+  <ul class="collapse">
+  <li><a href="#results-python-vs-r" id="toc-results-python-vs-r" class="nav-link" data-scroll-target="#results-python-vs-r">4.1 Results Python vs R</a></li>
+  <li><a href="#results-old-data-vs-new-data---lexicon-analysis" id="toc-results-old-data-vs-new-data---lexicon-analysis" class="nav-link" data-scroll-target="#results-old-data-vs-new-data---lexicon-analysis">4.2 Results Old Data vs New Data - Lexicon Analysis</a></li>
+  <li><a href="#comparison-of-bert-sentiment-results-across-preprocessing-approaches" id="toc-comparison-of-bert-sentiment-results-across-preprocessing-approaches" class="nav-link" data-scroll-target="#comparison-of-bert-sentiment-results-across-preprocessing-approaches">4.3 Comparison of BERT Sentiment Results Across Preprocessing Approaches</a></li>
+  <li><a href="#results-afinn-vs-bert---new-data" id="toc-results-afinn-vs-bert---new-data" class="nav-link" data-scroll-target="#results-afinn-vs-bert---new-data">4.4 Results AFINN vs BERT - New Data</a></li>
+  </ul></li>
+  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">5 Discussion</a>
+  <ul class="collapse">
+  <li><a href="#reproducibility-assessment" id="toc-reproducibility-assessment" class="nav-link" data-scroll-target="#reproducibility-assessment">5.1 Reproducibility Assessment</a></li>
+  <li><a href="#limitations---agas" id="toc-limitations---agas" class="nav-link" data-scroll-target="#limitations---agas">5.2 Limitations - AGAS</a></li>
+  </ul></li>
+  <li><a href="#generative-ai-disclosure" id="toc-generative-ai-disclosure" class="nav-link" data-scroll-target="#generative-ai-disclosure">6 Generative AI Disclosure</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="report_2.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
 </div>
@@ -194,7 +202,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 31, 2026</p>
+      <p class="date">June 1, 2026</p>
     </div>
   </div>
   
@@ -206,39 +214,72 @@ window.Quarto = {
 </header>
 
 
-<section id="summary" class="level2" data-number="0.1">
-<h2 data-number="0.1" class="anchored" data-anchor-id="summary"><span class="header-section-number">0.1</span> Summary</h2>
+<section id="summary" class="level1">
+<h1>Summary</h1>
 <p>This report documents a reproducible research project that translates an original R-based sentiment analysis of mobile banking app reviews into Python, extends it with newly scraped data, and augments the lexicon-based methods with a transformer (BERT) approach. The project covers five major US banks: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo across the Apple App Store (iOS) and Google Play (Android). The core research questions are: (1) Can the original R findings be faithfully reproduced in Python? (2) Do the results change with a fresh data scrape? (3) Does a transformer model produce sentiment classifications consistent with the lexicon approach?</p>
 <hr>
 </section>
-<section id="introduction-and-motivation" class="level2" data-number="0.2">
-<h2 data-number="0.2" class="anchored" data-anchor-id="introduction-and-motivation"><span class="header-section-number">0.2</span> 1. Introduction and Motivation</h2>
-<section id="research-context" class="level3" data-number="0.2.1">
-<h3 data-number="0.2.1" class="anchored" data-anchor-id="research-context"><span class="header-section-number">0.2.1</span> 1.1 Research Context</h3>
+<section id="introduction-and-motivation" class="level1">
+<h1>1. Introduction and Motivation</h1>
+<section id="research-context" class="level2">
+<h2 class="anchored" data-anchor-id="research-context">1.1 Research Context</h2>
 <p>Customer reviews on mobile app stores represent a rich, continuously updated source of unstructured opinion data. For the banking sector, app reviews offer direct evidence of customer satisfaction, pain points, and competitive positioning — feedback that often offers a faster point of view and is more granular than traditional survey methods. Sentiment analysis of these reviews can help researchers and practitioners understand how user experience varies across institutions and platforms, and whether negative signals co-occur with specific feature complaints or rating patterns.</p>
 <p>There are two motivations for this study. Academically, it provides an opportunity to practice reproducible research: taking an existing empirical study, replicating it in a different computational environment, and evaluating whether the results remain the same. Practically, it investigates whether mobile banking sentiment has shifted between the original data collection window and a fresh scrape in 2026, and whether more sophisticated deep learning methods agree with classic dictionary-based approaches.</p>
 </section>
-<section id="inspiration-and-source-study" class="level3" data-number="0.2.2">
-<h3 data-number="0.2.2" class="anchored" data-anchor-id="inspiration-and-source-study"><span class="header-section-number">0.2.2</span> 1.2 Inspiration and Source Study</h3>
+<section id="inspiration-and-source-study" class="level2">
+<h2 class="anchored" data-anchor-id="inspiration-and-source-study">1.2 Inspiration and Source Study</h2>
 <p>The project is inspired by the tidytext-based workflow popularised by <span class="citation" data-cites="silge2017text">@silge2017text</span>, which applies lexicon-based sentiment scoring to tokenised text in a tidy data format. The original analysis follows this approach: it imports and cleans review data, performs unigram sentiment analysis using three lexicons (Bing, AFINN, NRC), constructs bigrams with negator-aware scoring, and evaluates results statistically. The goal of this project is to demonstrate that these findings are reproducible — the same pipeline, implemented in Python with equivalent libraries, produces consistent conclusions — and then to extend the study in two directions: new data and a transformer model.</p>
 <hr>
 </section>
 </section>
-<section id="data" class="level2" data-number="0.3">
-<h2 data-number="0.3" class="anchored" data-anchor-id="data"><span class="header-section-number">0.3</span> 2. Data</h2>
+<section id="data" class="level1">
+<h1>2. Data</h1>
 <p>Dataset is obtained with the means of scrapping reviews from the App Store and Google Play for the five major banks in US. The original dataset was collected in 2023, while the new dataset was scraped in mid-2026. Both datasets contain reviews in English, with metadata including star ratings, review text, date, platform, and storefront. The data is stored as CSV files per bank and platform, which are combined and preprocessed for analysis.</p>
 <p>The major banks included in the dataset are some of the largest US financial institutions, which are: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo. Each has a significant mobile banking user base. The platforms covered are the two dominant mobile ecosystems: Apple’s App Store (iOS) and Google’s Play Store (Android). This allows for cross-platform comparisons and insights into whether user sentiment differs by operating system.</p>
 <p>The method of scrapping differs for each platform due to their distinct APIs and structures. For the iOS App Store, the script uses Python’s requests library to directly parse Apple’s publicly accessible XML/JSON RSS feed endpoints, which are ordered by the most recent submissions. For the Google Play Store, it leverages an open-source web scraping library (google-play-scraper) that mimics browser requests to dynamically fetch and page through raw review payloads using continuation tokens. Both approaches process these external data streams in real time, converting the raw JSON responses into structured Pandas DataFrames before exporting them to CSV files.</p>
-<section id="original-dataset-old-data" class="level3" data-number="0.3.1">
-<h3 data-number="0.3.1" class="anchored" data-anchor-id="original-dataset-old-data"><span class="header-section-number">0.3.1</span> 2.1 Original Dataset (Old Data)</h3>
+<section id="exploratory-data-analysis-of-the-original-dataset-old-data" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis-of-the-original-dataset-old-data">2.1 Exploratory Data Analysis of the Original Dataset (Old Data)</h2>
 <p>The original dataset was collected in 2023 using a combination of web scraping and API access methods. It includes reviews from the same five banks and both platforms, but covers a different time period than the new data. The dataset is stored as CSV files, one per bank and platform, with columns for review text, star rating, date, and other metadata. The original analysis applied lexicon-based sentiment scoring to this dataset to derive insights about user sentiment and its relationship to star ratings.</p>
+<div id="tbl-old-overview" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="1">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-old-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Overview of the original dataset
+</figcaption>
+<div aria-describedby="tbl-old-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>DATA_OLD <span class="op">=</span> Path(<span class="st">"Dataset/data_old_approach"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>raw_old <span class="op">=</span> pd.concat(</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    [pd.read_csv(p, dtype<span class="op">=</span><span class="bu">str</span>).assign(source_file<span class="op">=</span>p.name)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>     <span class="cf">for</span> p <span class="kw">in</span> DATA_OLD.glob(<span class="st">"*.csv"</span>)],</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    ignore_index<span class="op">=</span><span class="va">True</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Total reviews"</span>:  [<span class="bu">len</span>(raw_old)],</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Banks"</span>:          [raw_old[<span class="st">"source_file"</span>].nunique()],</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Platforms"</span>:      [raw_old[<span class="st">"platform"</span>].nunique()],</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Date range"</span>: [</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>pd<span class="sc">.</span>to_datetime(raw_old[<span class="st">'date'</span>], errors<span class="op">=</span><span class="st">'coerce'</span>)<span class="sc">.</span><span class="bu">min</span>()<span class="sc">.</span>date()<span class="sc">}</span><span class="ss"> – "</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>pd<span class="sc">.</span>to_datetime(raw_old[<span class="st">'date'</span>], errors<span class="op">=</span><span class="st">'coerce'</span>)<span class="sc">.</span><span class="bu">max</span>()<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</figure>
+</div>
 </section>
-<section id="newly-scraped-dataset-new-data" class="level3" data-number="0.3.2">
-<h3 data-number="0.3.2" class="anchored" data-anchor-id="newly-scraped-dataset-new-data"><span class="header-section-number">0.3.2</span> 2.2 Newly Scraped Dataset (New Data)</h3>
+<section id="exploratory-data-analysis-of-the-new-dataset-new-data" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis-of-the-new-dataset-new-data">2.2 Exploratory Data Analysis of the New Dataset (New Data)</h2>
 <p>The new dataset was collected using a dedicated scraper (<code>Dataset/scraper.ipynb</code>) targeting the same five banks and both platforms. The scraping window covers a more recent period <em>(2024-2026)</em> than the original data. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window.</p>
 </section>
-<section id="data-preprocessing" class="level3" data-number="0.3.3">
-<h3 data-number="0.3.3" class="anchored" data-anchor-id="data-preprocessing"><span class="header-section-number">0.3.3</span> 2.3 Data Preprocessing</h3>
+<section id="data-preprocessing" class="level2">
+<h2 class="anchored" data-anchor-id="data-preprocessing">2.3 Data Preprocessing</h2>
+<section id="data-preprocessing-for-lexicon-based-methods" class="level3">
+<h3 class="anchored" data-anchor-id="data-preprocessing-for-lexicon-based-methods">2.3 Data Preprocessing for Lexicon-Based Methods</h3>
 <p>Preprocessing follows the same logical steps in both the R original and the Python replications:</p>
 <ol type="1">
 <li><strong>Import and combine</strong> — all per-bank CSVs are concatenated into a single dataframe</li>
@@ -249,278 +290,209 @@ window.Quarto = {
 <li><strong>Tokenisation and stopword removal</strong> — words are extracted using regex; a custom stopword list (NLTK English stopwords + domain terms: <em>app, bank, banking, mobile, iphone, apple, android, phone</em>) is applied</li>
 <li><strong>Bigram construction</strong> — adjacent word pairs are extracted from cleaned text, with negators (<em>not, never, no, cannot</em>, etc.) explicitly excluded from the stopword filter so they are preserved in bigrams</li>
 </ol>
+</section>
+<section id="data-preprocessing-for-lexicon-based-methods-1" class="level3">
+<h3 class="anchored" data-anchor-id="data-preprocessing-for-lexicon-based-methods-1">2.3 Data Preprocessing for Lexicon-Based Methods</h3>
 <p>For the transformer approach, an additional cleaning step keeps punctuation intact (since BERT tokenisers handle it natively) and removes URLs.</p>
 <hr>
 </section>
 </section>
-<section id="methodology" class="level2" data-number="0.4">
-<h2 data-number="0.4" class="anchored" data-anchor-id="methodology"><span class="header-section-number">0.4</span> 3. Methodology</h2>
-<section id="lexicon-based-sentiment-analysis" class="level3" data-number="0.4.1">
-<h3 data-number="0.4.1" class="anchored" data-anchor-id="lexicon-based-sentiment-analysis"><span class="header-section-number">0.4.1</span> 3.1 Lexicon-Based Sentiment Analysis</h3>
+</section>
+<section id="methodology" class="level1">
+<h1>3. Methodology</h1>
+<section id="lexicon-based-sentiment-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="lexicon-based-sentiment-analysis">3.1 Lexicon-Based Sentiment Analysis</h2>
 <p>Three lexicons are applied to the filtered tokens. Scores are computed at the review level and disaggregated by bank and platform.</p>
 <p><strong>Bing (Opinion Lexicon):</strong> A binary lexicon classifying words as positive or negative <span class="citation" data-cites="hu2004mining">[@hu2004mining]</span>. Review sentiment is the count of positive words minus negative words.</p>
 <p><strong>AFINN:</strong> An integer-scored lexicon (−5 to +5) <span class="citation" data-cites="nielsen2011new">[@nielsen2011new]</span>. Review scores are the sum of matched word scores. Pearson correlation between AFINN scores and star ratings serves as a validity check.</p>
 <p><strong>NRC Emotion Lexicon:</strong> Developed by <span class="citation" data-cites="mohammad2013crowdsourcing">@mohammad2013crowdsourcing</span>, this lexicon maps words to 8 emotion categories (anger, anticipation, disgust, fear, joy, sadness, surprise, trust) and 2 polarity categories. One word may belong to multiple categories, enabling nuanced emotion profiling.</p>
 <hr>
 </section>
-<section id="bigram-analysis-and-negation-correction" class="level3" data-number="0.4.2">
-<h3 data-number="0.4.2" class="anchored" data-anchor-id="bigram-analysis-and-negation-correction"><span class="header-section-number">0.4.2</span> 3.2 Bigram Analysis and Negation Correction</h3>
+<section id="bigram-analysis-and-negation-correction" class="level2">
+<h2 class="anchored" data-anchor-id="bigram-analysis-and-negation-correction">3.2 Bigram Analysis and Negation Correction</h2>
 <p>Unigram methods cannot handle negation: <em>not good</em> is scored as positive because <em>good</em> carries a positive AFINN score. To quantify this limitation, bigrams are constructed from the raw review text, with negators explicitly retained in the stopword filter. A set of 22 negators is defined (e.g., <em>no</em>, <em>not</em>, <em>n’t</em>, <em>never</em>, <em>cannot</em>). Where the first token of a bigram is a negator and the second has an AFINN score, the score is sign-flipped. The magnitude of the resulting correction is reported by star-rating group.</p>
 <hr>
 </section>
-<section id="transformer-based-sentiment-analysis" class="level3" data-number="0.4.3">
-<h3 data-number="0.4.3" class="anchored" data-anchor-id="transformer-based-sentiment-analysis"><span class="header-section-number">0.4.3</span> 3.3 Transformer-Based Sentiment Analysis</h3>
+<section id="transformer-based-sentiment-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="transformer-based-sentiment-analysis">3.3 Transformer-Based Sentiment Analysis</h2>
 <p>As a complement to the lexicon methods, the pre-trained model <code>nlptown/bert-base-multilingual-uncased-sentiment</code> <span class="citation" data-cites="nlptown2019">[@nlptown2019]</span> is applied via the Hugging Face <code>transformers</code> pipeline. The model predicts a 1–5 star rating for each review; predictions are normalised to a continuous sentiment score:</p>
 <p><span class="math display">\[\text{bert\_score} = \frac{\text{bert\_stars} - 1}{4} \in [0, 1]\]</span></p>
 <p>Model validity is assessed by (1) Pearson correlation between <code>bert_score</code> and the actual star rating (95% CI via Fisher’s <em>z</em>-transformation), (2) boxplots of <code>bert_score</code> stratified by star rating, bank, and platform, (3) exact star-level agreement and a full confusion matrix, and (4) a Mann–Whitney U test comparing platform distributions.</p>
 <hr>
 </section>
 </section>
-<section id="results-old-data" class="level2" data-number="0.5">
-<h2 data-number="0.5" class="anchored" data-anchor-id="results-old-data"><span class="header-section-number">0.5</span> 4. Results: Old Data</h2>
-<div id="fig-rating-old" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="3">
+<section id="results" class="level1">
+<h1>4. Results</h1>
+<section id="results-python-vs-r" class="level2">
+<h2 class="anchored" data-anchor-id="results-python-vs-r">4.1 Results Python vs R</h2>
+<p>Yap yap yap here</p>
+</section>
+<section id="results-old-data-vs-new-data---lexicon-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="results-old-data-vs-new-data---lexicon-analysis">4.2 Results Old Data vs New Data - Lexicon Analysis</h2>
+</section>
+<section id="comparison-of-bert-sentiment-results-across-preprocessing-approaches" class="level2">
+<h2 class="anchored" data-anchor-id="comparison-of-bert-sentiment-results-across-preprocessing-approaches">4.3 Comparison of BERT Sentiment Results Across Preprocessing Approaches</h2>
+<p>This section compares the outputs of the BERT-based sentiment classifier <code>(nlptown/bert-base-multilingual-uncased-sentiment)</code> applied to two versions of the dataset: one preprocessed using the original pipeline and one using the revised approach. Both versions were scored using identical model settings and scoring logic, with predicted star ratings mapped to a normalized sentiment score in the range [0, 1]. The comparison focuses on whether the revised preprocessing affects the distribution of predicted sentiment, its alignment with actual star ratings, and the relative sentiment profiles across banks and platforms.</p>
+<p><strong>Distribution of BERT Predicted Sentiment</strong></p>
+<p>Both datasets produce a broadly similar bimodal distribution of BERT-predicted sentiment, with the majority of reviews classified at either the negative extreme (1 star) or the positive extreme (5 stars), and relatively few reviews falling in the middle ratings of 2 through 4 (<a href="#fig-bert-dist-old" class="quarto-xref">Figure&nbsp;1</a> and <a href="#fig-bert-dist-new" class="quarto-xref">Figure&nbsp;2</a>). However, a notable difference emerges in the balance between the two poles. In the older data, the 1-star predicted count (~1,550) is considerably closer to the 5-star predicted count (~2,000), whereas in the newer data the gap widens, with 1-star predictions declining to approximately 1,380 while 5-star predictions rise to around 2,100 (<a href="#fig-bert-dist-new" class="quarto-xref">Figure&nbsp;2</a>). This suggests that the newer batch of reviews contains a higher proportion of positively-perceived content as classified by the model. The sentiment score density plots reinforce this pattern: both distributions are heavily concentrated at 0.0 and 1.0, reflecting the model’s tendency toward confident polar predictions, with the overall shape of the density curve remaining consistent across both datasets (<a href="#fig-bert-dist-old" class="quarto-xref">Figure&nbsp;1</a> and <a href="#fig-bert-dist-new" class="quarto-xref">Figure&nbsp;2</a>).</p>
+<div id="fig-bert-dist-old" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-rating-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>raw_old[<span class="st">"rating"</span>] <span class="op">=</span> pd.to_numeric(raw_old[<span class="st">"rating"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>rating_counts <span class="op">=</span> (</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    raw_old.groupby([<span class="st">"platform"</span>, <span class="st">"rating"</span>])</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    .size().reset_index(name<span class="op">=</span><span class="st">"n"</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>platforms <span class="op">=</span> <span class="bu">sorted</span>(rating_counts[<span class="st">"platform"</span>].dropna().unique())</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="bu">len</span>(platforms), figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, plat <span class="kw">in</span> <span class="bu">zip</span>(axes, platforms):</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> rating_counts[rating_counts[<span class="st">"platform"</span>] <span class="op">==</span> plat]</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    ax.bar(data[<span class="st">"rating"</span>], data[<span class="st">"n"</span>], color<span class="op">=</span><span class="st">"steelblue"</span>)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    ax.set_title(plat)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"Star rating"</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"Number of reviews"</span>)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Rating distribution by platform"</span>)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<div aria-describedby="fig-bert-dist-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../plots/bert_old_distribution.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-rating-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-dist-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Distribution of BERT predicted star ratings and sentiment scores — older dataset
 </figcaption>
 </figure>
 </div>
-<div id="fig-bing" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="4">
+<div id="fig-bert-dist-new" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-bing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk, re, numpy <span class="im">as</span> np</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> opinion_lexicon, stopwords</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> ENGLISH_STOP_WORDS</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>nltk.download(<span class="st">"opinion_lexicon"</span>, quiet<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>nltk.download(<span class="st">"stopwords"</span>, quiet<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>PROCESSED_OLD <span class="op">=</span> Path(<span class="st">"Dataset/data_old_approach/processed_data"</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>lexicon_df <span class="op">=</span> pd.read_csv(PROCESSED_OLD <span class="op">/</span> <span class="st">"old_preprocessed_lexicon.csv"</span>)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>custom_stop <span class="op">=</span> <span class="bu">set</span>(stopwords.words(<span class="st">"english"</span>)) <span class="op">|</span> {</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"app"</span>,<span class="st">"bank"</span>,<span class="st">"banking"</span>,<span class="st">"mobile"</span>,<span class="st">"iphone"</span>,<span class="st">"apple"</span>,<span class="st">"android"</span>,<span class="st">"phone"</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>pos_words <span class="op">=</span> <span class="bu">set</span>(opinion_lexicon.positive())</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>neg_words <span class="op">=</span> <span class="bu">set</span>(opinion_lexicon.negative())</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>df_english <span class="op">=</span> lexicon_df.copy().reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>df_english[<span class="st">"review_id"</span>] <span class="op">=</span> df_english.index</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>reviews_tokens <span class="op">=</span> df_english.copy()</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>reviews_tokens[<span class="st">"word"</span>] <span class="op">=</span> (</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    reviews_tokens[<span class="st">"raw_text"</span>].fillna(<span class="st">""</span>).<span class="bu">str</span>.lower()</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">apply</span>(<span class="kw">lambda</span> x: re.findall(<span class="vs">r"</span><span class="dv">\b</span><span class="pp">[a-z]</span><span class="op">+</span><span class="dv">\b</span><span class="vs">"</span>, x))</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>reviews_tokens <span class="op">=</span> reviews_tokens.explode(<span class="st">"word"</span>).dropna(subset<span class="op">=</span>[<span class="st">"word"</span>])</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>reviews_after_sw <span class="op">=</span> reviews_tokens[<span class="op">~</span>reviews_tokens[<span class="st">"word"</span>].isin(custom_stop)].copy()</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>bing <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"word"</span>:      <span class="bu">list</span>(pos_words)              <span class="op">+</span> <span class="bu">list</span>(neg_words),</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sentiment"</span>: [<span class="st">"positive"</span>] <span class="op">*</span> <span class="bu">len</span>(pos_words) <span class="op">+</span> [<span class="st">"negative"</span>] <span class="op">*</span> <span class="bu">len</span>(neg_words)</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>bing_words <span class="op">=</span> reviews_after_sw.merge(bing, on<span class="op">=</span><span class="st">"word"</span>, how<span class="op">=</span><span class="st">"inner"</span>)</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> bing_words[<span class="st">"sentiment"</span>].value_counts().reset_index()</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>counts.columns <span class="op">=</span> [<span class="st">"sentiment"</span>, <span class="st">"n"</span>]</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">4</span>))</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>ax.bar(counts[<span class="st">"sentiment"</span>], counts[<span class="st">"n"</span>], color<span class="op">=</span>[<span class="st">"steelblue"</span>,<span class="st">"salmon"</span>])</span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Distribution of Bing sentiment words"</span>)</span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Sentiment"</span>)</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Word count"</span>)</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<div aria-describedby="fig-bert-dist-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../plots/bert_new_distribution.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-bing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-dist-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Distribution of BERT predicted star ratings and sentiment scores — newer dataset
 </figcaption>
 </figure>
 </div>
-<div id="fig-afinn-boxplot" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="5">
+<p><strong>Relationship Between BERT Scores and Actual Star Ratings</strong></p>
+<p>The relationship between BERT sentiment scores and actual star ratings is consistent across both datasets (<a href="#fig-bert-box-old" class="quarto-xref">Figure&nbsp;3</a> and <a href="#fig-bert-box-new" class="quarto-xref">Figure&nbsp;4</a>). In both cases, the model assigns near-zero sentiment scores to 1-star reviews with very tight interquartile ranges, indicating high confidence in negative classifications. Scores rise progressively through 2- and 3-star ratings, with 3-star reviews showing the widest spread, reflecting the model’s uncertainty around neutral or mixed-sentiment reviews. Reviews rated 4 and 5 stars are predominantly scored above the neutral threshold of 0.5, with 5-star reviews showing a highly compressed distribution concentrated at 1.0. The two datasets are visually near-identical in this regard (<a href="#fig-bert-box-old" class="quarto-xref">Figure&nbsp;3</a> and <a href="#fig-bert-box-new" class="quarto-xref">Figure&nbsp;4</a>), suggesting that the shift in review composition between the older and newer data did not meaningfully alter the model’s ability to align predicted sentiment with actual star ratings.</p>
+<div id="fig-bert-box-old" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-afinn-boxplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.request</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>afinn_path <span class="op">=</span> Path(<span class="st">"AFINN-111.txt"</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> afinn_path.exists():</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    urllib.request.urlretrieve(</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"https://raw.githubusercontent.com/fnielsen/afinn/master/afinn/data/AFINN-111.txt"</span>,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        afinn_path</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>afinn <span class="op">=</span> pd.read_csv(afinn_path, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, names<span class="op">=</span>[<span class="st">"word"</span>, <span class="st">"value"</span>])</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>afinn[<span class="st">"word"</span>] <span class="op">=</span> afinn[<span class="st">"word"</span>].<span class="bu">str</span>.lower()</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>afinn_words  <span class="op">=</span> reviews_after_sw.merge(afinn, on<span class="op">=</span><span class="st">"word"</span>, how<span class="op">=</span><span class="st">"inner"</span>)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>afinn_review <span class="op">=</span> (</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    afinn_words.groupby([<span class="st">"bank"</span>, <span class="st">"platform"</span>, <span class="st">"review_id"</span>])</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    .agg(afinn_sum<span class="op">=</span>(<span class="st">"value"</span>,<span class="st">"sum"</span>), afinn_mean<span class="op">=</span>(<span class="st">"value"</span>,<span class="st">"mean"</span>),</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>         n_afinn<span class="op">=</span>(<span class="st">"value"</span>,<span class="st">"count"</span>)).reset_index()</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>df_afinn <span class="op">=</span> df_english.copy()</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>df_afinn[<span class="st">"rating"</span>] <span class="op">=</span> pd.to_numeric(df_afinn[<span class="st">"rating"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>)</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>df_afinn <span class="op">=</span> df_afinn.merge(afinn_review, on<span class="op">=</span>[<span class="st">"bank"</span>,<span class="st">"platform"</span>,<span class="st">"review_id"</span>], how<span class="op">=</span><span class="st">"left"</span>)</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>df_plot <span class="op">=</span> df_afinn.dropna(subset<span class="op">=</span>[<span class="st">"rating"</span>,<span class="st">"afinn_sum"</span>])</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>ratings  <span class="op">=</span> <span class="bu">sorted</span>(df_plot[<span class="st">"rating"</span>].unique())</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>groups   <span class="op">=</span> [df_plot[df_plot[<span class="st">"rating"</span>] <span class="op">==</span> r][<span class="st">"afinn_sum"</span>] <span class="cf">for</span> r <span class="kw">in</span> ratings]</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">4</span>))</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>bp <span class="op">=</span> ax.boxplot(groups, labels<span class="op">=</span>[<span class="bu">int</span>(r) <span class="cf">for</span> r <span class="kw">in</span> ratings], patch_artist<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> patch <span class="kw">in</span> bp[<span class="st">"boxes"</span>]:</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    patch.set_facecolor(<span class="st">"lightblue"</span>)<span class="op">;</span> patch.set_alpha(<span class="fl">0.7</span>)</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"AFINN sentiment by star rating"</span>)</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Star rating"</span>)</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"AFINN sum score"</span>)</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<div aria-describedby="fig-bert-box-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../plots/bert_old_sentiment_score_boxplot.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-afinn-boxplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-box-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: BERT sentiment score by star rating — older dataset
 </figcaption>
 </figure>
 </div>
-<div id="tbl-pearson" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="6">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-pearson-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: Pearson correlation: AFINN score vs star rating
-</figcaption>
-<div aria-describedby="tbl-pearson-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>cor_data <span class="op">=</span> df_plot[[<span class="st">"rating"</span>,<span class="st">"afinn_sum"</span>]].dropna()</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>r, p <span class="op">=</span> stats.pearsonr(cor_data[<span class="st">"rating"</span>], cor_data[<span class="st">"afinn_sum"</span>])</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"r = </span><span class="sc">{</span>r<span class="sc">:.4f}</span><span class="ss">,  p = </span><span class="sc">{</span>p<span class="sc">:.4e}</span><span class="ss">,  n = </span><span class="sc">{</span><span class="bu">len</span>(cor_data)<span class="sc">:,}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-</figure>
-</div>
-<div id="fig-nrc" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="7">
+<div id="fig-bert-box-new" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-nrc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>nrc_path <span class="op">=</span> Path(<span class="st">"NRC-Emotion-Lexicon-Wordlevel-v0.92.txt"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> nrc_path.exists():</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    urllib.request.urlretrieve(</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"https://raw.githubusercontent.com/dinbav/LeXmo/master/NRC-Emotion-Lexicon-Wordlevel-v0.92.txt"</span>,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        nrc_path</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>nrc <span class="op">=</span> pd.read_csv(nrc_path, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, names<span class="op">=</span>[<span class="st">"word"</span>,<span class="st">"sentiment"</span>,<span class="st">"association"</span>])</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>nrc <span class="op">=</span> nrc[nrc[<span class="st">"association"</span>] <span class="op">==</span> <span class="dv">1</span>][[<span class="st">"word"</span>,<span class="st">"sentiment"</span>]].copy()</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>nrc[<span class="st">"word"</span>] <span class="op">=</span> nrc[<span class="st">"word"</span>].<span class="bu">str</span>.lower()</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>nrc_words <span class="op">=</span> reviews_after_sw.merge(nrc, on<span class="op">=</span><span class="st">"word"</span>, how<span class="op">=</span><span class="st">"inner"</span>)</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>nrc_by_bank <span class="op">=</span> nrc_words.groupby([<span class="st">"bank"</span>,<span class="st">"sentiment"</span>]).size().reset_index(name<span class="op">=</span><span class="st">"n"</span>)</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>nrc_by_bank[<span class="st">"pct"</span>] <span class="op">=</span> nrc_by_bank.groupby(<span class="st">"bank"</span>)[<span class="st">"n"</span>].transform(<span class="kw">lambda</span> x: x <span class="op">/</span> x.<span class="bu">sum</span>())</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>banks <span class="op">=</span> <span class="bu">sorted</span>(nrc_by_bank[<span class="st">"bank"</span>].unique())</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="bu">len</span>(banks), figsize<span class="op">=</span>(<span class="dv">5</span> <span class="op">*</span> <span class="bu">len</span>(banks), <span class="dv">5</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, bank <span class="kw">in</span> <span class="bu">zip</span>(axes, banks):</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> nrc_by_bank[nrc_by_bank[<span class="st">"bank"</span>] <span class="op">==</span> bank].sort_values(<span class="st">"pct"</span>)</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    ax.barh(data[<span class="st">"sentiment"</span>], data[<span class="st">"pct"</span>])</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    ax.set_title(bank, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"Proportion"</span>)</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"NRC emotion composition by bank"</span>)</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<div aria-describedby="fig-bert-box-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../plots/bert_new_sentiment_score_boxplot.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-nrc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-box-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: BERT sentiment score by star rating — newer dataset
 </figcaption>
 </figure>
 </div>
-<div id="tbl-evaluation" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="8">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-evaluation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2: Statistical evaluation
-</figcaption>
-<div aria-describedby="tbl-evaluation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>ios     <span class="op">=</span> df_afinn[df_afinn[<span class="st">"platform"</span>] <span class="op">==</span> <span class="st">"iOS"</span>][<span class="st">"afinn_sum"</span>].dropna()</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>android <span class="op">=</span> df_afinn[df_afinn[<span class="st">"platform"</span>] <span class="op">==</span> <span class="st">"Android"</span>][<span class="st">"afinn_sum"</span>].dropna()</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>u_stat, p_mw <span class="op">=</span> stats.mannwhitneyu(ios, android, alternative<span class="op">=</span><span class="st">"two-sided"</span>)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Mann-Whitney U (iOS vs Android): U = </span><span class="sc">{</span>u_stat<span class="sc">:.0f}</span><span class="ss">, p = </span><span class="sc">{</span>p_mw<span class="sc">:.4e}</span><span class="ss">"</span>)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"iOS reviews: </span><span class="sc">{</span><span class="bu">len</span>(ios)<span class="sc">:,}</span><span class="ss">  |  Android reviews: </span><span class="sc">{</span><span class="bu">len</span>(android)<span class="sc">:,}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<p><strong>Average BERT Sentiment Scores by Bank and Platform</strong></p>
+<p>Across both datasets, a consistent platform gap is visible: Android reviews tend to receive higher BERT sentiment scores than iOS reviews for most banks (<a href="#fig-bert-bank-old" class="quarto-xref">Figure&nbsp;5</a> and <a href="#fig-bert-bank-new" class="quarto-xref">Figure&nbsp;6</a>). Citi stands out in both periods, with Android scores approaching 0.9 while iOS scores remain well below the neutral threshold of 0.5, making it the most polarised bank by platform in both the older and newer data. Bank of America shows a similar pattern, with strong Android sentiment but iOS scores falling below neutral in both datasets. Wells Fargo is the only bank where both platforms consistently score above neutral, and remains so across both periods. One notable structural difference between the two datasets is that Chase appears in the older data (<a href="#fig-bert-bank-old" class="quarto-xref">Figure&nbsp;5</a>) with both platforms scoring above neutral, whereas in the newer data (<a href="#fig-bert-bank-new" class="quarto-xref">Figure&nbsp;6</a>) Chase drops to the bottom of the ranking with iOS sentiment just at the neutral threshold. Marcus by Goldman Sachs remains relatively stable across both periods, with Android scores moderately above neutral and iOS scores hovering near 0.5.</p>
+<div id="fig-bert-bank-old" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bert-bank-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../plots/bert_old_banknplatform.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-bank-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Average BERT sentiment score by bank and platform — older dataset
+</figcaption>
 </figure>
 </div>
+<div id="fig-bert-bank-new" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bert-bank-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../plots/bert_new_banknplatform.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-bank-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Average BERT sentiment score by bank and platform — newer dataset
+</figcaption>
+</figure>
+</div>
+<p><strong>Average BERT Sentiment Scores by Operating Platform</strong></p>
+<p>The per-platform breakdown of BERT sentiment scores by star rating reveals a largely stable pattern across both datasets (<a href="#fig-bert-plat-old" class="quarto-xref">Figure&nbsp;7</a> and <a href="#fig-bert-plat-new" class="quarto-xref">Figure&nbsp;8</a>). On Android, both the older and newer data show near-identical distributions: 1-star reviews are tightly concentrated at 0.0, scores rise progressively through 2 and 3 stars with widening spread, and 4- and 5-star reviews sit predominantly above the neutral threshold. The iOS platform tells a slightly different story between the two periods. In the older data (<a href="#fig-bert-plat-old" class="quarto-xref">Figure&nbsp;7</a>), the iOS 4-star distribution closely mirrors its Android counterpart, with a median around 0.75. In the newer data (<a href="#fig-bert-plat-new" class="quarto-xref">Figure&nbsp;8</a>), the iOS 4-star box shifts noticeably, with a lower median of approximately 0.6 and a wider interquartile range, suggesting greater variability in how the model scores moderately positive iOS reviews in the newer period. Across both datasets and platforms, 1- and 2-star distributions remain consistently low and 5-star reviews remain compressed near 1.0, indicating that the model’s confidence at the sentiment extremes is robust regardless of platform or time period.</p>
+<div id="fig-bert-plat-old" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bert-plat-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../plots/bert_old_per_platform.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-plat-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: BERT sentiment score by star rating per platform — older dataset
+</figcaption>
+</figure>
+</div>
+<div id="fig-bert-plat-new" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bert-plat-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../plots/bert_new_per_platform.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-plat-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: BERT sentiment score by star rating per platform — newer dataset
+</figcaption>
+</figure>
+</div>
+<p><strong>Statistical Correlation Between BERT Scores and Star Ratings</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Old Data</th>
+<th>New Data</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>n</td>
+<td>4,518</td>
+<td>4,478</td>
+</tr>
+<tr class="even">
+<td>Pearson r</td>
+<td>0.8615</td>
+<td>0.8660</td>
+</tr>
+<tr class="odd">
+<td>p-value</td>
+<td>&lt; 0.001</td>
+<td>&lt; 0.001</td>
+</tr>
+<tr class="even">
+<td>95% CI</td>
+<td>[0.8538, 0.8688]</td>
+<td>[0.8585, 0.8731]</td>
+</tr>
+</tbody>
+</table>
+<p>Both datasets show a strong positive correlation between BERT sentiment scores and actual star ratings, with Pearson r values of 0.8615 and 0.8660 for the older and newer data respectively, both statistically significant (p &lt; 0.001). The marginal increase in r across the two periods suggests a slightly stronger alignment between model-predicted sentiment and user-assigned ratings in the newer dataset, though the difference is negligible given the overlapping confidence intervals ([0.8538, 0.8688] vs [0.8585, 0.8731]). Overall, these results confirm that the BERT model captures sentiment signal consistently across both time periods.</p>
+<p><strong>Statistical Correlation Between BERT Scores and Users’ Platforms</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Old Data</th>
+<th>New Data</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Platforms compared</td>
+<td>Android vs iOS</td>
+<td>Android vs iOS</td>
+</tr>
+<tr class="even">
+<td>U statistic</td>
+<td>3,379,410.0000</td>
+<td>3,174,169.0000</td>
+</tr>
+<tr class="odd">
+<td>p-value</td>
+<td>3.23e-93</td>
+<td>1.46e-63</td>
+</tr>
+</tbody>
+</table>
+<p>Both datasets show a statistically significant difference in BERT sentiment scores between Android and iOS platforms (p &lt; 0.001 in both cases), confirming that platform is a meaningful source of variation in user sentiment regardless of time period. The U statistic is larger in the older data (3,379,410 vs 3,174,169), which is consistent with the older dataset having slightly more observations (n = 4,518 vs 4,478). While both p-values are extremely small, the older data yields a more extreme test statistic, suggesting the platform gap in sentiment may have been marginally more pronounced in the earlier period, which aligns with what was observed in the bank-by-platform plots (<a href="#fig-bert-bank-old" class="quarto-xref">Figure&nbsp;5</a> and <a href="#fig-bert-bank-new" class="quarto-xref">Figure&nbsp;6</a>).</p>
+</section>
+<section id="results-afinn-vs-bert---new-data" class="level2">
+<h2 class="anchored" data-anchor-id="results-afinn-vs-bert---new-data">4.4 Results AFINN vs BERT - New Data</h2>
 <hr>
 </section>
-<section id="results-new-data" class="level2" data-number="0.6">
-<h2 data-number="0.6" class="anchored" data-anchor-id="results-new-data"><span class="header-section-number">0.6</span> 5. Results: New Data</h2>
-<blockquote class="blockquote">
-<p><strong>[Fill in after running new_data_lexicon_analysis.ipynb and new_approach_sentiment_analysis.ipynb]</strong> Summarise: rating distribution shifts, top Bing/AFINN word changes, NRC emotion profile differences, and transformer model performance (accuracy, F1 per class, agreement rate with lexicon labels).</p>
-</blockquote>
-<div id="fig-rating-compare" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="9">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-rating-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>raw_new[<span class="st">"rating"</span>] <span class="op">=</span> pd.to_numeric(raw_new[<span class="st">"rating"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>), sharey<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, (df, label) <span class="kw">in</span> <span class="bu">zip</span>(axes, [(raw_old, <span class="st">"Old data"</span>), (raw_new, <span class="st">"New data"</span>)]):</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"rating"</span>].value_counts().sort_index().plot(</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        kind<span class="op">=</span><span class="st">"bar"</span>, ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">"steelblue"</span>, rot<span class="op">=</span><span class="dv">0</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    ax.set_title(label)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"Star rating"</span>)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"Count"</span>)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Rating distribution: old vs new data"</span>)</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-rating-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5
-</figcaption>
-</figure>
-</div>
-<hr>
 </section>
-<section id="discussion" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Discussion</h1>
-<section id="reproducibility-assessment" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="reproducibility-assessment"><span class="header-section-number">1.1</span> Reproducibility Assessment</h2>
+<section id="discussion" class="level1">
+<h1>5 Discussion</h1>
+<section id="reproducibility-assessment" class="level2">
+<h2 class="anchored" data-anchor-id="reproducibility-assessment">5.1 Reproducibility Assessment</h2>
+<p>Something about environment in python Overall assesment about reproducibility, minor differences, but overall conclusions hold Slight conclusions about the original study’s robustness to language and implementation choices</p>
 <p>The R-to-Python translation demonstrates that the core analytical conclusions of the original study are reproducible across languages. Minor numerical differences arise from:</p>
 <ul>
 <li><strong>Language detection:</strong> <code>langdetect</code> vs <code>cld3</code> use different underlying models; the set of English-classified reviews may differ slightly</li>
@@ -529,28 +501,25 @@ Figure&nbsp;5
 </ul>
 <p>These are expected cross-language reproducibility gaps and do not undermine the directional conclusions.</p>
 </section>
-<section id="limitations" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="limitations"><span class="header-section-number">1.2</span> Limitations</h2>
+<section id="limitations---agas" class="level2">
+<h2 class="anchored" data-anchor-id="limitations---agas">5.2 Limitations - AGAS</h2>
 <ul>
 <li><strong>Lexicon coverage:</strong> All three lexicons were built for general English, not financial app reviews — domain terms (<em>overdraft, Zelle, wire transfer</em>) may be absent</li>
 <li><strong>Negation scope:</strong> The bigram correction handles only two-word negation; longer-range negation is not captured</li>
 <li><strong>Temporal confounding:</strong> Old and new data cover different time windows, so observed differences may reflect temporal trends, not genuine quality changes</li>
 <li><strong>Label imbalance:</strong> App Store reviews skew heavily toward 5 stars; without class-weighting, the transformer may over-predict “positive”</li>
 </ul>
+<hr>
 </section>
-<section id="generative-ai-disclosure" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="generative-ai-disclosure"><span class="header-section-number">1.3</span> Generative AI Disclosure</h2>
+</section>
+<section id="generative-ai-disclosure" class="level1">
+<h1>6 Generative AI Disclosure</h1>
 <p>In accordance with course policy (dr Jakub Michańków, Reproducible Research 2026), generative AI (Claude AI) was used to assist with coding tasks, refine the code.</p>
 <p>All analytical decisions, interpretations, and research design are the team’s own work.</p>
 <hr>
 </section>
-</section>
-<section id="conclusion" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Conclusion</h1>
-<hr>
-</section>
-<section id="references" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> References</h1>
+<section id="references" class="level1">
+<h1>References</h1>
 <div id="refs" role="list">
 
 </div>
@@ -1011,417 +980,295 @@ Figure&nbsp;5
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Sentiment Analysis of Mobile Banking App Reviews"</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "A Reproducible Study: R to Python, Old Data to New Data, Lexicon to Transformer"</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "Chi Dao"</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "I Putu Agastya Harta Pratama"</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "Si Tang Lin"</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "Zuzanna Uljasz"</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> today</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-float: true</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-title: "Contents"</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: lumen</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">    smooth-scroll: true</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">    number-sections: true</span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-width: 9</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-height: 5</span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co">  pdf:</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co">    number-sections: true</span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-width: 7</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-height: 4</span></span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="co">  echo: true</span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="co">  eval: false</span></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="an">jupyter:</span><span class="co"> python3</span></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary</span></span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>This report documents a reproducible research project that translates an original R-based sentiment analysis of mobile banking app reviews into Python, extends it with newly scraped data, and augments the lexicon-based methods with a transformer (BERT) approach. The project covers five major US banks: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo across the Apple App Store (iOS) and Google Play (Android). The core research questions are: (1) Can the original R findings be faithfully reproduced in Python? (2) Do the results change with a fresh data scrape? (3) Does a transformer model produce sentiment classifications consistent with the lexicon approach?</span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Introduction and Motivation</span></span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1.1 Research Context</span></span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>Customer reviews on mobile app stores represent a rich, continuously updated source of unstructured opinion data. For the banking sector, app reviews offer direct evidence of customer satisfaction, pain points, and competitive positioning — feedback that often offers a faster point of view and is more granular than traditional survey methods. Sentiment analysis of these reviews can help researchers and practitioners understand how user experience varies across institutions and platforms, and whether negative signals co-occur with specific feature complaints or rating patterns.</span>
-<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>There are two motivations for this study. Academically, it provides an opportunity to practice reproducible research: taking an existing empirical study, replicating it in a different computational environment, and evaluating whether the results remain the same. Practically, it investigates whether mobile banking sentiment has shifted between the original data collection window and a fresh scrape in 2026, and whether more sophisticated deep learning methods agree with classic dictionary-based approaches.</span>
-<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1.2 Inspiration and Source Study</span></span>
-<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>The project is inspired by the tidytext-based workflow popularised by @silge2017text, which applies lexicon-based sentiment scoring to tokenised text in a tidy data format. The original analysis follows this approach: it imports and cleans review data, performs unigram sentiment analysis using three lexicons (Bing, AFINN, NRC), constructs bigrams with negator-aware scoring, and evaluates results statistically. The goal of this project is to demonstrate that these findings are reproducible — the same pipeline, implemented in Python with equivalent libraries, produces consistent conclusions — and then to extend the study in two directions: new data and a transformer model.</span>
-<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Data</span></span>
-<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>Dataset is obtained with the means of scrapping reviews from the App Store and Google Play for the five major banks in US. The original dataset was collected in 2023, while the new dataset was scraped in mid-2026. Both datasets contain reviews in English, with metadata including star ratings, review text, date, platform, and storefront. The data is stored as CSV files per bank and platform, which are combined and preprocessed for analysis.</span>
-<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>The major banks included in the dataset are some of the largest US financial institutions, which are: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo. Each has a significant mobile banking user base. The platforms covered are the two dominant mobile ecosystems: Apple's App Store (iOS) and Google's Play Store (Android). This allows for cross-platform comparisons and insights into whether user sentiment differs by operating system.</span>
-<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>The method of scrapping differs for each platform due to their distinct APIs and structures. For the iOS App Store, the script uses Python's requests library to directly parse Apple's publicly accessible XML/JSON RSS feed endpoints, which are ordered by the most recent submissions. For the Google Play Store, it leverages an open-source web scraping library (google-play-scraper) that mimics browser requests to dynamically fetch and page through raw review payloads using continuation tokens. Both approaches process these external data streams in real time, converting the raw JSON responses into structured Pandas DataFrames before exporting them to CSV files.</span>
-<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.1 Original Dataset (Old Data)</span></span>
-<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>The original dataset was collected in 2023 using a combination of web scraping and API access methods. It includes reviews from the same five banks and both platforms, but covers a different time period than the new data. The dataset is stored as CSV files, one per bank and platform, with columns for review text, star rating, date, and other metadata. The original analysis applied lexicon-based sentiment scoring to this dataset to derive insights about user sentiment and its relationship to star ratings.</span>
-<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-old-overview</span></span>
-<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Overview of the original dataset"</span></span>
-<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>DATA_OLD <span class="op">=</span> Path(<span class="st">"Dataset/data_old_approach"</span>)</span>
-<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>raw_old <span class="op">=</span> pd.concat(</span>
-<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>    [pd.read_csv(p, dtype<span class="op">=</span><span class="bu">str</span>).assign(source_file<span class="op">=</span>p.name)</span>
-<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>     <span class="cf">for</span> p <span class="kw">in</span> DATA_OLD.glob(<span class="st">"*.csv"</span>)],</span>
-<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>    ignore_index<span class="op">=</span><span class="va">True</span></span>
-<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({</span>
-<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Total reviews"</span>:  [<span class="bu">len</span>(raw_old)],</span>
-<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Banks"</span>:          [raw_old[<span class="st">"source_file"</span>].nunique()],</span>
-<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Platforms"</span>:      [raw_old[<span class="st">"platform"</span>].nunique()],</span>
-<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Date range"</span>: [</span>
-<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>pd<span class="sc">.</span>to_datetime(raw_old[<span class="st">'date'</span>], errors<span class="op">=</span><span class="st">'coerce'</span>)<span class="sc">.</span><span class="bu">min</span>()<span class="sc">.</span>date()<span class="sc">}</span><span class="ss"> – "</span></span>
-<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>pd<span class="sc">.</span>to_datetime(raw_old[<span class="st">'date'</span>], errors<span class="op">=</span><span class="st">'coerce'</span>)<span class="sc">.</span><span class="bu">max</span>()<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a>    ]</span>
-<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.2 Newly Scraped Dataset (New Data)</span></span>
-<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>The new dataset was collected using a dedicated scraper (<span class="in">`Dataset/scraper.ipynb`</span>) targeting the same five banks and both platforms. The scraping window covers a more recent period *(2024-2026)* than the original data. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window.</span>
-<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-new-overview</span></span>
-<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Overview of the newly scraped dataset"</span></span>
-<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a>DATA_NEW <span class="op">=</span> Path(<span class="st">"Dataset/data_new_approach"</span>)</span>
-<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a>raw_new <span class="op">=</span> pd.concat(</span>
-<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a>    [pd.read_csv(p, dtype<span class="op">=</span><span class="bu">str</span>).assign(source_file<span class="op">=</span>p.name)</span>
-<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a>     <span class="cf">for</span> p <span class="kw">in</span> DATA_NEW.glob(<span class="st">"*.csv"</span>)],</span>
-<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a>    ignore_index<span class="op">=</span><span class="va">True</span></span>
-<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({</span>
-<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Total reviews"</span>: [<span class="bu">len</span>(raw_new)],</span>
-<span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Banks"</span>:         [raw_new[<span class="st">"source_file"</span>].nunique()],</span>
-<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Platforms"</span>:     [raw_new[<span class="st">"platform"</span>].nunique()],</span>
-<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.3 Data Preprocessing</span></span>
-<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a>Preprocessing follows the same logical steps in both the R original and the Python replications:</span>
-<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Import and combine** — all per-bank CSVs are concatenated into a single dataframe</span>
-<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Bank and platform standardisation** — filenames are parsed to extract bank names; platform codes (<span class="in">`app_store`</span> → <span class="in">`iOS`</span>, <span class="in">`google_play`</span> → <span class="in">`Android`</span>) are mapped to readable labels</span>
-<span id="cb8-127"><a href="#cb8-127" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Type coercion** — <span class="in">`rating`</span> is cast to numeric; <span class="in">`date`</span> is parsed to datetime</span>
-<span id="cb8-128"><a href="#cb8-128" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Language detection** — reviews not detected as English are removed (using <span class="in">`langdetect`</span> in Python)</span>
-<span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Raw text construction** — <span class="in">`title`</span> and <span class="in">`review`</span> fields are concatenated into <span class="in">`raw_text`</span></span>
-<span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Tokenisation and stopword removal** — words are extracted using regex; a custom stopword list (NLTK English stopwords + domain terms: *app, bank, banking, mobile, iphone, apple, android, phone*) is applied</span>
-<span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>**Bigram construction** — adjacent word pairs are extracted from cleaned text, with negators (*not, never, no, cannot*, etc.) explicitly excluded from the stopword filter so they are preserved in bigrams</span>
-<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a>For the transformer approach, an additional cleaning step keeps punctuation intact (since BERT tokenisers handle it natively) and removes URLs.</span>
-<span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-135"><a href="#cb8-135" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb8-136"><a href="#cb8-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-137"><a href="#cb8-137" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Methodology</span></span>
-<span id="cb8-138"><a href="#cb8-138" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.1 Lexicon-Based Sentiment Analysis</span></span>
-<span id="cb8-139"><a href="#cb8-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a>Three lexicons are applied to the filtered tokens. Scores are computed at the review level and disaggregated by bank and platform.</span>
-<span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a>**Bing (Opinion Lexicon):** A binary lexicon classifying words as positive or negative <span class="co">[</span><span class="ot">@hu2004mining</span><span class="co">]</span>. Review sentiment is the count of positive words minus negative words.</span>
-<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a>**AFINN:** An integer-scored lexicon (−5 to +5) <span class="co">[</span><span class="ot">@nielsen2011new</span><span class="co">]</span>. Review scores are the sum of matched word scores. Pearson correlation between AFINN scores and star ratings serves as a validity check.</span>
-<span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a>**NRC Emotion Lexicon:** Developed by @mohammad2013crowdsourcing, this lexicon maps words to 8 emotion categories (anger, anticipation, disgust, fear, joy, sadness, surprise, trust) and 2 polarity categories. One word may belong to multiple categories, enabling nuanced emotion profiling.</span>
-<span id="cb8-147"><a href="#cb8-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-148"><a href="#cb8-148" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-150"><a href="#cb8-150" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.2 Bigram Analysis and Negation Correction</span></span>
-<span id="cb8-151"><a href="#cb8-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a>Unigram methods cannot handle negation: *not good* is scored as positive because *good* carries a positive AFINN score. To quantify this limitation, bigrams are constructed from the raw review text, with negators explicitly retained in the stopword filter. A set of 22 negators is defined (e.g., *no*, *not*, *n't*, *never*, *cannot*). Where the first token of a bigram is a negator and the second has an AFINN score, the score is sign-flipped. The magnitude of the resulting correction is reported by star-rating group.</span>
-<span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-156"><a href="#cb8-156" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.3 Transformer-Based Sentiment Analysis</span></span>
-<span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-158"><a href="#cb8-158" aria-hidden="true" tabindex="-1"></a>As a complement to the lexicon methods, the pre-trained model <span class="in">`nlptown/bert-base-multilingual-uncased-sentiment`</span> <span class="co">[</span><span class="ot">@nlptown2019</span><span class="co">]</span> is applied via the Hugging Face <span class="in">`transformers`</span> pipeline. The model predicts a 1–5 star rating for each review; predictions are normalised to a continuous sentiment score:</span>
-<span id="cb8-159"><a href="#cb8-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a>$$\text{bert<span class="sc">\_</span>score} = \frac{\text{bert<span class="sc">\_</span>stars} - 1}{4} \in <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$$</span>
-<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a>Model validity is assessed by (1) Pearson correlation between <span class="in">`bert_score`</span> and the actual star rating (95% CI via Fisher's *z*-transformation), (2) boxplots of <span class="in">`bert_score`</span> stratified by star rating, bank, and platform, (3) exact star-level agreement and a full confusion matrix, and (4) a Mann–Whitney U test comparing platform distributions.</span>
-<span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-164"><a href="#cb8-164" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb8-165"><a href="#cb8-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Results: Old Data</span></span>
-<span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-170"><a href="#cb8-170" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-171"><a href="#cb8-171" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-rating-old</span></span>
-<span id="cb8-172"><a href="#cb8-172" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Rating distribution by platform (old data)"</span></span>
-<span id="cb8-173"><a href="#cb8-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-174"><a href="#cb8-174" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a>raw_old[<span class="st">"rating"</span>] <span class="op">=</span> pd.to_numeric(raw_old[<span class="st">"rating"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>)</span>
-<span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a>rating_counts <span class="op">=</span> (</span>
-<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a>    raw_old.groupby([<span class="st">"platform"</span>, <span class="st">"rating"</span>])</span>
-<span id="cb8-179"><a href="#cb8-179" aria-hidden="true" tabindex="-1"></a>    .size().reset_index(name<span class="op">=</span><span class="st">"n"</span>)</span>
-<span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a>platforms <span class="op">=</span> <span class="bu">sorted</span>(rating_counts[<span class="st">"platform"</span>].dropna().unique())</span>
-<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="bu">len</span>(platforms), figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, plat <span class="kw">in</span> <span class="bu">zip</span>(axes, platforms):</span>
-<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> rating_counts[rating_counts[<span class="st">"platform"</span>] <span class="op">==</span> plat]</span>
-<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a>    ax.bar(data[<span class="st">"rating"</span>], data[<span class="st">"n"</span>], color<span class="op">=</span><span class="st">"steelblue"</span>)</span>
-<span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a>    ax.set_title(plat)</span>
-<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"Star rating"</span>)</span>
-<span id="cb8-188"><a href="#cb8-188" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"Number of reviews"</span>)</span>
-<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Rating distribution by platform"</span>)</span>
-<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-193"><a href="#cb8-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-bing</span></span>
-<span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Distribution of Bing sentiment words (old data)"</span></span>
-<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk, re, numpy <span class="im">as</span> np</span>
-<span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> opinion_lexicon, stopwords</span>
-<span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> ENGLISH_STOP_WORDS</span>
-<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-204"><a href="#cb8-204" aria-hidden="true" tabindex="-1"></a>nltk.download(<span class="st">"opinion_lexicon"</span>, quiet<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb8-205"><a href="#cb8-205" aria-hidden="true" tabindex="-1"></a>nltk.download(<span class="st">"stopwords"</span>, quiet<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb8-206"><a href="#cb8-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-207"><a href="#cb8-207" aria-hidden="true" tabindex="-1"></a>PROCESSED_OLD <span class="op">=</span> Path(<span class="st">"Dataset/data_old_approach/processed_data"</span>)</span>
-<span id="cb8-208"><a href="#cb8-208" aria-hidden="true" tabindex="-1"></a>lexicon_df <span class="op">=</span> pd.read_csv(PROCESSED_OLD <span class="op">/</span> <span class="st">"old_preprocessed_lexicon.csv"</span>)</span>
-<span id="cb8-209"><a href="#cb8-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-210"><a href="#cb8-210" aria-hidden="true" tabindex="-1"></a>custom_stop <span class="op">=</span> <span class="bu">set</span>(stopwords.words(<span class="st">"english"</span>)) <span class="op">|</span> {</span>
-<span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a>    <span class="st">"app"</span>,<span class="st">"bank"</span>,<span class="st">"banking"</span>,<span class="st">"mobile"</span>,<span class="st">"iphone"</span>,<span class="st">"apple"</span>,<span class="st">"android"</span>,<span class="st">"phone"</span></span>
-<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a>pos_words <span class="op">=</span> <span class="bu">set</span>(opinion_lexicon.positive())</span>
-<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a>neg_words <span class="op">=</span> <span class="bu">set</span>(opinion_lexicon.negative())</span>
-<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a>df_english <span class="op">=</span> lexicon_df.copy().reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a>df_english[<span class="st">"review_id"</span>] <span class="op">=</span> df_english.index</span>
-<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a>reviews_tokens <span class="op">=</span> df_english.copy()</span>
-<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a>reviews_tokens[<span class="st">"word"</span>] <span class="op">=</span> (</span>
-<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a>    reviews_tokens[<span class="st">"raw_text"</span>].fillna(<span class="st">""</span>).<span class="bu">str</span>.lower()</span>
-<span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">apply</span>(<span class="kw">lambda</span> x: re.findall(<span class="vs">r"</span><span class="dv">\b</span><span class="pp">[a-z]</span><span class="op">+</span><span class="dv">\b</span><span class="vs">"</span>, x))</span>
-<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a>reviews_tokens <span class="op">=</span> reviews_tokens.explode(<span class="st">"word"</span>).dropna(subset<span class="op">=</span>[<span class="st">"word"</span>])</span>
-<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a>reviews_after_sw <span class="op">=</span> reviews_tokens[<span class="op">~</span>reviews_tokens[<span class="st">"word"</span>].isin(custom_stop)].copy()</span>
-<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a>bing <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a>    <span class="st">"word"</span>:      <span class="bu">list</span>(pos_words)              <span class="op">+</span> <span class="bu">list</span>(neg_words),</span>
-<span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sentiment"</span>: [<span class="st">"positive"</span>] <span class="op">*</span> <span class="bu">len</span>(pos_words) <span class="op">+</span> [<span class="st">"negative"</span>] <span class="op">*</span> <span class="bu">len</span>(neg_words)</span>
-<span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a>bing_words <span class="op">=</span> reviews_after_sw.merge(bing, on<span class="op">=</span><span class="st">"word"</span>, how<span class="op">=</span><span class="st">"inner"</span>)</span>
-<span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> bing_words[<span class="st">"sentiment"</span>].value_counts().reset_index()</span>
-<span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a>counts.columns <span class="op">=</span> [<span class="st">"sentiment"</span>, <span class="st">"n"</span>]</span>
-<span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-236"><a href="#cb8-236" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">4</span>))</span>
-<span id="cb8-237"><a href="#cb8-237" aria-hidden="true" tabindex="-1"></a>ax.bar(counts[<span class="st">"sentiment"</span>], counts[<span class="st">"n"</span>], color<span class="op">=</span>[<span class="st">"steelblue"</span>,<span class="st">"salmon"</span>])</span>
-<span id="cb8-238"><a href="#cb8-238" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Distribution of Bing sentiment words"</span>)</span>
-<span id="cb8-239"><a href="#cb8-239" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Sentiment"</span>)</span>
-<span id="cb8-240"><a href="#cb8-240" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Word count"</span>)</span>
-<span id="cb8-241"><a href="#cb8-241" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb8-242"><a href="#cb8-242" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb8-243"><a href="#cb8-243" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-244"><a href="#cb8-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-247"><a href="#cb8-247" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-248"><a href="#cb8-248" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-afinn-boxplot</span></span>
-<span id="cb8-249"><a href="#cb8-249" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "AFINN sentiment score by star rating (old data)"</span></span>
-<span id="cb8-250"><a href="#cb8-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-251"><a href="#cb8-251" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.request</span>
-<span id="cb8-252"><a href="#cb8-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-253"><a href="#cb8-253" aria-hidden="true" tabindex="-1"></a>afinn_path <span class="op">=</span> Path(<span class="st">"AFINN-111.txt"</span>)</span>
-<span id="cb8-254"><a href="#cb8-254" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> afinn_path.exists():</span>
-<span id="cb8-255"><a href="#cb8-255" aria-hidden="true" tabindex="-1"></a>    urllib.request.urlretrieve(</span>
-<span id="cb8-256"><a href="#cb8-256" aria-hidden="true" tabindex="-1"></a>        <span class="st">"https://raw.githubusercontent.com/fnielsen/afinn/master/afinn/data/AFINN-111.txt"</span>,</span>
-<span id="cb8-257"><a href="#cb8-257" aria-hidden="true" tabindex="-1"></a>        afinn_path</span>
-<span id="cb8-258"><a href="#cb8-258" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb8-259"><a href="#cb8-259" aria-hidden="true" tabindex="-1"></a>afinn <span class="op">=</span> pd.read_csv(afinn_path, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, names<span class="op">=</span>[<span class="st">"word"</span>, <span class="st">"value"</span>])</span>
-<span id="cb8-260"><a href="#cb8-260" aria-hidden="true" tabindex="-1"></a>afinn[<span class="st">"word"</span>] <span class="op">=</span> afinn[<span class="st">"word"</span>].<span class="bu">str</span>.lower()</span>
-<span id="cb8-261"><a href="#cb8-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-262"><a href="#cb8-262" aria-hidden="true" tabindex="-1"></a>afinn_words  <span class="op">=</span> reviews_after_sw.merge(afinn, on<span class="op">=</span><span class="st">"word"</span>, how<span class="op">=</span><span class="st">"inner"</span>)</span>
-<span id="cb8-263"><a href="#cb8-263" aria-hidden="true" tabindex="-1"></a>afinn_review <span class="op">=</span> (</span>
-<span id="cb8-264"><a href="#cb8-264" aria-hidden="true" tabindex="-1"></a>    afinn_words.groupby([<span class="st">"bank"</span>, <span class="st">"platform"</span>, <span class="st">"review_id"</span>])</span>
-<span id="cb8-265"><a href="#cb8-265" aria-hidden="true" tabindex="-1"></a>    .agg(afinn_sum<span class="op">=</span>(<span class="st">"value"</span>,<span class="st">"sum"</span>), afinn_mean<span class="op">=</span>(<span class="st">"value"</span>,<span class="st">"mean"</span>),</span>
-<span id="cb8-266"><a href="#cb8-266" aria-hidden="true" tabindex="-1"></a>         n_afinn<span class="op">=</span>(<span class="st">"value"</span>,<span class="st">"count"</span>)).reset_index()</span>
-<span id="cb8-267"><a href="#cb8-267" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-268"><a href="#cb8-268" aria-hidden="true" tabindex="-1"></a>df_afinn <span class="op">=</span> df_english.copy()</span>
-<span id="cb8-269"><a href="#cb8-269" aria-hidden="true" tabindex="-1"></a>df_afinn[<span class="st">"rating"</span>] <span class="op">=</span> pd.to_numeric(df_afinn[<span class="st">"rating"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>)</span>
-<span id="cb8-270"><a href="#cb8-270" aria-hidden="true" tabindex="-1"></a>df_afinn <span class="op">=</span> df_afinn.merge(afinn_review, on<span class="op">=</span>[<span class="st">"bank"</span>,<span class="st">"platform"</span>,<span class="st">"review_id"</span>], how<span class="op">=</span><span class="st">"left"</span>)</span>
-<span id="cb8-271"><a href="#cb8-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-272"><a href="#cb8-272" aria-hidden="true" tabindex="-1"></a>df_plot <span class="op">=</span> df_afinn.dropna(subset<span class="op">=</span>[<span class="st">"rating"</span>,<span class="st">"afinn_sum"</span>])</span>
-<span id="cb8-273"><a href="#cb8-273" aria-hidden="true" tabindex="-1"></a>ratings  <span class="op">=</span> <span class="bu">sorted</span>(df_plot[<span class="st">"rating"</span>].unique())</span>
-<span id="cb8-274"><a href="#cb8-274" aria-hidden="true" tabindex="-1"></a>groups   <span class="op">=</span> [df_plot[df_plot[<span class="st">"rating"</span>] <span class="op">==</span> r][<span class="st">"afinn_sum"</span>] <span class="cf">for</span> r <span class="kw">in</span> ratings]</span>
-<span id="cb8-275"><a href="#cb8-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-276"><a href="#cb8-276" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">4</span>))</span>
-<span id="cb8-277"><a href="#cb8-277" aria-hidden="true" tabindex="-1"></a>bp <span class="op">=</span> ax.boxplot(groups, labels<span class="op">=</span>[<span class="bu">int</span>(r) <span class="cf">for</span> r <span class="kw">in</span> ratings], patch_artist<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb8-278"><a href="#cb8-278" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> patch <span class="kw">in</span> bp[<span class="st">"boxes"</span>]:</span>
-<span id="cb8-279"><a href="#cb8-279" aria-hidden="true" tabindex="-1"></a>    patch.set_facecolor(<span class="st">"lightblue"</span>)<span class="op">;</span> patch.set_alpha(<span class="fl">0.7</span>)</span>
-<span id="cb8-280"><a href="#cb8-280" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
-<span id="cb8-281"><a href="#cb8-281" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"AFINN sentiment by star rating"</span>)</span>
-<span id="cb8-282"><a href="#cb8-282" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Star rating"</span>)</span>
-<span id="cb8-283"><a href="#cb8-283" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"AFINN sum score"</span>)</span>
-<span id="cb8-284"><a href="#cb8-284" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb8-285"><a href="#cb8-285" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb8-286"><a href="#cb8-286" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-287"><a href="#cb8-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-290"><a href="#cb8-290" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-291"><a href="#cb8-291" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-pearson</span></span>
-<span id="cb8-292"><a href="#cb8-292" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Pearson correlation: AFINN score vs star rating"</span></span>
-<span id="cb8-293"><a href="#cb8-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-294"><a href="#cb8-294" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
-<span id="cb8-295"><a href="#cb8-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-296"><a href="#cb8-296" aria-hidden="true" tabindex="-1"></a>cor_data <span class="op">=</span> df_plot[[<span class="st">"rating"</span>,<span class="st">"afinn_sum"</span>]].dropna()</span>
-<span id="cb8-297"><a href="#cb8-297" aria-hidden="true" tabindex="-1"></a>r, p <span class="op">=</span> stats.pearsonr(cor_data[<span class="st">"rating"</span>], cor_data[<span class="st">"afinn_sum"</span>])</span>
-<span id="cb8-298"><a href="#cb8-298" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"r = </span><span class="sc">{</span>r<span class="sc">:.4f}</span><span class="ss">,  p = </span><span class="sc">{</span>p<span class="sc">:.4e}</span><span class="ss">,  n = </span><span class="sc">{</span><span class="bu">len</span>(cor_data)<span class="sc">:,}</span><span class="ss">"</span>)</span>
-<span id="cb8-299"><a href="#cb8-299" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-300"><a href="#cb8-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-303"><a href="#cb8-303" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-304"><a href="#cb8-304" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-nrc</span></span>
-<span id="cb8-305"><a href="#cb8-305" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "NRC emotion composition by bank (old data)"</span></span>
-<span id="cb8-306"><a href="#cb8-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-307"><a href="#cb8-307" aria-hidden="true" tabindex="-1"></a>nrc_path <span class="op">=</span> Path(<span class="st">"NRC-Emotion-Lexicon-Wordlevel-v0.92.txt"</span>)</span>
-<span id="cb8-308"><a href="#cb8-308" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> nrc_path.exists():</span>
-<span id="cb8-309"><a href="#cb8-309" aria-hidden="true" tabindex="-1"></a>    urllib.request.urlretrieve(</span>
-<span id="cb8-310"><a href="#cb8-310" aria-hidden="true" tabindex="-1"></a>        <span class="st">"https://raw.githubusercontent.com/dinbav/LeXmo/master/NRC-Emotion-Lexicon-Wordlevel-v0.92.txt"</span>,</span>
-<span id="cb8-311"><a href="#cb8-311" aria-hidden="true" tabindex="-1"></a>        nrc_path</span>
-<span id="cb8-312"><a href="#cb8-312" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb8-313"><a href="#cb8-313" aria-hidden="true" tabindex="-1"></a>nrc <span class="op">=</span> pd.read_csv(nrc_path, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, names<span class="op">=</span>[<span class="st">"word"</span>,<span class="st">"sentiment"</span>,<span class="st">"association"</span>])</span>
-<span id="cb8-314"><a href="#cb8-314" aria-hidden="true" tabindex="-1"></a>nrc <span class="op">=</span> nrc[nrc[<span class="st">"association"</span>] <span class="op">==</span> <span class="dv">1</span>][[<span class="st">"word"</span>,<span class="st">"sentiment"</span>]].copy()</span>
-<span id="cb8-315"><a href="#cb8-315" aria-hidden="true" tabindex="-1"></a>nrc[<span class="st">"word"</span>] <span class="op">=</span> nrc[<span class="st">"word"</span>].<span class="bu">str</span>.lower()</span>
-<span id="cb8-316"><a href="#cb8-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-317"><a href="#cb8-317" aria-hidden="true" tabindex="-1"></a>nrc_words <span class="op">=</span> reviews_after_sw.merge(nrc, on<span class="op">=</span><span class="st">"word"</span>, how<span class="op">=</span><span class="st">"inner"</span>)</span>
-<span id="cb8-318"><a href="#cb8-318" aria-hidden="true" tabindex="-1"></a>nrc_by_bank <span class="op">=</span> nrc_words.groupby([<span class="st">"bank"</span>,<span class="st">"sentiment"</span>]).size().reset_index(name<span class="op">=</span><span class="st">"n"</span>)</span>
-<span id="cb8-319"><a href="#cb8-319" aria-hidden="true" tabindex="-1"></a>nrc_by_bank[<span class="st">"pct"</span>] <span class="op">=</span> nrc_by_bank.groupby(<span class="st">"bank"</span>)[<span class="st">"n"</span>].transform(<span class="kw">lambda</span> x: x <span class="op">/</span> x.<span class="bu">sum</span>())</span>
-<span id="cb8-320"><a href="#cb8-320" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-321"><a href="#cb8-321" aria-hidden="true" tabindex="-1"></a>banks <span class="op">=</span> <span class="bu">sorted</span>(nrc_by_bank[<span class="st">"bank"</span>].unique())</span>
-<span id="cb8-322"><a href="#cb8-322" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="bu">len</span>(banks), figsize<span class="op">=</span>(<span class="dv">5</span> <span class="op">*</span> <span class="bu">len</span>(banks), <span class="dv">5</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb8-323"><a href="#cb8-323" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, bank <span class="kw">in</span> <span class="bu">zip</span>(axes, banks):</span>
-<span id="cb8-324"><a href="#cb8-324" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> nrc_by_bank[nrc_by_bank[<span class="st">"bank"</span>] <span class="op">==</span> bank].sort_values(<span class="st">"pct"</span>)</span>
-<span id="cb8-325"><a href="#cb8-325" aria-hidden="true" tabindex="-1"></a>    ax.barh(data[<span class="st">"sentiment"</span>], data[<span class="st">"pct"</span>])</span>
-<span id="cb8-326"><a href="#cb8-326" aria-hidden="true" tabindex="-1"></a>    ax.set_title(bank, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
-<span id="cb8-327"><a href="#cb8-327" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"Proportion"</span>)</span>
-<span id="cb8-328"><a href="#cb8-328" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"NRC emotion composition by bank"</span>)</span>
-<span id="cb8-329"><a href="#cb8-329" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb8-330"><a href="#cb8-330" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb8-331"><a href="#cb8-331" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-332"><a href="#cb8-332" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-335"><a href="#cb8-335" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-336"><a href="#cb8-336" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-evaluation</span></span>
-<span id="cb8-337"><a href="#cb8-337" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Statistical evaluation"</span></span>
-<span id="cb8-338"><a href="#cb8-338" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-339"><a href="#cb8-339" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
-<span id="cb8-340"><a href="#cb8-340" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-341"><a href="#cb8-341" aria-hidden="true" tabindex="-1"></a>ios     <span class="op">=</span> df_afinn[df_afinn[<span class="st">"platform"</span>] <span class="op">==</span> <span class="st">"iOS"</span>][<span class="st">"afinn_sum"</span>].dropna()</span>
-<span id="cb8-342"><a href="#cb8-342" aria-hidden="true" tabindex="-1"></a>android <span class="op">=</span> df_afinn[df_afinn[<span class="st">"platform"</span>] <span class="op">==</span> <span class="st">"Android"</span>][<span class="st">"afinn_sum"</span>].dropna()</span>
-<span id="cb8-343"><a href="#cb8-343" aria-hidden="true" tabindex="-1"></a>u_stat, p_mw <span class="op">=</span> stats.mannwhitneyu(ios, android, alternative<span class="op">=</span><span class="st">"two-sided"</span>)</span>
-<span id="cb8-344"><a href="#cb8-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-345"><a href="#cb8-345" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Mann-Whitney U (iOS vs Android): U = </span><span class="sc">{</span>u_stat<span class="sc">:.0f}</span><span class="ss">, p = </span><span class="sc">{</span>p_mw<span class="sc">:.4e}</span><span class="ss">"</span>)</span>
-<span id="cb8-346"><a href="#cb8-346" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"iOS reviews: </span><span class="sc">{</span><span class="bu">len</span>(ios)<span class="sc">:,}</span><span class="ss">  |  Android reviews: </span><span class="sc">{</span><span class="bu">len</span>(android)<span class="sc">:,}</span><span class="ss">"</span>)</span>
-<span id="cb8-347"><a href="#cb8-347" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-348"><a href="#cb8-348" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-349"><a href="#cb8-349" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb8-350"><a href="#cb8-350" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-351"><a href="#cb8-351" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Results: New Data</span></span>
-<span id="cb8-352"><a href="#cb8-352" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-353"><a href="#cb8-353" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **[Fill in after running new_data_lexicon_analysis.ipynb and new_approach_sentiment_analysis.ipynb]**</span></span>
-<span id="cb8-354"><a href="#cb8-354" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Summarise: rating distribution shifts, top Bing/AFINN word changes, NRC emotion</span></span>
-<span id="cb8-355"><a href="#cb8-355" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; profile differences, and transformer model performance (accuracy, F1 per class,</span></span>
-<span id="cb8-356"><a href="#cb8-356" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; agreement rate with lexicon labels).</span></span>
-<span id="cb8-357"><a href="#cb8-357" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-360"><a href="#cb8-360" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-361"><a href="#cb8-361" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-rating-compare</span></span>
-<span id="cb8-362"><a href="#cb8-362" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Rating distribution: old vs new data"</span></span>
-<span id="cb8-363"><a href="#cb8-363" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-364"><a href="#cb8-364" aria-hidden="true" tabindex="-1"></a>raw_new[<span class="st">"rating"</span>] <span class="op">=</span> pd.to_numeric(raw_new[<span class="st">"rating"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>)</span>
-<span id="cb8-365"><a href="#cb8-365" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-366"><a href="#cb8-366" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>), sharey<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb8-367"><a href="#cb8-367" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, (df, label) <span class="kw">in</span> <span class="bu">zip</span>(axes, [(raw_old, <span class="st">"Old data"</span>), (raw_new, <span class="st">"New data"</span>)]):</span>
-<span id="cb8-368"><a href="#cb8-368" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"rating"</span>].value_counts().sort_index().plot(</span>
-<span id="cb8-369"><a href="#cb8-369" aria-hidden="true" tabindex="-1"></a>        kind<span class="op">=</span><span class="st">"bar"</span>, ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">"steelblue"</span>, rot<span class="op">=</span><span class="dv">0</span></span>
-<span id="cb8-370"><a href="#cb8-370" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb8-371"><a href="#cb8-371" aria-hidden="true" tabindex="-1"></a>    ax.set_title(label)</span>
-<span id="cb8-372"><a href="#cb8-372" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"Star rating"</span>)</span>
-<span id="cb8-373"><a href="#cb8-373" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"Count"</span>)</span>
-<span id="cb8-374"><a href="#cb8-374" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Rating distribution: old vs new data"</span>)</span>
-<span id="cb8-375"><a href="#cb8-375" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb8-376"><a href="#cb8-376" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb8-377"><a href="#cb8-377" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-378"><a href="#cb8-378" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-379"><a href="#cb8-379" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb8-380"><a href="#cb8-380" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-381"><a href="#cb8-381" aria-hidden="true" tabindex="-1"></a><span class="fu"># Discussion</span></span>
-<span id="cb8-382"><a href="#cb8-382" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-383"><a href="#cb8-383" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reproducibility Assessment</span></span>
-<span id="cb8-384"><a href="#cb8-384" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-385"><a href="#cb8-385" aria-hidden="true" tabindex="-1"></a>The R-to-Python translation demonstrates that the core analytical conclusions</span>
-<span id="cb8-386"><a href="#cb8-386" aria-hidden="true" tabindex="-1"></a>of the original study are reproducible across languages. Minor numerical</span>
-<span id="cb8-387"><a href="#cb8-387" aria-hidden="true" tabindex="-1"></a>differences arise from:</span>
-<span id="cb8-388"><a href="#cb8-388" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-389"><a href="#cb8-389" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Language detection:** <span class="in">`langdetect`</span> vs <span class="in">`cld3`</span> use different underlying</span>
-<span id="cb8-390"><a href="#cb8-390" aria-hidden="true" tabindex="-1"></a>  models; the set of English-classified reviews may differ slightly</span>
-<span id="cb8-391"><a href="#cb8-391" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Stopword lists:** <span class="in">`tidytext::stop_words`</span> differs from NLTK's English list</span>
-<span id="cb8-392"><a href="#cb8-392" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Bing lexicon size:** NLTK <span class="in">`opinion_lexicon`</span> covers more words than the</span>
-<span id="cb8-393"><a href="#cb8-393" aria-hidden="true" tabindex="-1"></a>  Bing lexicon embedded in tidytext</span>
-<span id="cb8-394"><a href="#cb8-394" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-395"><a href="#cb8-395" aria-hidden="true" tabindex="-1"></a>These are expected cross-language reproducibility gaps and do not undermine</span>
-<span id="cb8-396"><a href="#cb8-396" aria-hidden="true" tabindex="-1"></a>the directional conclusions.</span>
-<span id="cb8-397"><a href="#cb8-397" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-398"><a href="#cb8-398" aria-hidden="true" tabindex="-1"></a><span class="fu">## Limitations</span></span>
-<span id="cb8-399"><a href="#cb8-399" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-400"><a href="#cb8-400" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Lexicon coverage:** All three lexicons were built for general English, not</span>
-<span id="cb8-401"><a href="#cb8-401" aria-hidden="true" tabindex="-1"></a>  financial app reviews — domain terms (*overdraft, Zelle, wire transfer*) may</span>
-<span id="cb8-402"><a href="#cb8-402" aria-hidden="true" tabindex="-1"></a>  be absent</span>
-<span id="cb8-403"><a href="#cb8-403" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Negation scope:** The bigram correction handles only two-word negation;</span>
-<span id="cb8-404"><a href="#cb8-404" aria-hidden="true" tabindex="-1"></a>  longer-range negation is not captured</span>
-<span id="cb8-405"><a href="#cb8-405" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Temporal confounding:** Old and new data cover different time windows, so</span>
-<span id="cb8-406"><a href="#cb8-406" aria-hidden="true" tabindex="-1"></a>  observed differences may reflect temporal trends, not genuine quality changes</span>
-<span id="cb8-407"><a href="#cb8-407" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Label imbalance:** App Store reviews skew heavily toward 5 stars; without</span>
-<span id="cb8-408"><a href="#cb8-408" aria-hidden="true" tabindex="-1"></a>  class-weighting, the transformer may over-predict "positive"</span>
-<span id="cb8-409"><a href="#cb8-409" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-410"><a href="#cb8-410" aria-hidden="true" tabindex="-1"></a><span class="fu">## Generative AI Disclosure</span></span>
-<span id="cb8-411"><a href="#cb8-411" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-412"><a href="#cb8-412" aria-hidden="true" tabindex="-1"></a>In accordance with course policy (dr Jakub Michańków, Reproducible Research</span>
-<span id="cb8-413"><a href="#cb8-413" aria-hidden="true" tabindex="-1"></a>2026), generative AI (Claude AI) was used to assist with coding tasks, refine the code.</span>
-<span id="cb8-414"><a href="#cb8-414" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-415"><a href="#cb8-415" aria-hidden="true" tabindex="-1"></a>All analytical decisions, interpretations, and research design are the</span>
-<span id="cb8-416"><a href="#cb8-416" aria-hidden="true" tabindex="-1"></a>team's own work.</span>
-<span id="cb8-417"><a href="#cb8-417" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-418"><a href="#cb8-418" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb8-419"><a href="#cb8-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-420"><a href="#cb8-420" aria-hidden="true" tabindex="-1"></a><span class="fu"># Conclusion</span></span>
-<span id="cb8-421"><a href="#cb8-421" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-422"><a href="#cb8-422" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-423"><a href="#cb8-423" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-424"><a href="#cb8-424" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb8-425"><a href="#cb8-425" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-426"><a href="#cb8-426" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
-<span id="cb8-427"><a href="#cb8-427" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-428"><a href="#cb8-428" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
-<span id="cb8-429"><a href="#cb8-429" aria-hidden="true" tabindex="-1"></a>:::</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Sentiment Analysis of Mobile Banking App Reviews"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "A Reproducible Study: R to Python, Old Data to New Data, Lexicon to Transformer"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "Chi Dao"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "I Putu Agastya Harta Pratama"</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "Si Tang Lin"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "Zuzanna Uljasz"</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> today</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-float: true</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-title: "Contents"</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: lumen</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">    smooth-scroll: true</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co">    number-sections: false</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-width: 9</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-height: 5</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co">  pdf:</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">    number-sections: false</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-width: 7</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-height: 4</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co">  echo: true</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co">  eval: false</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="an">jupyter:</span><span class="co"> python3</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="fu"># Summary</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>This report documents a reproducible research project that translates an original R-based sentiment analysis of mobile banking app reviews into Python, extends it with newly scraped data, and augments the lexicon-based methods with a transformer (BERT) approach. The project covers five major US banks: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo across the Apple App Store (iOS) and Google Play (Android). The core research questions are: (1) Can the original R findings be faithfully reproduced in Python? (2) Do the results change with a fresh data scrape? (3) Does a transformer model produce sentiment classifications consistent with the lexicon approach?</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="fu"># 1. Introduction and Motivation</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.1 Research Context</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>Customer reviews on mobile app stores represent a rich, continuously updated source of unstructured opinion data. For the banking sector, app reviews offer direct evidence of customer satisfaction, pain points, and competitive positioning — feedback that often offers a faster point of view and is more granular than traditional survey methods. Sentiment analysis of these reviews can help researchers and practitioners understand how user experience varies across institutions and platforms, and whether negative signals co-occur with specific feature complaints or rating patterns.</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>There are two motivations for this study. Academically, it provides an opportunity to practice reproducible research: taking an existing empirical study, replicating it in a different computational environment, and evaluating whether the results remain the same. Practically, it investigates whether mobile banking sentiment has shifted between the original data collection window and a fresh scrape in 2026, and whether more sophisticated deep learning methods agree with classic dictionary-based approaches.</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.2 Inspiration and Source Study</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>The project is inspired by the tidytext-based workflow popularised by @silge2017text, which applies lexicon-based sentiment scoring to tokenised text in a tidy data format. The original analysis follows this approach: it imports and cleans review data, performs unigram sentiment analysis using three lexicons (Bing, AFINN, NRC), constructs bigrams with negator-aware scoring, and evaluates results statistically. The goal of this project is to demonstrate that these findings are reproducible — the same pipeline, implemented in Python with equivalent libraries, produces consistent conclusions — and then to extend the study in two directions: new data and a transformer model.</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="fu"># 2. Data</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>Dataset is obtained with the means of scrapping reviews from the App Store and Google Play for the five major banks in US. The original dataset was collected in 2023, while the new dataset was scraped in mid-2026. Both datasets contain reviews in English, with metadata including star ratings, review text, date, platform, and storefront. The data is stored as CSV files per bank and platform, which are combined and preprocessed for analysis.</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>The major banks included in the dataset are some of the largest US financial institutions, which are: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo. Each has a significant mobile banking user base. The platforms covered are the two dominant mobile ecosystems: Apple's App Store (iOS) and Google's Play Store (Android). This allows for cross-platform comparisons and insights into whether user sentiment differs by operating system.</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>The method of scrapping differs for each platform due to their distinct APIs and structures. For the iOS App Store, the script uses Python's requests library to directly parse Apple's publicly accessible XML/JSON RSS feed endpoints, which are ordered by the most recent submissions. For the Google Play Store, it leverages an open-source web scraping library (google-play-scraper) that mimics browser requests to dynamically fetch and page through raw review payloads using continuation tokens. Both approaches process these external data streams in real time, converting the raw JSON responses into structured Pandas DataFrames before exporting them to CSV files.</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2.1 Exploratory Data Analysis of the Original Dataset (Old Data)</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>The original dataset was collected in 2023 using a combination of web scraping and API access methods. It includes reviews from the same five banks and both platforms, but covers a different time period than the new data. The dataset is stored as CSV files, one per bank and platform, with columns for review text, star rating, date, and other metadata. The original analysis applied lexicon-based sentiment scoring to this dataset to derive insights about user sentiment and its relationship to star ratings.</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-old-overview</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Overview of the original dataset"</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>DATA_OLD <span class="op">=</span> Path(<span class="st">"Dataset/data_old_approach"</span>)</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>raw_old <span class="op">=</span> pd.concat(</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>    [pd.read_csv(p, dtype<span class="op">=</span><span class="bu">str</span>).assign(source_file<span class="op">=</span>p.name)</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>     <span class="cf">for</span> p <span class="kw">in</span> DATA_OLD.glob(<span class="st">"*.csv"</span>)],</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>    ignore_index<span class="op">=</span><span class="va">True</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Total reviews"</span>:  [<span class="bu">len</span>(raw_old)],</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Banks"</span>:          [raw_old[<span class="st">"source_file"</span>].nunique()],</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Platforms"</span>:      [raw_old[<span class="st">"platform"</span>].nunique()],</span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Date range"</span>: [</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>pd<span class="sc">.</span>to_datetime(raw_old[<span class="st">'date'</span>], errors<span class="op">=</span><span class="st">'coerce'</span>)<span class="sc">.</span><span class="bu">min</span>()<span class="sc">.</span>date()<span class="sc">}</span><span class="ss"> – "</span></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>pd<span class="sc">.</span>to_datetime(raw_old[<span class="st">'date'</span>], errors<span class="op">=</span><span class="st">'coerce'</span>)<span class="sc">.</span><span class="bu">max</span>()<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2.2 Exploratory Data Analysis of the New Dataset (New Data)</span></span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>The new dataset was collected using a dedicated scraper (<span class="in">`Dataset/scraper.ipynb`</span>) targeting the same five banks and both platforms. The scraping window covers a more recent period *(2024-2026)* than the original data. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window.</span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-new-overview</span></span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Overview of the newly scraped dataset"</span></span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>DATA_NEW <span class="op">=</span> Path(<span class="st">"Dataset/data_new_approach"</span>)</span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>raw_new <span class="op">=</span> pd.concat(</span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>    [pd.read_csv(p, dtype<span class="op">=</span><span class="bu">str</span>).assign(source_file<span class="op">=</span>p.name)</span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>     <span class="cf">for</span> p <span class="kw">in</span> DATA_NEW.glob(<span class="st">"*.csv"</span>)],</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a>    ignore_index<span class="op">=</span><span class="va">True</span></span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({</span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Total reviews"</span>: [<span class="bu">len</span>(raw_new)],</span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Banks"</span>:         [raw_new[<span class="st">"source_file"</span>].nunique()],</span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Platforms"</span>:     [raw_new[<span class="st">"platform"</span>].nunique()],</span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2.3 Data Preprocessing</span></span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.3 Data Preprocessing for Lexicon-Based Methods</span></span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a>Preprocessing follows the same logical steps in both the R original and the Python replications:</span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Import and combine** — all per-bank CSVs are concatenated into a single dataframe</span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Bank and platform standardisation** — filenames are parsed to extract bank names; platform codes (<span class="in">`app_store`</span> → <span class="in">`iOS`</span>, <span class="in">`google_play`</span> → <span class="in">`Android`</span>) are mapped to readable labels</span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Type coercion** — <span class="in">`rating`</span> is cast to numeric; <span class="in">`date`</span> is parsed to datetime</span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Language detection** — reviews not detected as English are removed (using <span class="in">`langdetect`</span> in Python)</span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Raw text construction** — <span class="in">`title`</span> and <span class="in">`review`</span> fields are concatenated into <span class="in">`raw_text`</span></span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Tokenisation and stopword removal** — words are extracted using regex; a custom stopword list (NLTK English stopwords + domain terms: *app, bank, banking, mobile, iphone, apple, android, phone*) is applied</span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>**Bigram construction** — adjacent word pairs are extracted from cleaned text, with negators (*not, never, no, cannot*, etc.) explicitly excluded from the stopword filter so they are preserved in bigrams</span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.3 Data Preprocessing for Lexicon-Based Methods</span></span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a>For the transformer approach, an additional cleaning step keeps punctuation intact (since BERT tokenisers handle it natively) and removes URLs.</span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a><span class="fu"># 3. Methodology</span></span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3.1 Lexicon-Based Sentiment Analysis</span></span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>Three lexicons are applied to the filtered tokens. Scores are computed at the review level and disaggregated by bank and platform.</span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a>**Bing (Opinion Lexicon):** A binary lexicon classifying words as positive or negative <span class="co">[</span><span class="ot">@hu2004mining</span><span class="co">]</span>. Review sentiment is the count of positive words minus negative words.</span>
+<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a>**AFINN:** An integer-scored lexicon (−5 to +5) <span class="co">[</span><span class="ot">@nielsen2011new</span><span class="co">]</span>. Review scores are the sum of matched word scores. Pearson correlation between AFINN scores and star ratings serves as a validity check.</span>
+<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>**NRC Emotion Lexicon:** Developed by @mohammad2013crowdsourcing, this lexicon maps words to 8 emotion categories (anger, anticipation, disgust, fear, joy, sadness, surprise, trust) and 2 polarity categories. One word may belong to multiple categories, enabling nuanced emotion profiling.</span>
+<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3.2 Bigram Analysis and Negation Correction</span></span>
+<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a>Unigram methods cannot handle negation: *not good* is scored as positive because *good* carries a positive AFINN score. To quantify this limitation, bigrams are constructed from the raw review text, with negators explicitly retained in the stopword filter. A set of 22 negators is defined (e.g., *no*, *not*, *n't*, *never*, *cannot*). Where the first token of a bigram is a negator and the second has an AFINN score, the score is sign-flipped. The magnitude of the resulting correction is reported by star-rating group.</span>
+<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3.3 Transformer-Based Sentiment Analysis</span></span>
+<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a>As a complement to the lexicon methods, the pre-trained model <span class="in">`nlptown/bert-base-multilingual-uncased-sentiment`</span> <span class="co">[</span><span class="ot">@nlptown2019</span><span class="co">]</span> is applied via the Hugging Face <span class="in">`transformers`</span> pipeline. The model predicts a 1–5 star rating for each review; predictions are normalised to a continuous sentiment score:</span>
+<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a>$$\text{bert<span class="sc">\_</span>score} = \frac{\text{bert<span class="sc">\_</span>stars} - 1}{4} \in <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$$</span>
+<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a>Model validity is assessed by (1) Pearson correlation between <span class="in">`bert_score`</span> and the actual star rating (95% CI via Fisher's *z*-transformation), (2) boxplots of <span class="in">`bert_score`</span> stratified by star rating, bank, and platform, (3) exact star-level agreement and a full confusion matrix, and (4) a Mann–Whitney U test comparing platform distributions.</span>
+<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a><span class="fu"># 4. Results</span></span>
+<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4.1 Results Python vs R</span></span>
+<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a>Yap yap yap here</span>
+<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a><span class="co"># WE CODE TO SHOW IMAGE</span></span>
+<span id="cb2-177"><a href="#cb2-177" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4.2 Results Old Data vs New Data - Lexicon Analysis</span></span>
+<span id="cb2-181"><a href="#cb2-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4.3 Comparison of BERT Sentiment Results Across Preprocessing Approaches</span></span>
+<span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a>This section compares the outputs of the BERT-based sentiment classifier <span class="in">`(nlptown/bert-base-multilingual-uncased-sentiment)`</span> applied to two versions of the dataset: one preprocessed using the original pipeline and one using the revised approach. Both versions were scored using identical model settings and scoring logic, with predicted star ratings mapped to a normalized sentiment score in the range <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>. The comparison focuses on whether the revised preprocessing affects the distribution of predicted sentiment, its alignment with actual star ratings, and the relative sentiment profiles across banks and platforms.</span>
+<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a>**Distribution of BERT Predicted Sentiment**</span>
+<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a>Both datasets produce a broadly similar bimodal distribution of BERT-predicted sentiment, with the majority of reviews classified at either the negative extreme (1 star) or the positive extreme (5 stars), and relatively few reviews falling in the middle ratings of 2 through 4 (@fig-bert-dist-old and @fig-bert-dist-new). However, a notable difference emerges in the balance between the two poles. In the older data, the 1-star predicted count (~1,550) is considerably closer to the 5-star predicted count (~2,000), whereas in the newer data the gap widens, with 1-star predictions declining to approximately 1,380 while 5-star predictions rise to around 2,100 (@fig-bert-dist-new). This suggests that the newer batch of reviews contains a higher proportion of positively-perceived content as classified by the model. The sentiment score density plots reinforce this pattern: both distributions are heavily concentrated at 0.0 and 1.0, reflecting the model's tendency toward confident polar predictions, with the overall shape of the density curve remaining consistent across both datasets (@fig-bert-dist-old and @fig-bert-dist-new).</span>
+<span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-190"><a href="#cb2-190" aria-hidden="true" tabindex="-1"></a><span class="al">![Distribution of BERT predicted star ratings and sentiment scores — older dataset](../plots/bert_old_distribution.png)</span>{#fig-bert-dist-old width=90%}</span>
+<span id="cb2-191"><a href="#cb2-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-192"><a href="#cb2-192" aria-hidden="true" tabindex="-1"></a><span class="al">![Distribution of BERT predicted star ratings and sentiment scores — newer dataset](../plots/bert_new_distribution.png)</span>{#fig-bert-dist-new width=90%}</span>
+<span id="cb2-193"><a href="#cb2-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-194"><a href="#cb2-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-195"><a href="#cb2-195" aria-hidden="true" tabindex="-1"></a>**Relationship Between BERT Scores and Actual Star Ratings**</span>
+<span id="cb2-196"><a href="#cb2-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-197"><a href="#cb2-197" aria-hidden="true" tabindex="-1"></a>The relationship between BERT sentiment scores and actual star ratings is consistent across both datasets (@fig-bert-box-old and @fig-bert-box-new). In both cases, the model assigns near-zero sentiment scores to 1-star reviews with very tight interquartile ranges, indicating high confidence in negative classifications. Scores rise progressively through 2- and 3-star ratings, with 3-star reviews showing the widest spread, reflecting the model's uncertainty around neutral or mixed-sentiment reviews. Reviews rated 4 and 5 stars are predominantly scored above the neutral threshold of 0.5, with 5-star reviews showing a highly compressed distribution concentrated at 1.0. The two datasets are visually near-identical in this regard (@fig-bert-box-old and @fig-bert-box-new), suggesting that the shift in review composition between the older and newer data did not meaningfully alter the model's ability to align predicted sentiment with actual star ratings.</span>
+<span id="cb2-198"><a href="#cb2-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-199"><a href="#cb2-199" aria-hidden="true" tabindex="-1"></a><span class="al">![BERT sentiment score by star rating — older dataset](../plots/bert_old_sentiment_score_boxplot.png)</span>{#fig-bert-box-old width=90%}</span>
+<span id="cb2-200"><a href="#cb2-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-201"><a href="#cb2-201" aria-hidden="true" tabindex="-1"></a><span class="al">![BERT sentiment score by star rating — newer dataset](../plots/bert_new_sentiment_score_boxplot.png)</span>{#fig-bert-box-new width=90%}</span>
+<span id="cb2-202"><a href="#cb2-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-203"><a href="#cb2-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-204"><a href="#cb2-204" aria-hidden="true" tabindex="-1"></a>**Average BERT Sentiment Scores by Bank and Platform**</span>
+<span id="cb2-205"><a href="#cb2-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-206"><a href="#cb2-206" aria-hidden="true" tabindex="-1"></a>Across both datasets, a consistent platform gap is visible: Android reviews tend to receive higher BERT sentiment scores than iOS reviews for most banks (@fig-bert-bank-old and @fig-bert-bank-new). Citi stands out in both periods, with Android scores approaching 0.9 while iOS scores remain well below the neutral threshold of 0.5, making it the most polarised bank by platform in both the older and newer data. Bank of America shows a similar pattern, with strong Android sentiment but iOS scores falling below neutral in both datasets. Wells Fargo is the only bank where both platforms consistently score above neutral, and remains so across both periods. One notable structural difference between the two datasets is that Chase appears in the older data (@fig-bert-bank-old) with both platforms scoring above neutral, whereas in the newer data (@fig-bert-bank-new) Chase drops to the bottom of the ranking with iOS sentiment just at the neutral threshold. Marcus by Goldman Sachs remains relatively stable across both periods, with Android scores moderately above neutral and iOS scores hovering near 0.5.</span>
+<span id="cb2-207"><a href="#cb2-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-208"><a href="#cb2-208" aria-hidden="true" tabindex="-1"></a><span class="al">![Average BERT sentiment score by bank and platform — older dataset](../plots/bert_old_banknplatform.png)</span>{#fig-bert-bank-old width=90%}</span>
+<span id="cb2-209"><a href="#cb2-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-210"><a href="#cb2-210" aria-hidden="true" tabindex="-1"></a><span class="al">![Average BERT sentiment score by bank and platform — newer dataset](../plots/bert_new_banknplatform.png)</span>{#fig-bert-bank-new width=90%}</span>
+<span id="cb2-211"><a href="#cb2-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-212"><a href="#cb2-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-213"><a href="#cb2-213" aria-hidden="true" tabindex="-1"></a>**Average BERT Sentiment Scores by Operating Platform**</span>
+<span id="cb2-214"><a href="#cb2-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-215"><a href="#cb2-215" aria-hidden="true" tabindex="-1"></a>The per-platform breakdown of BERT sentiment scores by star rating reveals a largely stable pattern across both datasets (@fig-bert-plat-old and @fig-bert-plat-new). On Android, both the older and newer data show near-identical distributions: 1-star reviews are tightly concentrated at 0.0, scores rise progressively through 2 and 3 stars with widening spread, and 4- and 5-star reviews sit predominantly above the neutral threshold. The iOS platform tells a slightly different story between the two periods. In the older data (@fig-bert-plat-old), the iOS 4-star distribution closely mirrors its Android counterpart, with a median around 0.75. In the newer data (@fig-bert-plat-new), the iOS 4-star box shifts noticeably, with a lower median of approximately 0.6 and a wider interquartile range, suggesting greater variability in how the model scores moderately positive iOS reviews in the newer period. Across both datasets and platforms, 1- and 2-star distributions remain consistently low and 5-star reviews remain compressed near 1.0, indicating that the model's confidence at the sentiment extremes is robust regardless of platform or time period.</span>
+<span id="cb2-216"><a href="#cb2-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-217"><a href="#cb2-217" aria-hidden="true" tabindex="-1"></a><span class="al">![BERT sentiment score by star rating per platform — older dataset](../plots/bert_old_per_platform.png)</span>{#fig-bert-plat-old width=90%}</span>
+<span id="cb2-218"><a href="#cb2-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-219"><a href="#cb2-219" aria-hidden="true" tabindex="-1"></a><span class="al">![BERT sentiment score by star rating per platform — newer dataset](../plots/bert_new_per_platform.png)</span>{#fig-bert-plat-new width=90%}</span>
+<span id="cb2-220"><a href="#cb2-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-221"><a href="#cb2-221" aria-hidden="true" tabindex="-1"></a>**Statistical Correlation Between BERT Scores and Star Ratings**</span>
+<span id="cb2-222"><a href="#cb2-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-223"><a href="#cb2-223" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Metric <span class="pp">|</span> Old Data <span class="pp">|</span> New Data <span class="pp">|</span></span>
+<span id="cb2-224"><a href="#cb2-224" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb2-225"><a href="#cb2-225" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> n <span class="pp">|</span> 4,518 <span class="pp">|</span> 4,478 <span class="pp">|</span></span>
+<span id="cb2-226"><a href="#cb2-226" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Pearson r <span class="pp">|</span> 0.8615 <span class="pp">|</span> 0.8660 <span class="pp">|</span></span>
+<span id="cb2-227"><a href="#cb2-227" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> p-value <span class="pp">|</span> &lt; 0.001 <span class="pp">|</span> &lt; 0.001 <span class="pp">|</span></span>
+<span id="cb2-228"><a href="#cb2-228" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 95% CI <span class="pp">|</span> <span class="co">[</span><span class="ot">0.8538, 0.8688</span><span class="co">]</span> <span class="pp">|</span> <span class="co">[</span><span class="ot">0.8585, 0.8731</span><span class="co">]</span> <span class="pp">|</span></span>
+<span id="cb2-229"><a href="#cb2-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-230"><a href="#cb2-230" aria-hidden="true" tabindex="-1"></a>Both datasets show a strong positive correlation between BERT sentiment scores and actual star ratings, with Pearson r values of 0.8615 and 0.8660 for the older and newer data respectively, both statistically significant (p &lt; 0.001). The marginal increase in r across the two periods suggests a slightly stronger alignment between model-predicted sentiment and user-assigned ratings in the newer dataset, though the difference is negligible given the overlapping confidence intervals (<span class="co">[</span><span class="ot">0.8538, 0.8688</span><span class="co">]</span> vs <span class="co">[</span><span class="ot">0.8585, 0.8731</span><span class="co">]</span>). Overall, these results confirm that the BERT model captures sentiment signal consistently across both time periods.</span>
+<span id="cb2-231"><a href="#cb2-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-232"><a href="#cb2-232" aria-hidden="true" tabindex="-1"></a>**Statistical Correlation Between BERT Scores and Users' Platforms**</span>
+<span id="cb2-233"><a href="#cb2-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-234"><a href="#cb2-234" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Metric <span class="pp">|</span> Old Data <span class="pp">|</span> New Data <span class="pp">|</span></span>
+<span id="cb2-235"><a href="#cb2-235" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb2-236"><a href="#cb2-236" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Platforms compared <span class="pp">|</span> Android vs iOS <span class="pp">|</span> Android vs iOS <span class="pp">|</span></span>
+<span id="cb2-237"><a href="#cb2-237" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> U statistic <span class="pp">|</span> 3,379,410.0000 <span class="pp">|</span> 3,174,169.0000 <span class="pp">|</span></span>
+<span id="cb2-238"><a href="#cb2-238" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> p-value <span class="pp">|</span> 3.23e-93 <span class="pp">|</span> 1.46e-63 <span class="pp">|</span></span>
+<span id="cb2-239"><a href="#cb2-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-240"><a href="#cb2-240" aria-hidden="true" tabindex="-1"></a>Both datasets show a statistically significant difference in BERT sentiment scores between Android and iOS platforms (p &lt; 0.001 in both cases), confirming that platform is a meaningful source of variation in user sentiment regardless of time period. The U statistic is larger in the older data (3,379,410 vs 3,174,169), which is consistent with the older dataset having slightly more observations (n = 4,518 vs 4,478). While both p-values are extremely small, the older data yields a more extreme test statistic, suggesting the platform gap in sentiment may have been marginally more pronounced in the earlier period, which aligns with what was observed in the bank-by-platform plots (@fig-bert-bank-old and @fig-bert-bank-new).</span>
+<span id="cb2-241"><a href="#cb2-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-242"><a href="#cb2-242" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4.4 Results AFINN vs BERT - New Data</span></span>
+<span id="cb2-243"><a href="#cb2-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-244"><a href="#cb2-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-245"><a href="#cb2-245" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-246"><a href="#cb2-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-247"><a href="#cb2-247" aria-hidden="true" tabindex="-1"></a><span class="fu"># 5 Discussion</span></span>
+<span id="cb2-248"><a href="#cb2-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-249"><a href="#cb2-249" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5.1 Reproducibility Assessment</span></span>
+<span id="cb2-250"><a href="#cb2-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-251"><a href="#cb2-251" aria-hidden="true" tabindex="-1"></a>Something about environment in python</span>
+<span id="cb2-252"><a href="#cb2-252" aria-hidden="true" tabindex="-1"></a>Overall assesment about reproducibility, minor differences, but overall conclusions hold</span>
+<span id="cb2-253"><a href="#cb2-253" aria-hidden="true" tabindex="-1"></a>Slight conclusions about the original study's robustness to language and implementation choices</span>
+<span id="cb2-254"><a href="#cb2-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-255"><a href="#cb2-255" aria-hidden="true" tabindex="-1"></a>The R-to-Python translation demonstrates that the core analytical conclusions</span>
+<span id="cb2-256"><a href="#cb2-256" aria-hidden="true" tabindex="-1"></a>of the original study are reproducible across languages. Minor numerical</span>
+<span id="cb2-257"><a href="#cb2-257" aria-hidden="true" tabindex="-1"></a>differences arise from:</span>
+<span id="cb2-258"><a href="#cb2-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-259"><a href="#cb2-259" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Language detection:** <span class="in">`langdetect`</span> vs <span class="in">`cld3`</span> use different underlying</span>
+<span id="cb2-260"><a href="#cb2-260" aria-hidden="true" tabindex="-1"></a>  models; the set of English-classified reviews may differ slightly</span>
+<span id="cb2-261"><a href="#cb2-261" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Stopword lists:** <span class="in">`tidytext::stop_words`</span> differs from NLTK's English list</span>
+<span id="cb2-262"><a href="#cb2-262" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Bing lexicon size:** NLTK <span class="in">`opinion_lexicon`</span> covers more words than the</span>
+<span id="cb2-263"><a href="#cb2-263" aria-hidden="true" tabindex="-1"></a>  Bing lexicon embedded in tidytext</span>
+<span id="cb2-264"><a href="#cb2-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-265"><a href="#cb2-265" aria-hidden="true" tabindex="-1"></a>These are expected cross-language reproducibility gaps and do not undermine</span>
+<span id="cb2-266"><a href="#cb2-266" aria-hidden="true" tabindex="-1"></a>the directional conclusions.</span>
+<span id="cb2-267"><a href="#cb2-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-268"><a href="#cb2-268" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5.2 Limitations - AGAS</span></span>
+<span id="cb2-269"><a href="#cb2-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-270"><a href="#cb2-270" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Lexicon coverage:** All three lexicons were built for general English, not</span>
+<span id="cb2-271"><a href="#cb2-271" aria-hidden="true" tabindex="-1"></a>  financial app reviews — domain terms (*overdraft, Zelle, wire transfer*) may</span>
+<span id="cb2-272"><a href="#cb2-272" aria-hidden="true" tabindex="-1"></a>  be absent</span>
+<span id="cb2-273"><a href="#cb2-273" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Negation scope:** The bigram correction handles only two-word negation;</span>
+<span id="cb2-274"><a href="#cb2-274" aria-hidden="true" tabindex="-1"></a>  longer-range negation is not captured</span>
+<span id="cb2-275"><a href="#cb2-275" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Temporal confounding:** Old and new data cover different time windows, so</span>
+<span id="cb2-276"><a href="#cb2-276" aria-hidden="true" tabindex="-1"></a>  observed differences may reflect temporal trends, not genuine quality changes</span>
+<span id="cb2-277"><a href="#cb2-277" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Label imbalance:** App Store reviews skew heavily toward 5 stars; without</span>
+<span id="cb2-278"><a href="#cb2-278" aria-hidden="true" tabindex="-1"></a>  class-weighting, the transformer may over-predict "positive"</span>
+<span id="cb2-279"><a href="#cb2-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-280"><a href="#cb2-280" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-281"><a href="#cb2-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-282"><a href="#cb2-282" aria-hidden="true" tabindex="-1"></a><span class="fu"># 6 Generative AI Disclosure</span></span>
+<span id="cb2-283"><a href="#cb2-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-284"><a href="#cb2-284" aria-hidden="true" tabindex="-1"></a>In accordance with course policy (dr Jakub Michańków, Reproducible Research</span>
+<span id="cb2-285"><a href="#cb2-285" aria-hidden="true" tabindex="-1"></a>2026), generative AI (Claude AI) was used to assist with coding tasks, refine the code.</span>
+<span id="cb2-286"><a href="#cb2-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-287"><a href="#cb2-287" aria-hidden="true" tabindex="-1"></a>All analytical decisions, interpretations, and research design are the</span>
+<span id="cb2-288"><a href="#cb2-288" aria-hidden="true" tabindex="-1"></a>team's own work.</span>
+<span id="cb2-289"><a href="#cb2-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-290"><a href="#cb2-290" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-291"><a href="#cb2-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-292"><a href="#cb2-292" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+<span id="cb2-293"><a href="#cb2-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-294"><a href="#cb2-294" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
+<span id="cb2-295"><a href="#cb2-295" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
