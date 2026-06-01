@@ -68,7 +68,6 @@ The original dataset was collected in 2023 using a combination of web scraping a
 ```{python}
 #| label: tbl-old-overview
 #| tbl-cap: "Overview of the original dataset"
-#| echo: false
 
 from pathlib import Path
 import pandas as pd
@@ -159,210 +158,31 @@ Model validity is assessed by (1) Pearson correlation between `bert_score` and t
 
 ---
 
-## 4. Results: Old Data
-
+## 4.1 Results Python vs R
+Yap yap yap here
 ```{python}
-#| label: fig-rating-old
-#| fig-cap: "Rating distribution by platform (old data)"
+#| echo = false
 
-import matplotlib.pyplot as plt
-
-raw_old["rating"] = pd.to_numeric(raw_old["rating"], errors="coerce")
-rating_counts = (
-    raw_old.groupby(["platform", "rating"])
-    .size().reset_index(name="n")
-)
-platforms = sorted(rating_counts["platform"].dropna().unique())
-fig, axes = plt.subplots(1, len(platforms), figsize=(10, 4), sharey=True)
-for ax, plat in zip(axes, platforms):
-    data = rating_counts[rating_counts["platform"] == plat]
-    ax.bar(data["rating"], data["n"], color="steelblue")
-    ax.set_title(plat)
-    ax.set_xlabel("Star rating")
-    ax.set_ylabel("Number of reviews")
-fig.suptitle("Rating distribution by platform")
-plt.tight_layout()
-plt.show()
+# WE CODE TO SHOW IMAGE
 ```
 
-```{python}
-#| label: fig-bing
-#| fig-cap: "Distribution of Bing sentiment words (old data)"
 
-import nltk, re, numpy as np
-from nltk.corpus import opinion_lexicon, stopwords
-from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
+## 4.2 Results Old Data vs New Data - Lexicon Analysis
+## 4.2 Results Old Data vs New Data - Transformer Analysis
+## 4.2 Results AFINN vs BERT - New Data
 
-nltk.download("opinion_lexicon", quiet=True)
-nltk.download("stopwords", quiet=True)
-
-PROCESSED_OLD = Path("Dataset/data_old_approach/processed_data")
-lexicon_df = pd.read_csv(PROCESSED_OLD / "old_preprocessed_lexicon.csv")
-
-custom_stop = set(stopwords.words("english")) | {
-    "app","bank","banking","mobile","iphone","apple","android","phone"
-}
-pos_words = set(opinion_lexicon.positive())
-neg_words = set(opinion_lexicon.negative())
-
-df_english = lexicon_df.copy().reset_index(drop=True)
-df_english["review_id"] = df_english.index
-
-reviews_tokens = df_english.copy()
-reviews_tokens["word"] = (
-    reviews_tokens["raw_text"].fillna("").str.lower()
-    .apply(lambda x: re.findall(r"\b[a-z]+\b", x))
-)
-reviews_tokens = reviews_tokens.explode("word").dropna(subset=["word"])
-reviews_after_sw = reviews_tokens[~reviews_tokens["word"].isin(custom_stop)].copy()
-
-bing = pd.DataFrame({
-    "word":      list(pos_words)              + list(neg_words),
-    "sentiment": ["positive"] * len(pos_words) + ["negative"] * len(neg_words)
-})
-bing_words = reviews_after_sw.merge(bing, on="word", how="inner")
-
-counts = bing_words["sentiment"].value_counts().reset_index()
-counts.columns = ["sentiment", "n"]
-
-fig, ax = plt.subplots(figsize=(5, 4))
-ax.bar(counts["sentiment"], counts["n"], color=["steelblue","salmon"])
-ax.set_title("Distribution of Bing sentiment words")
-ax.set_xlabel("Sentiment")
-ax.set_ylabel("Word count")
-plt.tight_layout()
-plt.show()
-```
-
-```{python}
-#| label: fig-afinn-boxplot
-#| fig-cap: "AFINN sentiment score by star rating (old data)"
-
-import urllib.request
-
-afinn_path = Path("AFINN-111.txt")
-if not afinn_path.exists():
-    urllib.request.urlretrieve(
-        "https://raw.githubusercontent.com/fnielsen/afinn/master/afinn/data/AFINN-111.txt",
-        afinn_path
-    )
-afinn = pd.read_csv(afinn_path, sep="\t", names=["word", "value"])
-afinn["word"] = afinn["word"].str.lower()
-
-afinn_words  = reviews_after_sw.merge(afinn, on="word", how="inner")
-afinn_review = (
-    afinn_words.groupby(["bank", "platform", "review_id"])
-    .agg(afinn_sum=("value","sum"), afinn_mean=("value","mean"),
-         n_afinn=("value","count")).reset_index()
-)
-df_afinn = df_english.copy()
-df_afinn["rating"] = pd.to_numeric(df_afinn["rating"], errors="coerce")
-df_afinn = df_afinn.merge(afinn_review, on=["bank","platform","review_id"], how="left")
-
-df_plot = df_afinn.dropna(subset=["rating","afinn_sum"])
-ratings  = sorted(df_plot["rating"].unique())
-groups   = [df_plot[df_plot["rating"] == r]["afinn_sum"] for r in ratings]
-
-fig, ax = plt.subplots(figsize=(7, 4))
-bp = ax.boxplot(groups, labels=[int(r) for r in ratings], patch_artist=True)
-for patch in bp["boxes"]:
-    patch.set_facecolor("lightblue"); patch.set_alpha(0.7)
-ax.axhline(0, linestyle="--")
-ax.set_title("AFINN sentiment by star rating")
-ax.set_xlabel("Star rating")
-ax.set_ylabel("AFINN sum score")
-plt.tight_layout()
-plt.show()
-```
-
-```{python}
-#| label: tbl-pearson
-#| tbl-cap: "Pearson correlation: AFINN score vs star rating"
-
-from scipy import stats
-
-cor_data = df_plot[["rating","afinn_sum"]].dropna()
-r, p = stats.pearsonr(cor_data["rating"], cor_data["afinn_sum"])
-print(f"r = {r:.4f},  p = {p:.4e},  n = {len(cor_data):,}")
-```
-
-```{python}
-#| label: fig-nrc
-#| fig-cap: "NRC emotion composition by bank (old data)"
-
-nrc_path = Path("NRC-Emotion-Lexicon-Wordlevel-v0.92.txt")
-if not nrc_path.exists():
-    urllib.request.urlretrieve(
-        "https://raw.githubusercontent.com/dinbav/LeXmo/master/NRC-Emotion-Lexicon-Wordlevel-v0.92.txt",
-        nrc_path
-    )
-nrc = pd.read_csv(nrc_path, sep="\t", names=["word","sentiment","association"])
-nrc = nrc[nrc["association"] == 1][["word","sentiment"]].copy()
-nrc["word"] = nrc["word"].str.lower()
-
-nrc_words = reviews_after_sw.merge(nrc, on="word", how="inner")
-nrc_by_bank = nrc_words.groupby(["bank","sentiment"]).size().reset_index(name="n")
-nrc_by_bank["pct"] = nrc_by_bank.groupby("bank")["n"].transform(lambda x: x / x.sum())
-
-banks = sorted(nrc_by_bank["bank"].unique())
-fig, axes = plt.subplots(1, len(banks), figsize=(5 * len(banks), 5), sharey=True)
-for ax, bank in zip(axes, banks):
-    data = nrc_by_bank[nrc_by_bank["bank"] == bank].sort_values("pct")
-    ax.barh(data["sentiment"], data["pct"])
-    ax.set_title(bank, fontsize=9)
-    ax.set_xlabel("Proportion")
-fig.suptitle("NRC emotion composition by bank")
-plt.tight_layout()
-plt.show()
-```
-
-```{python}
-#| label: tbl-evaluation
-#| tbl-cap: "Statistical evaluation"
-
-from scipy import stats
-
-ios     = df_afinn[df_afinn["platform"] == "iOS"]["afinn_sum"].dropna()
-android = df_afinn[df_afinn["platform"] == "Android"]["afinn_sum"].dropna()
-u_stat, p_mw = stats.mannwhitneyu(ios, android, alternative="two-sided")
-
-print(f"Mann-Whitney U (iOS vs Android): U = {u_stat:.0f}, p = {p_mw:.4e}")
-print(f"iOS reviews: {len(ios):,}  |  Android reviews: {len(android):,}")
-```
 
 ---
 
-## 5. Results: New Data
-
-> **[Fill in after running new_data_lexicon_analysis.ipynb and new_approach_sentiment_analysis.ipynb]**
-> Summarise: rating distribution shifts, top Bing/AFINN word changes, NRC emotion
-> profile differences, and transformer model performance (accuracy, F1 per class,
-> agreement rate with lexicon labels).
-
-```{python}
-#| label: fig-rating-compare
-#| fig-cap: "Rating distribution: old vs new data"
-
-raw_new["rating"] = pd.to_numeric(raw_new["rating"], errors="coerce")
-
-fig, axes = plt.subplots(1, 2, figsize=(10, 4), sharey=False)
-for ax, (df, label) in zip(axes, [(raw_old, "Old data"), (raw_new, "New data")]):
-    df["rating"].value_counts().sort_index().plot(
-        kind="bar", ax=ax, color="steelblue", rot=0
-    )
-    ax.set_title(label)
-    ax.set_xlabel("Star rating")
-    ax.set_ylabel("Count")
-fig.suptitle("Rating distribution: old vs new data")
-plt.tight_layout()
-plt.show()
-```
-
 ---
 
-# Discussion
+# 5 Discussion
 
 ## Reproducibility Assessment
+
+Something about environment in python
+Overall assesment about reproducibility, minor differences, but overall conclusions hold
+Slight conclusions about the original study's robustness to language and implementation choices
 
 The R-to-Python translation demonstrates that the core analytical conclusions
 of the original study are reproducible across languages. Minor numerical
@@ -377,7 +197,7 @@ differences arise from:
 These are expected cross-language reproducibility gaps and do not undermine
 the directional conclusions.
 
-## Limitations
+# 6 Limitations
 
 - **Lexicon coverage:** All three lexicons were built for general English, not
   financial app reviews — domain terms (*overdraft, Zelle, wire transfer*) may
@@ -389,7 +209,7 @@ the directional conclusions.
 - **Label imbalance:** App Store reviews skew heavily toward 5 stars; without
   class-weighting, the transformer may over-predict "positive"
 
-## Generative AI Disclosure
+# 7 Generative AI Disclosure
 
 In accordance with course policy (dr Jakub Michańków, Reproducible Research
 2026), generative AI (Claude AI) was used to assist with coding tasks, refine the code.
@@ -398,11 +218,6 @@ All analytical decisions, interpretations, and research design are the
 team's own work.
 
 ---
-
-# Conclusion
-
-
-
 ---
 
 # References
