@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -92,7 +92,7 @@ div.csl-indent {
 <script src="report_2_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="report_2_files/libs/quarto-html/anchor.min.js"></script>
 <link href="report_2_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="report_2_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="report_2_files/libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="report_2_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="report_2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="report_2_files/libs/bootstrap/bootstrap-514d4a2d8494d04c60f6f18c7d836709.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -150,8 +150,8 @@ window.Quarto = {
   <li><a href="#exploratory-data-analysis-of-the-new-dataset-new-data" id="toc-exploratory-data-analysis-of-the-new-dataset-new-data" class="nav-link" data-scroll-target="#exploratory-data-analysis-of-the-new-dataset-new-data">2.2 Exploratory Data Analysis of the New Dataset (New Data)</a></li>
   <li><a href="#data-preprocessing" id="toc-data-preprocessing" class="nav-link" data-scroll-target="#data-preprocessing">2.3 Data Preprocessing</a>
   <ul class="collapse">
-  <li><a href="#data-preprocessing-for-lexicon-based-methods" id="toc-data-preprocessing-for-lexicon-based-methods" class="nav-link" data-scroll-target="#data-preprocessing-for-lexicon-based-methods">2.3 Data Preprocessing for Lexicon-Based Methods</a></li>
-  <li><a href="#data-preprocessing-for-lexicon-based-methods-1" id="toc-data-preprocessing-for-lexicon-based-methods-1" class="nav-link" data-scroll-target="#data-preprocessing-for-lexicon-based-methods-1">2.3 Data Preprocessing for Lexicon-Based Methods</a></li>
+  <li><a href="#data-preprocessing-for-lexicon-based-methods" id="toc-data-preprocessing-for-lexicon-based-methods" class="nav-link" data-scroll-target="#data-preprocessing-for-lexicon-based-methods">2.3.1 Data Preprocessing for Lexicon-Based Methods</a></li>
+  <li><a href="#data-preprocessing-for-transformer-methods" id="toc-data-preprocessing-for-transformer-methods" class="nav-link" data-scroll-target="#data-preprocessing-for-transformer-methods">2.3.2 Data Preprocessing for Transformer Methods</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology">3. Methodology</a>
@@ -217,7 +217,6 @@ window.Quarto = {
 <section id="summary" class="level1">
 <h1>Summary</h1>
 <p>This report documents a reproducible research project that translates an original R-based sentiment analysis of mobile banking app reviews into Python, extends it with newly scraped data, and augments the lexicon-based methods with a transformer (BERT) approach. The project covers five major US banks: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo across the Apple App Store (iOS) and Google Play (Android). The core research questions are: (1) Can the original R findings be faithfully reproduced in Python? (2) Do the results change with a fresh data scrape? (3) Does a transformer model produce sentiment classifications consistent with the lexicon approach?</p>
-<hr>
 </section>
 <section id="introduction-and-motivation" class="level1">
 <h1>1. Introduction and Motivation</h1>
@@ -228,8 +227,7 @@ window.Quarto = {
 </section>
 <section id="inspiration-and-source-study" class="level2">
 <h2 class="anchored" data-anchor-id="inspiration-and-source-study">1.2 Inspiration and Source Study</h2>
-<p>The project is inspired by the tidytext-based workflow popularised by <span class="citation" data-cites="silge2017text">@silge2017text</span>, which applies lexicon-based sentiment scoring to tokenised text in a tidy data format. The original analysis follows this approach: it imports and cleans review data, performs unigram sentiment analysis using three lexicons (Bing, AFINN, NRC), constructs bigrams with negator-aware scoring, and evaluates results statistically. The goal of this project is to demonstrate that these findings are reproducible — the same pipeline, implemented in Python with equivalent libraries, produces consistent conclusions — and then to extend the study in two directions: new data and a transformer model.</p>
-<hr>
+<p>The project is inspired by the tidytext-based workflow popularised by <span class="citation" data-cites="silge2017text">Silge and Robinson (<a href="#ref-silge2017text" role="doc-biblioref">2017</a>)</span>, which applies lexicon-based sentiment scoring to tokenised text in a tidy data format. The original analysis follows this approach: it imports and cleans review data, performs unigram sentiment analysis using three lexicons (Bing, AFINN, NRC), constructs bigrams with negator-aware scoring, and evaluates results statistically. The goal of this project is to demonstrate that these findings are reproducible — the same pipeline, implemented in Python with equivalent libraries, produces consistent conclusions — and then to extend the study in two directions: new data and a transformer model.</p>
 </section>
 </section>
 <section id="data" class="level1">
@@ -239,50 +237,41 @@ window.Quarto = {
 <p>The method of scrapping differs for each platform due to their distinct APIs and structures. For the iOS App Store, the script uses Python’s requests library to directly parse Apple’s publicly accessible XML/JSON RSS feed endpoints, which are ordered by the most recent submissions. For the Google Play Store, it leverages an open-source web scraping library (google-play-scraper) that mimics browser requests to dynamically fetch and page through raw review payloads using continuation tokens. Both approaches process these external data streams in real time, converting the raw JSON responses into structured Pandas DataFrames before exporting them to CSV files.</p>
 <section id="exploratory-data-analysis-of-the-original-dataset-old-data" class="level2">
 <h2 class="anchored" data-anchor-id="exploratory-data-analysis-of-the-original-dataset-old-data">2.1 Exploratory Data Analysis of the Original Dataset (Old Data)</h2>
-<p>The original dataset was collected in 2023 using a combination of web scraping and API access methods. It includes reviews from the same five banks and both platforms, but covers a different time period than the new data. The dataset is stored as CSV files, one per bank and platform, with columns for review text, star rating, date, and other metadata. The original analysis applied lexicon-based sentiment scoring to this dataset to derive insights about user sentiment and its relationship to star ratings.</p>
-<div id="tbl-old-overview" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="1">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-old-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: Overview of the original dataset
-</figcaption>
-<div aria-describedby="tbl-old-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>DATA_OLD <span class="op">=</span> Path(<span class="st">"Dataset/data_old_approach"</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>raw_old <span class="op">=</span> pd.concat(</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    [pd.read_csv(p, dtype<span class="op">=</span><span class="bu">str</span>).assign(source_file<span class="op">=</span>p.name)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>     <span class="cf">for</span> p <span class="kw">in</span> DATA_OLD.glob(<span class="st">"*.csv"</span>)],</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    ignore_index<span class="op">=</span><span class="va">True</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Total reviews"</span>:  [<span class="bu">len</span>(raw_old)],</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Banks"</span>:          [raw_old[<span class="st">"source_file"</span>].nunique()],</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Platforms"</span>:      [raw_old[<span class="st">"platform"</span>].nunique()],</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Date range"</span>: [</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>pd<span class="sc">.</span>to_datetime(raw_old[<span class="st">'date'</span>], errors<span class="op">=</span><span class="st">'coerce'</span>)<span class="sc">.</span><span class="bu">min</span>()<span class="sc">.</span>date()<span class="sc">}</span><span class="ss"> – "</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>pd<span class="sc">.</span>to_datetime(raw_old[<span class="st">'date'</span>], errors<span class="op">=</span><span class="st">'coerce'</span>)<span class="sc">.</span><span class="bu">max</span>()<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    ]</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-</figure>
-</div>
+<p>The original dataset was collected in 2025 using a combination of web scraping and API access methods. It includes reviews from the same five banks and both platforms, but covers a different time period than the new data. The dataset is stored as CSV files, one per bank and platform, with columns for review text, star rating, date, and other metadata. The original analysis applied lexicon-based sentiment scoring to this dataset to derive insights about user sentiment and its relationship to star ratings.</p>
 </section>
 <section id="exploratory-data-analysis-of-the-new-dataset-new-data" class="level2">
 <h2 class="anchored" data-anchor-id="exploratory-data-analysis-of-the-new-dataset-new-data">2.2 Exploratory Data Analysis of the New Dataset (New Data)</h2>
-<p>The new dataset was collected using a dedicated scraper (<code>Dataset/scraper.ipynb</code>) targeting the same five banks and both platforms. The scraping window covers a more recent period <em>(2024-2026)</em> than the original data. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window.</p>
+<p>The new dataset was collected using a dedicated scraper (<code>Dataset/scraper.ipynb</code>) targeting the same five banks and both platforms. The scraping window covers a more recent period - <em>early 2026</em>. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window. Upon checking, the rating distribution of the new data is similar to the original one, with the majority of reviews are at extreme positions, either 1 or 5 stars (<a href="#fig-star-dist-new" class="quarto-xref">Figure&nbsp;1</a>).</p>
+<div id="fig-star-dist-new" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-star-dist-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="plots/star_dist_new.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-star-dist-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Rating distribution by platform — new dataset
+</figcaption>
+</figure>
+</div>
+<p>The top 20 most frequent bigrams in the new dataset reveal a clear thematic structure in how users discuss their mobile banking experience (<a href="#fig-bigram-new" class="quarto-xref">Figure&nbsp;2</a>). Customer service is by far the most frequent bigram (~220 occurrences), nearly 25% more common than the second-ranked Wells Fargo (~175), which appears frequently as a named entity within reviews of that bank. Credit card (~150) and user friendly (~115) round out the top four, reflecting that product features and usability remain central to how users articulate their experience.</p>
+<p>Several bigrams signal recurring friction points: no longer (~65), bring back (~42), please fix (~38), and blank screen (~37) all indicate users reacting to feature removals or technical failures.</p>
+<div id="fig-bigram-new" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bigram-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="plots/bigram_new.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bigram-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Top 20 Most Frequent Bigrams in Mobile Banking Reviews — new dataset
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="data-preprocessing" class="level2">
 <h2 class="anchored" data-anchor-id="data-preprocessing">2.3 Data Preprocessing</h2>
 <section id="data-preprocessing-for-lexicon-based-methods" class="level3">
-<h3 class="anchored" data-anchor-id="data-preprocessing-for-lexicon-based-methods">2.3 Data Preprocessing for Lexicon-Based Methods</h3>
+<h3 class="anchored" data-anchor-id="data-preprocessing-for-lexicon-based-methods">2.3.1 Data Preprocessing for Lexicon-Based Methods</h3>
 <p>Preprocessing follows the same logical steps in both the R original and the Python replications:</p>
 <ol type="1">
-<li><strong>Import and combine</strong> — all per-bank CSVs are concatenated into a single dataframe</li>
+<li><strong>Import and combine</strong> - all per-bank CSVs are concatenated into a single dataframe</li>
 <li><strong>Bank and platform standardisation</strong> — filenames are parsed to extract bank names; platform codes (<code>app_store</code> → <code>iOS</code>, <code>google_play</code> → <code>Android</code>) are mapped to readable labels</li>
 <li><strong>Type coercion</strong> — <code>rating</code> is cast to numeric; <code>date</code> is parsed to datetime</li>
 <li><strong>Language detection</strong> — reviews not detected as English are removed (using <code>langdetect</code> in Python)</li>
@@ -291,10 +280,9 @@ Table&nbsp;1: Overview of the original dataset
 <li><strong>Bigram construction</strong> — adjacent word pairs are extracted from cleaned text, with negators (<em>not, never, no, cannot</em>, etc.) explicitly excluded from the stopword filter so they are preserved in bigrams</li>
 </ol>
 </section>
-<section id="data-preprocessing-for-lexicon-based-methods-1" class="level3">
-<h3 class="anchored" data-anchor-id="data-preprocessing-for-lexicon-based-methods-1">2.3 Data Preprocessing for Lexicon-Based Methods</h3>
+<section id="data-preprocessing-for-transformer-methods" class="level3">
+<h3 class="anchored" data-anchor-id="data-preprocessing-for-transformer-methods">2.3.2 Data Preprocessing for Transformer Methods</h3>
 <p>For the transformer approach, an additional cleaning step keeps punctuation intact (since BERT tokenisers handle it natively) and removes URLs.</p>
-<hr>
 </section>
 </section>
 </section>
@@ -303,22 +291,19 @@ Table&nbsp;1: Overview of the original dataset
 <section id="lexicon-based-sentiment-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="lexicon-based-sentiment-analysis">3.1 Lexicon-Based Sentiment Analysis</h2>
 <p>Three lexicons are applied to the filtered tokens. Scores are computed at the review level and disaggregated by bank and platform.</p>
-<p><strong>Bing (Opinion Lexicon):</strong> A binary lexicon classifying words as positive or negative <span class="citation" data-cites="hu2004mining">[@hu2004mining]</span>. Review sentiment is the count of positive words minus negative words.</p>
-<p><strong>AFINN:</strong> An integer-scored lexicon (−5 to +5) <span class="citation" data-cites="nielsen2011new">[@nielsen2011new]</span>. Review scores are the sum of matched word scores. Pearson correlation between AFINN scores and star ratings serves as a validity check.</p>
-<p><strong>NRC Emotion Lexicon:</strong> Developed by <span class="citation" data-cites="mohammad2013crowdsourcing">@mohammad2013crowdsourcing</span>, this lexicon maps words to 8 emotion categories (anger, anticipation, disgust, fear, joy, sadness, surprise, trust) and 2 polarity categories. One word may belong to multiple categories, enabling nuanced emotion profiling.</p>
-<hr>
+<p><strong>Bing (Opinion Lexicon):</strong> A binary lexicon classifying words as positive or negative. Review sentiment is the count of positive words minus negative words.</p>
+<p><strong>AFINN:</strong> An integer-scored lexicon (−5 to +5) <span class="citation" data-cites="nielsen2011new">(<a href="#ref-nielsen2011new" role="doc-biblioref">Nielsen 2011</a>)</span>. Review scores are the sum of matched word scores. Pearson correlation between AFINN scores and star ratings serves as a validity check.</p>
+<p><strong>NRC Emotion Lexicon:</strong> Developed by <span class="citation" data-cites="mohammad2013crowdsourcing">Mohammad and Turney (<a href="#ref-mohammad2013crowdsourcing" role="doc-biblioref">2013</a>)</span>, this lexicon maps words to 8 emotion categories (anger, anticipation, disgust, fear, joy, sadness, surprise, trust) and 2 polarity categories. One word may belong to multiple categories, enabling nuanced emotion profiling.</p>
 </section>
 <section id="bigram-analysis-and-negation-correction" class="level2">
 <h2 class="anchored" data-anchor-id="bigram-analysis-and-negation-correction">3.2 Bigram Analysis and Negation Correction</h2>
 <p>Unigram methods cannot handle negation: <em>not good</em> is scored as positive because <em>good</em> carries a positive AFINN score. To quantify this limitation, bigrams are constructed from the raw review text, with negators explicitly retained in the stopword filter. A set of 22 negators is defined (e.g., <em>no</em>, <em>not</em>, <em>n’t</em>, <em>never</em>, <em>cannot</em>). Where the first token of a bigram is a negator and the second has an AFINN score, the score is sign-flipped. The magnitude of the resulting correction is reported by star-rating group.</p>
-<hr>
 </section>
 <section id="transformer-based-sentiment-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="transformer-based-sentiment-analysis">3.3 Transformer-Based Sentiment Analysis</h2>
-<p>As a complement to the lexicon methods, the pre-trained model <code>nlptown/bert-base-multilingual-uncased-sentiment</code> <span class="citation" data-cites="nlptown2019">[@nlptown2019]</span> is applied via the Hugging Face <code>transformers</code> pipeline. The model predicts a 1–5 star rating for each review; predictions are normalised to a continuous sentiment score:</p>
+<p>As a complement to the lexicon methods, the pre-trained model <code>nlptown/bert-base-multilingual-uncased-sentiment</code> <span class="citation" data-cites="nlptown2019">(<a href="#ref-nlptown2019" role="doc-biblioref"><strong>nlptown2019?</strong></a>)</span> is applied via the Hugging Face <code>transformers</code> pipeline. The model predicts a 1–5 star rating for each review; predictions are normalised to a continuous sentiment score:</p>
 <p><span class="math display">\[\text{bert\_score} = \frac{\text{bert\_stars} - 1}{4} \in [0, 1]\]</span></p>
 <p>Model validity is assessed by (1) Pearson correlation between <code>bert_score</code> and the actual star rating (95% CI via Fisher’s <em>z</em>-transformation), (2) boxplots of <code>bert_score</code> stratified by star rating, bank, and platform, (3) exact star-level agreement and a full confusion matrix, and (4) a Mann–Whitney U test comparing platform distributions.</p>
-<hr>
 </section>
 </section>
 <section id="results" class="level1">
@@ -329,95 +314,148 @@ Table&nbsp;1: Overview of the original dataset
 </section>
 <section id="results-old-data-vs-new-data---lexicon-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="results-old-data-vs-new-data---lexicon-analysis">4.2 Results Old Data vs New Data - Lexicon Analysis</h2>
+<p>This section compares lexicon-based sentiment results across three lexicons (Bing, AFINN, NRC) between the original 2025 dataset and the newly scraped 2026 dataset. The new dataset contains <strong>4,478 reviews</strong>, covering the same five banks and two platforms but a different temporal window.</p>
+<p><strong><em>BING</em></strong></p>
+<p>In the new data, the Bing lexicon identified <strong>7,363 positive</strong> and <strong>3,657 negative</strong> word tokens, yielding an overall positive-to-negative ratio of approximately 2.01:1. The directional pattern of results is consistent with the original study: positive words dominate in aggregate, and the platform gap observed in the old data persists — Android reviews skew more positive than iOS reviews across most banks (<a href="#fig-bing-word-new-pf" class="quarto-xref">Figure&nbsp;3</a> and <a href="#fig-bing-word-new-bank" class="quarto-xref">Figure&nbsp;4</a>).</p>
+<div id="fig-bing-word-new-pf" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="H">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bing-word-new-pf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="plots/bing_new_wordnplatform.png" class="img-fluid figure-img" style="width:90.0%" data-fig-pos="H">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bing-word-new-pf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Top BING sentiment words by platform — new dataset
+</figcaption>
+</figure>
+</div>
+<div id="fig-bing-word-new-bank" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="H">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bing-word-new-bank-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="plots/bing_new_wordnbank.png" class="img-fluid figure-img" style="width:90.0%" data-fig-pos="H">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bing-word-new-bank-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Top BING sentiment words by bank — new dataset
+</figcaption>
+</figure>
+</div>
+<p><strong><em>AFINN</em></strong></p>
+<p>The AFINN analysis of the new data yields a Pearson correlation between review-level AFINN sum scores and star ratings of <strong>r = 0.539</strong> (n = 3,885; 95% CI: [0.516, 0.561]; p &lt; 0.001). This is a moderate-to-strong positive correlation, confirming that higher AFINN scores correspond to higher user ratings — the same directional conclusion as the original data.</p>
+<p>Compared to the old dataset, the correlation in the new data is <strong>slightly lower</strong> (the original study reported a Pearson correlation at 0.59). This small reduction in predictive alignment may reflect the greater temporal concentration of recent reviews around extreme ratings (1 and 5 stars), which inflates the role of polarity extremes and reduces mid-range discrimination.</p>
+<p>The per-bank AFINN mean-sum scores reveal an interesting structural shift (<a href="#fig-afinn-bank-new" class="quarto-xref">Figure&nbsp;5</a>): <strong>Citi iOS</strong> is the only bank–platform cell with a <em>negative</em> mean AFINN sum score (−0.724). All other bank–platform cells remain positive. <strong>Wells Fargo iOS</strong> posts the highest mean AFINN sum (3.80) in the new data, followed by <strong>Marcus by Goldman Sachs iOS</strong> (3.12) and <strong>Chase iOS</strong> (2.99). On Android, scores are more tightly clustered, ranging from approximately 1.9 (Chase) to 2.6 (Citi Android), which is broadly consistent with the old data.</p>
+<div id="fig-afinn-bank-new" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="H">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-afinn-bank-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="plots/afin_bank_new.png" class="img-fluid figure-img" style="width:90.0%" data-fig-pos="H">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-afinn-bank-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Average AFINN sentiment by bank and platform — new dataset
+</figcaption>
+</figure>
+</div>
+<p><strong><em>NRC Emotion</em></strong> The NRC emotion profile in the new data is dominated by <strong>positive</strong> (6,941 tokens) and <strong>trust</strong> (5,281 tokens), together accounting for over 44% of all matched tokens — a pattern that mirrors the old data and is consistent with the service-oriented nature of banking apps, where trust vocabulary (<em>account</em>, <em>recommend</em>, <em>secure</em>) is naturally frequent.</p>
+<p>The platform breakdown reveals a structurally important asymmetry (<a href="#fig-nrc-dist" class="quarto-xref">Figure&nbsp;6</a>): Android reviews show a markedly higher <em>positive</em> proportion (26.9% of tokens) compared to iOS (23.8%), while iOS shows higher <em>negative</em> (12.8% vs 9.8%), <em>anger</em> (5.9% vs 4.5%), <em>fear</em> (5.4% vs 3.8%), and <em>sadness</em> (5.7% vs 3.8%) proportions. This Android–iOS emotional gap is consistent across both datasets and reinforces the finding from the BERT analysis that Android users express systematically more positive sentiment than iOS users — a pattern that warrants further investigation into whether it reflects genuine experience differences or platform-specific reviewer demographics.</p>
+<div id="fig-nrc-dist" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="H">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nrc-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="plots/nrc_new_distribution.png" class="img-fluid figure-img" style="width:90.0%" data-fig-pos="H">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nrc-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Distribution of NRC emotion composition by platform — new dataset
+</figcaption>
+</figure>
+</div>
+<p><strong><em>Bigram and Negation Analysis</em></strong></p>
+<p>The top bigrams in the new data are largely consistent with the old data: <em>customer service</em>, <em>credit card</em>, <em>user friendly</em>, <em>savings account</em>, and <em>checking account</em> dominate the co-occurrence table. Two new entries — <em>dark mode</em> (rank 13) and <em>blank screen</em> (rank 16) — suggest that UI/UX concerns specific to the late 2025 to early 2026 period have increased in salience.</p>
+<p>The negation correction analysis confirms the structural finding from the original study: 1-star reviews show the largest total negation shift (−216 across the dataset, averaging −0.164 per review), reflecting that negative reviews contain the most negator–sentiment bigrams. Crucially, the sign of the correction is <em>negative</em> for 1–4 star reviews but <em>positive</em> for 5-star reviews (total shift +63), meaning that naive unigram AFINN systematically underestimates negativity in low-rated reviews and underestimates positivity in top-rated reviews. This directional finding holds in both the old and new data, confirming that negation correction is not a temporal artifact but a structural property of this type of review language.</p>
+<p>The most frequent negated bigrams are <em>no problems</em> (16 occurrences, flipped from −2 to +2), <em>not allow</em> (15), <em>not happy</em> (12), <em>no problem</em> (11), and <em>no help</em> (10) - indicating that both false-negative corrections (e.g., <em>not happy</em> correctly flipped to negative) and false-positive corrections (e.g., <em>no problems</em> correctly flipped to positive) are present in meaningful quantities, broadly consistent with the pattern in the original data.</p>
 </section>
 <section id="comparison-of-bert-sentiment-results-across-preprocessing-approaches" class="level2">
 <h2 class="anchored" data-anchor-id="comparison-of-bert-sentiment-results-across-preprocessing-approaches">4.3 Comparison of BERT Sentiment Results Across Preprocessing Approaches</h2>
 <p>This section compares the outputs of the BERT-based sentiment classifier <code>(nlptown/bert-base-multilingual-uncased-sentiment)</code> applied to two versions of the dataset: one preprocessed using the original pipeline and one using the revised approach. Both versions were scored using identical model settings and scoring logic, with predicted star ratings mapped to a normalized sentiment score in the range [0, 1]. The comparison focuses on whether the revised preprocessing affects the distribution of predicted sentiment, its alignment with actual star ratings, and the relative sentiment profiles across banks and platforms.</p>
 <p><strong>Distribution of BERT Predicted Sentiment</strong></p>
-<p>Both datasets produce a broadly similar bimodal distribution of BERT-predicted sentiment, with the majority of reviews classified at either the negative extreme (1 star) or the positive extreme (5 stars), and relatively few reviews falling in the middle ratings of 2 through 4 (<a href="#fig-bert-dist-old" class="quarto-xref">Figure&nbsp;1</a> and <a href="#fig-bert-dist-new" class="quarto-xref">Figure&nbsp;2</a>). However, a notable difference emerges in the balance between the two poles. In the older data, the 1-star predicted count (~1,550) is considerably closer to the 5-star predicted count (~2,000), whereas in the newer data the gap widens, with 1-star predictions declining to approximately 1,380 while 5-star predictions rise to around 2,100 (<a href="#fig-bert-dist-new" class="quarto-xref">Figure&nbsp;2</a>). This suggests that the newer batch of reviews contains a higher proportion of positively-perceived content as classified by the model. The sentiment score density plots reinforce this pattern: both distributions are heavily concentrated at 0.0 and 1.0, reflecting the model’s tendency toward confident polar predictions, with the overall shape of the density curve remaining consistent across both datasets (<a href="#fig-bert-dist-old" class="quarto-xref">Figure&nbsp;1</a> and <a href="#fig-bert-dist-new" class="quarto-xref">Figure&nbsp;2</a>).</p>
+<p>Both datasets produce a broadly similar bimodal distribution of BERT-predicted sentiment, with the majority of reviews classified at either the negative extreme (1 star) or the positive extreme (5 stars), and relatively few reviews falling in the middle ratings of 2 through 4 (<a href="#fig-bert-dist-old" class="quarto-xref">Figure&nbsp;7</a> and <a href="#fig-bert-dist-new" class="quarto-xref">Figure&nbsp;8</a>). However, a notable difference emerges in the balance between the two poles. In the older data, the 1-star predicted count (~1,550) is considerably closer to the 5-star predicted count (~2,000), whereas in the newer data the gap widens, with 1-star predictions declining to approximately 1,380 while 5-star predictions rise to around 2,100 (<a href="#fig-bert-dist-new" class="quarto-xref">Figure&nbsp;8</a>). This suggests that the newer batch of reviews contains a higher proportion of positively-perceived content as classified by the model. The sentiment score density plots reinforce this pattern: both distributions are heavily concentrated at 0.0 and 1.0, reflecting the model’s tendency toward confident polar predictions, with the overall shape of the density curve remaining consistent across both datasets (<a href="#fig-bert-dist-old" class="quarto-xref">Figure&nbsp;7</a> and <a href="#fig-bert-dist-new" class="quarto-xref">Figure&nbsp;8</a>).</p>
 <div id="fig-bert-dist-old" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bert-dist-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../plots/bert_old_distribution.png" class="img-fluid figure-img" style="width:90.0%">
+<img src="plots/bert_old_distribution.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-dist-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Distribution of BERT predicted star ratings and sentiment scores — older dataset
+Figure&nbsp;7: Distribution of BERT predicted star ratings and sentiment scores — older dataset
 </figcaption>
 </figure>
 </div>
 <div id="fig-bert-dist-new" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bert-dist-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../plots/bert_new_distribution.png" class="img-fluid figure-img" style="width:90.0%">
+<img src="plots/bert_new_distribution.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-dist-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Distribution of BERT predicted star ratings and sentiment scores — newer dataset
+Figure&nbsp;8: Distribution of BERT predicted star ratings and sentiment scores — newer dataset
 </figcaption>
 </figure>
 </div>
 <p><strong>Relationship Between BERT Scores and Actual Star Ratings</strong></p>
-<p>The relationship between BERT sentiment scores and actual star ratings is consistent across both datasets (<a href="#fig-bert-box-old" class="quarto-xref">Figure&nbsp;3</a> and <a href="#fig-bert-box-new" class="quarto-xref">Figure&nbsp;4</a>). In both cases, the model assigns near-zero sentiment scores to 1-star reviews with very tight interquartile ranges, indicating high confidence in negative classifications. Scores rise progressively through 2- and 3-star ratings, with 3-star reviews showing the widest spread, reflecting the model’s uncertainty around neutral or mixed-sentiment reviews. Reviews rated 4 and 5 stars are predominantly scored above the neutral threshold of 0.5, with 5-star reviews showing a highly compressed distribution concentrated at 1.0. The two datasets are visually near-identical in this regard (<a href="#fig-bert-box-old" class="quarto-xref">Figure&nbsp;3</a> and <a href="#fig-bert-box-new" class="quarto-xref">Figure&nbsp;4</a>), suggesting that the shift in review composition between the older and newer data did not meaningfully alter the model’s ability to align predicted sentiment with actual star ratings.</p>
+<p>The relationship between BERT sentiment scores and actual star ratings is consistent across both datasets (<a href="#fig-bert-box-old" class="quarto-xref">Figure&nbsp;9</a> and <a href="#fig-bert-box-new" class="quarto-xref">Figure&nbsp;10</a>). In both cases, the model assigns near-zero sentiment scores to 1-star reviews with very tight interquartile ranges, indicating high confidence in negative classifications. Scores rise progressively through 2- and 3-star ratings, with 3-star reviews showing the widest spread, reflecting the model’s uncertainty around neutral or mixed-sentiment reviews. Reviews rated 4 and 5 stars are predominantly scored above the neutral threshold of 0.5, with 5-star reviews showing a highly compressed distribution concentrated at 1.0. The two datasets are visually near-identical in this regard (<a href="#fig-bert-box-old" class="quarto-xref">Figure&nbsp;9</a> and <a href="#fig-bert-box-new" class="quarto-xref">Figure&nbsp;10</a>), suggesting that the shift in review composition between the older and newer data did not meaningfully alter the model’s ability to align predicted sentiment with actual star ratings.</p>
 <div id="fig-bert-box-old" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bert-box-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../plots/bert_old_sentiment_score_boxplot.png" class="img-fluid figure-img" style="width:90.0%">
+<img src="plots/bert_old_sentiment_score_boxplot.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-box-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: BERT sentiment score by star rating — older dataset
+Figure&nbsp;9: BERT sentiment score by star rating — older dataset
 </figcaption>
 </figure>
 </div>
 <div id="fig-bert-box-new" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bert-box-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../plots/bert_new_sentiment_score_boxplot.png" class="img-fluid figure-img" style="width:90.0%">
+<img src="plots/bert_new_sentiment_score_boxplot.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-box-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: BERT sentiment score by star rating — newer dataset
+Figure&nbsp;10: BERT sentiment score by star rating — newer dataset
 </figcaption>
 </figure>
 </div>
 <p><strong>Average BERT Sentiment Scores by Bank and Platform</strong></p>
-<p>Across both datasets, a consistent platform gap is visible: Android reviews tend to receive higher BERT sentiment scores than iOS reviews for most banks (<a href="#fig-bert-bank-old" class="quarto-xref">Figure&nbsp;5</a> and <a href="#fig-bert-bank-new" class="quarto-xref">Figure&nbsp;6</a>). Citi stands out in both periods, with Android scores approaching 0.9 while iOS scores remain well below the neutral threshold of 0.5, making it the most polarised bank by platform in both the older and newer data. Bank of America shows a similar pattern, with strong Android sentiment but iOS scores falling below neutral in both datasets. Wells Fargo is the only bank where both platforms consistently score above neutral, and remains so across both periods. One notable structural difference between the two datasets is that Chase appears in the older data (<a href="#fig-bert-bank-old" class="quarto-xref">Figure&nbsp;5</a>) with both platforms scoring above neutral, whereas in the newer data (<a href="#fig-bert-bank-new" class="quarto-xref">Figure&nbsp;6</a>) Chase drops to the bottom of the ranking with iOS sentiment just at the neutral threshold. Marcus by Goldman Sachs remains relatively stable across both periods, with Android scores moderately above neutral and iOS scores hovering near 0.5.</p>
+<p>Across both datasets, a consistent platform gap is visible: Android reviews tend to receive higher BERT sentiment scores than iOS reviews for most banks (<a href="#fig-bert-bank-old" class="quarto-xref">Figure&nbsp;11</a> and <a href="#fig-bert-bank-new" class="quarto-xref">Figure&nbsp;12</a>). Citi stands out in both periods, with Android scores approaching 0.9 while iOS scores remain well below the neutral threshold of 0.5, making it the most polarised bank by platform in both the older and newer data. Bank of America shows a similar pattern, with strong Android sentiment but iOS scores falling below neutral in both datasets. Wells Fargo is the only bank where both platforms consistently score above neutral, and remains so across both periods. One notable structural difference between the two datasets is that Chase appears in the older data (<a href="#fig-bert-bank-old" class="quarto-xref">Figure&nbsp;11</a>) with both platforms scoring above neutral, whereas in the newer data (<a href="#fig-bert-bank-new" class="quarto-xref">Figure&nbsp;12</a>) Chase drops to the bottom of the ranking with iOS sentiment just at the neutral threshold. Marcus by Goldman Sachs remains relatively stable across both periods, with Android scores moderately above neutral and iOS scores hovering near 0.5.</p>
 <div id="fig-bert-bank-old" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bert-bank-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../plots/bert_old_banknplatform.png" class="img-fluid figure-img" style="width:90.0%">
+<img src="plots/bert_old_banknplatform.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-bank-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Average BERT sentiment score by bank and platform — older dataset
+Figure&nbsp;11: Average BERT sentiment score by bank and platform — older dataset
 </figcaption>
 </figure>
 </div>
 <div id="fig-bert-bank-new" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bert-bank-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../plots/bert_new_banknplatform.png" class="img-fluid figure-img" style="width:90.0%">
+<img src="plots/bert_new_banknplatform.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-bank-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6: Average BERT sentiment score by bank and platform — newer dataset
+Figure&nbsp;12: Average BERT sentiment score by bank and platform — newer dataset
 </figcaption>
 </figure>
 </div>
 <p><strong>Average BERT Sentiment Scores by Operating Platform</strong></p>
-<p>The per-platform breakdown of BERT sentiment scores by star rating reveals a largely stable pattern across both datasets (<a href="#fig-bert-plat-old" class="quarto-xref">Figure&nbsp;7</a> and <a href="#fig-bert-plat-new" class="quarto-xref">Figure&nbsp;8</a>). On Android, both the older and newer data show near-identical distributions: 1-star reviews are tightly concentrated at 0.0, scores rise progressively through 2 and 3 stars with widening spread, and 4- and 5-star reviews sit predominantly above the neutral threshold. The iOS platform tells a slightly different story between the two periods. In the older data (<a href="#fig-bert-plat-old" class="quarto-xref">Figure&nbsp;7</a>), the iOS 4-star distribution closely mirrors its Android counterpart, with a median around 0.75. In the newer data (<a href="#fig-bert-plat-new" class="quarto-xref">Figure&nbsp;8</a>), the iOS 4-star box shifts noticeably, with a lower median of approximately 0.6 and a wider interquartile range, suggesting greater variability in how the model scores moderately positive iOS reviews in the newer period. Across both datasets and platforms, 1- and 2-star distributions remain consistently low and 5-star reviews remain compressed near 1.0, indicating that the model’s confidence at the sentiment extremes is robust regardless of platform or time period.</p>
+<p>The per-platform breakdown of BERT sentiment scores by star rating reveals a largely stable pattern across both datasets (<a href="#fig-bert-plat-old" class="quarto-xref">Figure&nbsp;13</a> and <a href="#fig-bert-plat-new" class="quarto-xref">Figure&nbsp;14</a>). On Android, both the older and newer data show near-identical distributions: 1-star reviews are tightly concentrated at 0.0, scores rise progressively through 2 and 3 stars with widening spread, and 4- and 5-star reviews sit predominantly above the neutral threshold. The iOS platform tells a slightly different story between the two periods. In the older data (<a href="#fig-bert-plat-old" class="quarto-xref">Figure&nbsp;13</a>), the iOS 4-star distribution closely mirrors its Android counterpart, with a median around 0.75. In the newer data (<a href="#fig-bert-plat-new" class="quarto-xref">Figure&nbsp;14</a>), the iOS 4-star box shifts noticeably, with a lower median of approximately 0.6 and a wider interquartile range, suggesting greater variability in how the model scores moderately positive iOS reviews in the newer period. Across both datasets and platforms, 1- and 2-star distributions remain consistently low and 5-star reviews remain compressed near 1.0, indicating that the model’s confidence at the sentiment extremes is robust regardless of platform or time period.</p>
 <div id="fig-bert-plat-old" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bert-plat-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../plots/bert_old_per_platform.png" class="img-fluid figure-img" style="width:90.0%">
+<img src="plots/bert_old_per_platform.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-plat-old-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7: BERT sentiment score by star rating per platform — older dataset
+Figure&nbsp;13: BERT sentiment score by star rating per platform — older dataset
 </figcaption>
 </figure>
 </div>
 <div id="fig-bert-plat-new" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bert-plat-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../plots/bert_new_per_platform.png" class="img-fluid figure-img" style="width:90.0%">
+<img src="plots/bert_new_per_platform.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bert-plat-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8: BERT sentiment score by star rating per platform — newer dataset
+Figure&nbsp;14: BERT sentiment score by star rating per platform — newer dataset
 </figcaption>
 </figure>
 </div>
@@ -481,11 +519,10 @@ Figure&nbsp;8: BERT sentiment score by star rating per platform — newer datase
 </tr>
 </tbody>
 </table>
-<p>Both datasets show a statistically significant difference in BERT sentiment scores between Android and iOS platforms (p &lt; 0.001 in both cases), confirming that platform is a meaningful source of variation in user sentiment regardless of time period. The U statistic is larger in the older data (3,379,410 vs 3,174,169), which is consistent with the older dataset having slightly more observations (n = 4,518 vs 4,478). While both p-values are extremely small, the older data yields a more extreme test statistic, suggesting the platform gap in sentiment may have been marginally more pronounced in the earlier period, which aligns with what was observed in the bank-by-platform plots (<a href="#fig-bert-bank-old" class="quarto-xref">Figure&nbsp;5</a> and <a href="#fig-bert-bank-new" class="quarto-xref">Figure&nbsp;6</a>).</p>
+<p>Both datasets show a statistically significant difference in BERT sentiment scores between Android and iOS platforms (p &lt; 0.001 in both cases), confirming that platform is a meaningful source of variation in user sentiment regardless of time period. The U statistic is larger in the older data (3,379,410 vs 3,174,169), which is consistent with the older dataset having slightly more observations (n = 4,518 vs 4,478). While both p-values are extremely small, the older data yields a more extreme test statistic, suggesting the platform gap in sentiment may have been marginally more pronounced in the earlier period, which aligns with what was observed in the bank-by-platform plots (<a href="#fig-bert-bank-old" class="quarto-xref">Figure&nbsp;11</a> and <a href="#fig-bert-bank-new" class="quarto-xref">Figure&nbsp;12</a>).</p>
 </section>
 <section id="results-afinn-vs-bert---new-data" class="level2">
 <h2 class="anchored" data-anchor-id="results-afinn-vs-bert---new-data">4.4 Results AFINN vs BERT - New Data</h2>
-<hr>
 </section>
 </section>
 <section id="discussion" class="level1">
@@ -509,19 +546,25 @@ Figure&nbsp;8: BERT sentiment score by star rating per platform — newer datase
 <li><strong>Temporal confounding:</strong> Old and new data cover different time windows, so observed differences may reflect temporal trends, not genuine quality changes</li>
 <li><strong>Label imbalance:</strong> App Store reviews skew heavily toward 5 stars; without class-weighting, the transformer may over-predict “positive”</li>
 </ul>
-<hr>
 </section>
 </section>
 <section id="generative-ai-disclosure" class="level1">
 <h1>6 Generative AI Disclosure</h1>
 <p>In accordance with course policy (dr Jakub Michańków, Reproducible Research 2026), generative AI (Claude AI) was used to assist with coding tasks, refine the code.</p>
 <p>All analytical decisions, interpretations, and research design are the team’s own work.</p>
-<hr>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
-<div id="refs" role="list">
-
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-mohammad2013crowdsourcing" class="csl-entry" role="listitem">
+Mohammad, Saif M., and Peter D. Turney. 2013. <span>“Crowdsourcing a Word-Emotion Association Lexicon.”</span> <em>Computational Intelligence</em> 29: 436–65.
+</div>
+<div id="ref-nielsen2011new" class="csl-entry" role="listitem">
+Nielsen, Finn Årup. 2011. <em>A New <span>ANEW</span>: Evaluation of a Word List for Sentiment Analysis in Microblogs</em>. <a href="https://arxiv.org/abs/1103.2903">https://arxiv.org/abs/1103.2903</a>.
+</div>
+<div id="ref-silge2017text" class="csl-entry" role="listitem">
+Silge, Julia, and David Robinson. 2017. <em>Text Mining with r: A Tidy Approach</em>. O’Reilly Media. <a href="https://www.tidytextmining.com/">https://www.tidytextmining.com/</a>.
+</div>
 </div>
 <!-- -->
 
@@ -980,295 +1023,331 @@ Figure&nbsp;8: BERT sentiment score by star rating per platform — newer datase
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Sentiment Analysis of Mobile Banking App Reviews"</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "A Reproducible Study: R to Python, Old Data to New Data, Lexicon to Transformer"</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "Chi Dao"</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "I Putu Agastya Harta Pratama"</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "Si Tang Lin"</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "Zuzanna Uljasz"</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> today</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-float: true</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-title: "Contents"</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: lumen</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">    smooth-scroll: true</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co">    number-sections: false</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-width: 9</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-height: 5</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co">  pdf:</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">    number-sections: false</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-width: 7</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-height: 4</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co">  echo: true</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co">  eval: false</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="an">jupyter:</span><span class="co"> python3</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="fu"># Summary</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>This report documents a reproducible research project that translates an original R-based sentiment analysis of mobile banking app reviews into Python, extends it with newly scraped data, and augments the lexicon-based methods with a transformer (BERT) approach. The project covers five major US banks: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo across the Apple App Store (iOS) and Google Play (Android). The core research questions are: (1) Can the original R findings be faithfully reproduced in Python? (2) Do the results change with a fresh data scrape? (3) Does a transformer model produce sentiment classifications consistent with the lexicon approach?</span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="fu"># 1. Introduction and Motivation</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.1 Research Context</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>Customer reviews on mobile app stores represent a rich, continuously updated source of unstructured opinion data. For the banking sector, app reviews offer direct evidence of customer satisfaction, pain points, and competitive positioning — feedback that often offers a faster point of view and is more granular than traditional survey methods. Sentiment analysis of these reviews can help researchers and practitioners understand how user experience varies across institutions and platforms, and whether negative signals co-occur with specific feature complaints or rating patterns.</span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>There are two motivations for this study. Academically, it provides an opportunity to practice reproducible research: taking an existing empirical study, replicating it in a different computational environment, and evaluating whether the results remain the same. Practically, it investigates whether mobile banking sentiment has shifted between the original data collection window and a fresh scrape in 2026, and whether more sophisticated deep learning methods agree with classic dictionary-based approaches.</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.2 Inspiration and Source Study</span></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>The project is inspired by the tidytext-based workflow popularised by @silge2017text, which applies lexicon-based sentiment scoring to tokenised text in a tidy data format. The original analysis follows this approach: it imports and cleans review data, performs unigram sentiment analysis using three lexicons (Bing, AFINN, NRC), constructs bigrams with negator-aware scoring, and evaluates results statistically. The goal of this project is to demonstrate that these findings are reproducible — the same pipeline, implemented in Python with equivalent libraries, produces consistent conclusions — and then to extend the study in two directions: new data and a transformer model.</span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="fu"># 2. Data</span></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>Dataset is obtained with the means of scrapping reviews from the App Store and Google Play for the five major banks in US. The original dataset was collected in 2023, while the new dataset was scraped in mid-2026. Both datasets contain reviews in English, with metadata including star ratings, review text, date, platform, and storefront. The data is stored as CSV files per bank and platform, which are combined and preprocessed for analysis.</span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>The major banks included in the dataset are some of the largest US financial institutions, which are: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo. Each has a significant mobile banking user base. The platforms covered are the two dominant mobile ecosystems: Apple's App Store (iOS) and Google's Play Store (Android). This allows for cross-platform comparisons and insights into whether user sentiment differs by operating system.</span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>The method of scrapping differs for each platform due to their distinct APIs and structures. For the iOS App Store, the script uses Python's requests library to directly parse Apple's publicly accessible XML/JSON RSS feed endpoints, which are ordered by the most recent submissions. For the Google Play Store, it leverages an open-source web scraping library (google-play-scraper) that mimics browser requests to dynamically fetch and page through raw review payloads using continuation tokens. Both approaches process these external data streams in real time, converting the raw JSON responses into structured Pandas DataFrames before exporting them to CSV files.</span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2.1 Exploratory Data Analysis of the Original Dataset (Old Data)</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>The original dataset was collected in 2023 using a combination of web scraping and API access methods. It includes reviews from the same five banks and both platforms, but covers a different time period than the new data. The dataset is stored as CSV files, one per bank and platform, with columns for review text, star rating, date, and other metadata. The original analysis applied lexicon-based sentiment scoring to this dataset to derive insights about user sentiment and its relationship to star ratings.</span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-old-overview</span></span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Overview of the original dataset"</span></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>DATA_OLD <span class="op">=</span> Path(<span class="st">"Dataset/data_old_approach"</span>)</span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>raw_old <span class="op">=</span> pd.concat(</span>
-<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>    [pd.read_csv(p, dtype<span class="op">=</span><span class="bu">str</span>).assign(source_file<span class="op">=</span>p.name)</span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>     <span class="cf">for</span> p <span class="kw">in</span> DATA_OLD.glob(<span class="st">"*.csv"</span>)],</span>
-<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>    ignore_index<span class="op">=</span><span class="va">True</span></span>
-<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({</span>
-<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Total reviews"</span>:  [<span class="bu">len</span>(raw_old)],</span>
-<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Banks"</span>:          [raw_old[<span class="st">"source_file"</span>].nunique()],</span>
-<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Platforms"</span>:      [raw_old[<span class="st">"platform"</span>].nunique()],</span>
-<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Date range"</span>: [</span>
-<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>pd<span class="sc">.</span>to_datetime(raw_old[<span class="st">'date'</span>], errors<span class="op">=</span><span class="st">'coerce'</span>)<span class="sc">.</span><span class="bu">min</span>()<span class="sc">.</span>date()<span class="sc">}</span><span class="ss"> – "</span></span>
-<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>pd<span class="sc">.</span>to_datetime(raw_old[<span class="st">'date'</span>], errors<span class="op">=</span><span class="st">'coerce'</span>)<span class="sc">.</span><span class="bu">max</span>()<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>    ]</span>
-<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2.2 Exploratory Data Analysis of the New Dataset (New Data)</span></span>
-<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>The new dataset was collected using a dedicated scraper (<span class="in">`Dataset/scraper.ipynb`</span>) targeting the same five banks and both platforms. The scraping window covers a more recent period *(2024-2026)* than the original data. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window.</span>
-<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-new-overview</span></span>
-<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Overview of the newly scraped dataset"</span></span>
-<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>DATA_NEW <span class="op">=</span> Path(<span class="st">"Dataset/data_new_approach"</span>)</span>
-<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>raw_new <span class="op">=</span> pd.concat(</span>
-<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>    [pd.read_csv(p, dtype<span class="op">=</span><span class="bu">str</span>).assign(source_file<span class="op">=</span>p.name)</span>
-<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>     <span class="cf">for</span> p <span class="kw">in</span> DATA_NEW.glob(<span class="st">"*.csv"</span>)],</span>
-<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a>    ignore_index<span class="op">=</span><span class="va">True</span></span>
-<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({</span>
-<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Total reviews"</span>: [<span class="bu">len</span>(raw_new)],</span>
-<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Banks"</span>:         [raw_new[<span class="st">"source_file"</span>].nunique()],</span>
-<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Platforms"</span>:     [raw_new[<span class="st">"platform"</span>].nunique()],</span>
-<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2.3 Data Preprocessing</span></span>
-<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.3 Data Preprocessing for Lexicon-Based Methods</span></span>
-<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a>Preprocessing follows the same logical steps in both the R original and the Python replications:</span>
-<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Import and combine** — all per-bank CSVs are concatenated into a single dataframe</span>
-<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Bank and platform standardisation** — filenames are parsed to extract bank names; platform codes (<span class="in">`app_store`</span> → <span class="in">`iOS`</span>, <span class="in">`google_play`</span> → <span class="in">`Android`</span>) are mapped to readable labels</span>
-<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Type coercion** — <span class="in">`rating`</span> is cast to numeric; <span class="in">`date`</span> is parsed to datetime</span>
-<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Language detection** — reviews not detected as English are removed (using <span class="in">`langdetect`</span> in Python)</span>
-<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Raw text construction** — <span class="in">`title`</span> and <span class="in">`review`</span> fields are concatenated into <span class="in">`raw_text`</span></span>
-<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Tokenisation and stopword removal** — words are extracted using regex; a custom stopword list (NLTK English stopwords + domain terms: *app, bank, banking, mobile, iphone, apple, android, phone*) is applied</span>
-<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>**Bigram construction** — adjacent word pairs are extracted from cleaned text, with negators (*not, never, no, cannot*, etc.) explicitly excluded from the stopword filter so they are preserved in bigrams</span>
-<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.3 Data Preprocessing for Lexicon-Based Methods</span></span>
-<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a>For the transformer approach, an additional cleaning step keeps punctuation intact (since BERT tokenisers handle it natively) and removes URLs.</span>
-<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a><span class="fu"># 3. Methodology</span></span>
-<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3.1 Lexicon-Based Sentiment Analysis</span></span>
-<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>Three lexicons are applied to the filtered tokens. Scores are computed at the review level and disaggregated by bank and platform.</span>
-<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a>**Bing (Opinion Lexicon):** A binary lexicon classifying words as positive or negative <span class="co">[</span><span class="ot">@hu2004mining</span><span class="co">]</span>. Review sentiment is the count of positive words minus negative words.</span>
-<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a>**AFINN:** An integer-scored lexicon (−5 to +5) <span class="co">[</span><span class="ot">@nielsen2011new</span><span class="co">]</span>. Review scores are the sum of matched word scores. Pearson correlation between AFINN scores and star ratings serves as a validity check.</span>
-<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>**NRC Emotion Lexicon:** Developed by @mohammad2013crowdsourcing, this lexicon maps words to 8 emotion categories (anger, anticipation, disgust, fear, joy, sadness, surprise, trust) and 2 polarity categories. One word may belong to multiple categories, enabling nuanced emotion profiling.</span>
-<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3.2 Bigram Analysis and Negation Correction</span></span>
-<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a>Unigram methods cannot handle negation: *not good* is scored as positive because *good* carries a positive AFINN score. To quantify this limitation, bigrams are constructed from the raw review text, with negators explicitly retained in the stopword filter. A set of 22 negators is defined (e.g., *no*, *not*, *n't*, *never*, *cannot*). Where the first token of a bigram is a negator and the second has an AFINN score, the score is sign-flipped. The magnitude of the resulting correction is reported by star-rating group.</span>
-<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3.3 Transformer-Based Sentiment Analysis</span></span>
-<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a>As a complement to the lexicon methods, the pre-trained model <span class="in">`nlptown/bert-base-multilingual-uncased-sentiment`</span> <span class="co">[</span><span class="ot">@nlptown2019</span><span class="co">]</span> is applied via the Hugging Face <span class="in">`transformers`</span> pipeline. The model predicts a 1–5 star rating for each review; predictions are normalised to a continuous sentiment score:</span>
-<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a>$$\text{bert<span class="sc">\_</span>score} = \frac{\text{bert<span class="sc">\_</span>stars} - 1}{4} \in <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$$</span>
-<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a>Model validity is assessed by (1) Pearson correlation between <span class="in">`bert_score`</span> and the actual star rating (95% CI via Fisher's *z*-transformation), (2) boxplots of <span class="in">`bert_score`</span> stratified by star rating, bank, and platform, (3) exact star-level agreement and a full confusion matrix, and (4) a Mann–Whitney U test comparing platform distributions.</span>
-<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a><span class="fu"># 4. Results</span></span>
-<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4.1 Results Python vs R</span></span>
-<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a>Yap yap yap here</span>
-<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a><span class="co"># WE CODE TO SHOW IMAGE</span></span>
-<span id="cb2-177"><a href="#cb2-177" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4.2 Results Old Data vs New Data - Lexicon Analysis</span></span>
-<span id="cb2-181"><a href="#cb2-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4.3 Comparison of BERT Sentiment Results Across Preprocessing Approaches</span></span>
-<span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a>This section compares the outputs of the BERT-based sentiment classifier <span class="in">`(nlptown/bert-base-multilingual-uncased-sentiment)`</span> applied to two versions of the dataset: one preprocessed using the original pipeline and one using the revised approach. Both versions were scored using identical model settings and scoring logic, with predicted star ratings mapped to a normalized sentiment score in the range <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>. The comparison focuses on whether the revised preprocessing affects the distribution of predicted sentiment, its alignment with actual star ratings, and the relative sentiment profiles across banks and platforms.</span>
-<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a>**Distribution of BERT Predicted Sentiment**</span>
-<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a>Both datasets produce a broadly similar bimodal distribution of BERT-predicted sentiment, with the majority of reviews classified at either the negative extreme (1 star) or the positive extreme (5 stars), and relatively few reviews falling in the middle ratings of 2 through 4 (@fig-bert-dist-old and @fig-bert-dist-new). However, a notable difference emerges in the balance between the two poles. In the older data, the 1-star predicted count (~1,550) is considerably closer to the 5-star predicted count (~2,000), whereas in the newer data the gap widens, with 1-star predictions declining to approximately 1,380 while 5-star predictions rise to around 2,100 (@fig-bert-dist-new). This suggests that the newer batch of reviews contains a higher proportion of positively-perceived content as classified by the model. The sentiment score density plots reinforce this pattern: both distributions are heavily concentrated at 0.0 and 1.0, reflecting the model's tendency toward confident polar predictions, with the overall shape of the density curve remaining consistent across both datasets (@fig-bert-dist-old and @fig-bert-dist-new).</span>
-<span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-190"><a href="#cb2-190" aria-hidden="true" tabindex="-1"></a><span class="al">![Distribution of BERT predicted star ratings and sentiment scores — older dataset](../plots/bert_old_distribution.png)</span>{#fig-bert-dist-old width=90%}</span>
-<span id="cb2-191"><a href="#cb2-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-192"><a href="#cb2-192" aria-hidden="true" tabindex="-1"></a><span class="al">![Distribution of BERT predicted star ratings and sentiment scores — newer dataset](../plots/bert_new_distribution.png)</span>{#fig-bert-dist-new width=90%}</span>
-<span id="cb2-193"><a href="#cb2-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-194"><a href="#cb2-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-195"><a href="#cb2-195" aria-hidden="true" tabindex="-1"></a>**Relationship Between BERT Scores and Actual Star Ratings**</span>
-<span id="cb2-196"><a href="#cb2-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-197"><a href="#cb2-197" aria-hidden="true" tabindex="-1"></a>The relationship between BERT sentiment scores and actual star ratings is consistent across both datasets (@fig-bert-box-old and @fig-bert-box-new). In both cases, the model assigns near-zero sentiment scores to 1-star reviews with very tight interquartile ranges, indicating high confidence in negative classifications. Scores rise progressively through 2- and 3-star ratings, with 3-star reviews showing the widest spread, reflecting the model's uncertainty around neutral or mixed-sentiment reviews. Reviews rated 4 and 5 stars are predominantly scored above the neutral threshold of 0.5, with 5-star reviews showing a highly compressed distribution concentrated at 1.0. The two datasets are visually near-identical in this regard (@fig-bert-box-old and @fig-bert-box-new), suggesting that the shift in review composition between the older and newer data did not meaningfully alter the model's ability to align predicted sentiment with actual star ratings.</span>
-<span id="cb2-198"><a href="#cb2-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-199"><a href="#cb2-199" aria-hidden="true" tabindex="-1"></a><span class="al">![BERT sentiment score by star rating — older dataset](../plots/bert_old_sentiment_score_boxplot.png)</span>{#fig-bert-box-old width=90%}</span>
-<span id="cb2-200"><a href="#cb2-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-201"><a href="#cb2-201" aria-hidden="true" tabindex="-1"></a><span class="al">![BERT sentiment score by star rating — newer dataset](../plots/bert_new_sentiment_score_boxplot.png)</span>{#fig-bert-box-new width=90%}</span>
-<span id="cb2-202"><a href="#cb2-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-203"><a href="#cb2-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-204"><a href="#cb2-204" aria-hidden="true" tabindex="-1"></a>**Average BERT Sentiment Scores by Bank and Platform**</span>
-<span id="cb2-205"><a href="#cb2-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-206"><a href="#cb2-206" aria-hidden="true" tabindex="-1"></a>Across both datasets, a consistent platform gap is visible: Android reviews tend to receive higher BERT sentiment scores than iOS reviews for most banks (@fig-bert-bank-old and @fig-bert-bank-new). Citi stands out in both periods, with Android scores approaching 0.9 while iOS scores remain well below the neutral threshold of 0.5, making it the most polarised bank by platform in both the older and newer data. Bank of America shows a similar pattern, with strong Android sentiment but iOS scores falling below neutral in both datasets. Wells Fargo is the only bank where both platforms consistently score above neutral, and remains so across both periods. One notable structural difference between the two datasets is that Chase appears in the older data (@fig-bert-bank-old) with both platforms scoring above neutral, whereas in the newer data (@fig-bert-bank-new) Chase drops to the bottom of the ranking with iOS sentiment just at the neutral threshold. Marcus by Goldman Sachs remains relatively stable across both periods, with Android scores moderately above neutral and iOS scores hovering near 0.5.</span>
-<span id="cb2-207"><a href="#cb2-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-208"><a href="#cb2-208" aria-hidden="true" tabindex="-1"></a><span class="al">![Average BERT sentiment score by bank and platform — older dataset](../plots/bert_old_banknplatform.png)</span>{#fig-bert-bank-old width=90%}</span>
-<span id="cb2-209"><a href="#cb2-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-210"><a href="#cb2-210" aria-hidden="true" tabindex="-1"></a><span class="al">![Average BERT sentiment score by bank and platform — newer dataset](../plots/bert_new_banknplatform.png)</span>{#fig-bert-bank-new width=90%}</span>
-<span id="cb2-211"><a href="#cb2-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-212"><a href="#cb2-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-213"><a href="#cb2-213" aria-hidden="true" tabindex="-1"></a>**Average BERT Sentiment Scores by Operating Platform**</span>
-<span id="cb2-214"><a href="#cb2-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-215"><a href="#cb2-215" aria-hidden="true" tabindex="-1"></a>The per-platform breakdown of BERT sentiment scores by star rating reveals a largely stable pattern across both datasets (@fig-bert-plat-old and @fig-bert-plat-new). On Android, both the older and newer data show near-identical distributions: 1-star reviews are tightly concentrated at 0.0, scores rise progressively through 2 and 3 stars with widening spread, and 4- and 5-star reviews sit predominantly above the neutral threshold. The iOS platform tells a slightly different story between the two periods. In the older data (@fig-bert-plat-old), the iOS 4-star distribution closely mirrors its Android counterpart, with a median around 0.75. In the newer data (@fig-bert-plat-new), the iOS 4-star box shifts noticeably, with a lower median of approximately 0.6 and a wider interquartile range, suggesting greater variability in how the model scores moderately positive iOS reviews in the newer period. Across both datasets and platforms, 1- and 2-star distributions remain consistently low and 5-star reviews remain compressed near 1.0, indicating that the model's confidence at the sentiment extremes is robust regardless of platform or time period.</span>
-<span id="cb2-216"><a href="#cb2-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-217"><a href="#cb2-217" aria-hidden="true" tabindex="-1"></a><span class="al">![BERT sentiment score by star rating per platform — older dataset](../plots/bert_old_per_platform.png)</span>{#fig-bert-plat-old width=90%}</span>
-<span id="cb2-218"><a href="#cb2-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-219"><a href="#cb2-219" aria-hidden="true" tabindex="-1"></a><span class="al">![BERT sentiment score by star rating per platform — newer dataset](../plots/bert_new_per_platform.png)</span>{#fig-bert-plat-new width=90%}</span>
-<span id="cb2-220"><a href="#cb2-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-221"><a href="#cb2-221" aria-hidden="true" tabindex="-1"></a>**Statistical Correlation Between BERT Scores and Star Ratings**</span>
-<span id="cb2-222"><a href="#cb2-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-223"><a href="#cb2-223" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Metric <span class="pp">|</span> Old Data <span class="pp">|</span> New Data <span class="pp">|</span></span>
-<span id="cb2-224"><a href="#cb2-224" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb2-225"><a href="#cb2-225" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> n <span class="pp">|</span> 4,518 <span class="pp">|</span> 4,478 <span class="pp">|</span></span>
-<span id="cb2-226"><a href="#cb2-226" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Pearson r <span class="pp">|</span> 0.8615 <span class="pp">|</span> 0.8660 <span class="pp">|</span></span>
-<span id="cb2-227"><a href="#cb2-227" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> p-value <span class="pp">|</span> &lt; 0.001 <span class="pp">|</span> &lt; 0.001 <span class="pp">|</span></span>
-<span id="cb2-228"><a href="#cb2-228" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 95% CI <span class="pp">|</span> <span class="co">[</span><span class="ot">0.8538, 0.8688</span><span class="co">]</span> <span class="pp">|</span> <span class="co">[</span><span class="ot">0.8585, 0.8731</span><span class="co">]</span> <span class="pp">|</span></span>
-<span id="cb2-229"><a href="#cb2-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-230"><a href="#cb2-230" aria-hidden="true" tabindex="-1"></a>Both datasets show a strong positive correlation between BERT sentiment scores and actual star ratings, with Pearson r values of 0.8615 and 0.8660 for the older and newer data respectively, both statistically significant (p &lt; 0.001). The marginal increase in r across the two periods suggests a slightly stronger alignment between model-predicted sentiment and user-assigned ratings in the newer dataset, though the difference is negligible given the overlapping confidence intervals (<span class="co">[</span><span class="ot">0.8538, 0.8688</span><span class="co">]</span> vs <span class="co">[</span><span class="ot">0.8585, 0.8731</span><span class="co">]</span>). Overall, these results confirm that the BERT model captures sentiment signal consistently across both time periods.</span>
-<span id="cb2-231"><a href="#cb2-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-232"><a href="#cb2-232" aria-hidden="true" tabindex="-1"></a>**Statistical Correlation Between BERT Scores and Users' Platforms**</span>
-<span id="cb2-233"><a href="#cb2-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-234"><a href="#cb2-234" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Metric <span class="pp">|</span> Old Data <span class="pp">|</span> New Data <span class="pp">|</span></span>
-<span id="cb2-235"><a href="#cb2-235" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb2-236"><a href="#cb2-236" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Platforms compared <span class="pp">|</span> Android vs iOS <span class="pp">|</span> Android vs iOS <span class="pp">|</span></span>
-<span id="cb2-237"><a href="#cb2-237" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> U statistic <span class="pp">|</span> 3,379,410.0000 <span class="pp">|</span> 3,174,169.0000 <span class="pp">|</span></span>
-<span id="cb2-238"><a href="#cb2-238" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> p-value <span class="pp">|</span> 3.23e-93 <span class="pp">|</span> 1.46e-63 <span class="pp">|</span></span>
-<span id="cb2-239"><a href="#cb2-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-240"><a href="#cb2-240" aria-hidden="true" tabindex="-1"></a>Both datasets show a statistically significant difference in BERT sentiment scores between Android and iOS platforms (p &lt; 0.001 in both cases), confirming that platform is a meaningful source of variation in user sentiment regardless of time period. The U statistic is larger in the older data (3,379,410 vs 3,174,169), which is consistent with the older dataset having slightly more observations (n = 4,518 vs 4,478). While both p-values are extremely small, the older data yields a more extreme test statistic, suggesting the platform gap in sentiment may have been marginally more pronounced in the earlier period, which aligns with what was observed in the bank-by-platform plots (@fig-bert-bank-old and @fig-bert-bank-new).</span>
-<span id="cb2-241"><a href="#cb2-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-242"><a href="#cb2-242" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4.4 Results AFINN vs BERT - New Data</span></span>
-<span id="cb2-243"><a href="#cb2-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-244"><a href="#cb2-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-245"><a href="#cb2-245" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-246"><a href="#cb2-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-247"><a href="#cb2-247" aria-hidden="true" tabindex="-1"></a><span class="fu"># 5 Discussion</span></span>
-<span id="cb2-248"><a href="#cb2-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-249"><a href="#cb2-249" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5.1 Reproducibility Assessment</span></span>
-<span id="cb2-250"><a href="#cb2-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-251"><a href="#cb2-251" aria-hidden="true" tabindex="-1"></a>Something about environment in python</span>
-<span id="cb2-252"><a href="#cb2-252" aria-hidden="true" tabindex="-1"></a>Overall assesment about reproducibility, minor differences, but overall conclusions hold</span>
-<span id="cb2-253"><a href="#cb2-253" aria-hidden="true" tabindex="-1"></a>Slight conclusions about the original study's robustness to language and implementation choices</span>
-<span id="cb2-254"><a href="#cb2-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-255"><a href="#cb2-255" aria-hidden="true" tabindex="-1"></a>The R-to-Python translation demonstrates that the core analytical conclusions</span>
-<span id="cb2-256"><a href="#cb2-256" aria-hidden="true" tabindex="-1"></a>of the original study are reproducible across languages. Minor numerical</span>
-<span id="cb2-257"><a href="#cb2-257" aria-hidden="true" tabindex="-1"></a>differences arise from:</span>
-<span id="cb2-258"><a href="#cb2-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-259"><a href="#cb2-259" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Language detection:** <span class="in">`langdetect`</span> vs <span class="in">`cld3`</span> use different underlying</span>
-<span id="cb2-260"><a href="#cb2-260" aria-hidden="true" tabindex="-1"></a>  models; the set of English-classified reviews may differ slightly</span>
-<span id="cb2-261"><a href="#cb2-261" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Stopword lists:** <span class="in">`tidytext::stop_words`</span> differs from NLTK's English list</span>
-<span id="cb2-262"><a href="#cb2-262" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Bing lexicon size:** NLTK <span class="in">`opinion_lexicon`</span> covers more words than the</span>
-<span id="cb2-263"><a href="#cb2-263" aria-hidden="true" tabindex="-1"></a>  Bing lexicon embedded in tidytext</span>
-<span id="cb2-264"><a href="#cb2-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-265"><a href="#cb2-265" aria-hidden="true" tabindex="-1"></a>These are expected cross-language reproducibility gaps and do not undermine</span>
-<span id="cb2-266"><a href="#cb2-266" aria-hidden="true" tabindex="-1"></a>the directional conclusions.</span>
-<span id="cb2-267"><a href="#cb2-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-268"><a href="#cb2-268" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5.2 Limitations - AGAS</span></span>
-<span id="cb2-269"><a href="#cb2-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-270"><a href="#cb2-270" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Lexicon coverage:** All three lexicons were built for general English, not</span>
-<span id="cb2-271"><a href="#cb2-271" aria-hidden="true" tabindex="-1"></a>  financial app reviews — domain terms (*overdraft, Zelle, wire transfer*) may</span>
-<span id="cb2-272"><a href="#cb2-272" aria-hidden="true" tabindex="-1"></a>  be absent</span>
-<span id="cb2-273"><a href="#cb2-273" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Negation scope:** The bigram correction handles only two-word negation;</span>
-<span id="cb2-274"><a href="#cb2-274" aria-hidden="true" tabindex="-1"></a>  longer-range negation is not captured</span>
-<span id="cb2-275"><a href="#cb2-275" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Temporal confounding:** Old and new data cover different time windows, so</span>
-<span id="cb2-276"><a href="#cb2-276" aria-hidden="true" tabindex="-1"></a>  observed differences may reflect temporal trends, not genuine quality changes</span>
-<span id="cb2-277"><a href="#cb2-277" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Label imbalance:** App Store reviews skew heavily toward 5 stars; without</span>
-<span id="cb2-278"><a href="#cb2-278" aria-hidden="true" tabindex="-1"></a>  class-weighting, the transformer may over-predict "positive"</span>
-<span id="cb2-279"><a href="#cb2-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-280"><a href="#cb2-280" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-281"><a href="#cb2-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-282"><a href="#cb2-282" aria-hidden="true" tabindex="-1"></a><span class="fu"># 6 Generative AI Disclosure</span></span>
-<span id="cb2-283"><a href="#cb2-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-284"><a href="#cb2-284" aria-hidden="true" tabindex="-1"></a>In accordance with course policy (dr Jakub Michańków, Reproducible Research</span>
-<span id="cb2-285"><a href="#cb2-285" aria-hidden="true" tabindex="-1"></a>2026), generative AI (Claude AI) was used to assist with coding tasks, refine the code.</span>
-<span id="cb2-286"><a href="#cb2-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-287"><a href="#cb2-287" aria-hidden="true" tabindex="-1"></a>All analytical decisions, interpretations, and research design are the</span>
-<span id="cb2-288"><a href="#cb2-288" aria-hidden="true" tabindex="-1"></a>team's own work.</span>
-<span id="cb2-289"><a href="#cb2-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-290"><a href="#cb2-290" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-291"><a href="#cb2-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-292"><a href="#cb2-292" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
-<span id="cb2-293"><a href="#cb2-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-294"><a href="#cb2-294" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
-<span id="cb2-295"><a href="#cb2-295" aria-hidden="true" tabindex="-1"></a>:::</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Sentiment Analysis of Mobile Banking App Reviews"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "A Reproducible Study: R to Python, Old Data to New Data, Lexicon to Transformer"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "Chi Dao"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "I Putu Agastya Harta Pratama"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "Si Tang Lin"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "Zuzanna Uljasz"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 06-01-2026</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="an">bibliography:</span><span class="co"> references.bib</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-float: true</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-title: "Contents"</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: lumen</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">    smooth-scroll: true</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">    number-sections: false</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-width: 9</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-height: 5</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">  pdf:</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">    number-sections: false</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-width: 7</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-height: 4</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co">  echo: true</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co">  eval: false</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="an">jupyter:</span><span class="co"> python3</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="fu"># Summary</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>This report documents a reproducible research project that translates an original R-based sentiment analysis of mobile banking app reviews into Python, extends it with newly scraped data, and augments the lexicon-based methods with a transformer (BERT) approach. The project covers five major US banks: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo across the Apple App Store (iOS) and Google Play (Android). The core research questions are: (1) Can the original R findings be faithfully reproduced in Python? (2) Do the results change with a fresh data scrape? (3) Does a transformer model produce sentiment classifications consistent with the lexicon approach?</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="fu"># 1. Introduction and Motivation</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.1 Research Context</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>Customer reviews on mobile app stores represent a rich, continuously updated source of unstructured opinion data. For the banking sector, app reviews offer direct evidence of customer satisfaction, pain points, and competitive positioning — feedback that often offers a faster point of view and is more granular than traditional survey methods. Sentiment analysis of these reviews can help researchers and practitioners understand how user experience varies across institutions and platforms, and whether negative signals co-occur with specific feature complaints or rating patterns.</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>There are two motivations for this study. Academically, it provides an opportunity to practice reproducible research: taking an existing empirical study, replicating it in a different computational environment, and evaluating whether the results remain the same. Practically, it investigates whether mobile banking sentiment has shifted between the original data collection window and a fresh scrape in 2026, and whether more sophisticated deep learning methods agree with classic dictionary-based approaches.</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1.2 Inspiration and Source Study</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>The project is inspired by the tidytext-based workflow popularised by @silge2017text, which applies lexicon-based sentiment scoring to tokenised text in a tidy data format. The original analysis follows this approach: it imports and cleans review data, performs unigram sentiment analysis using three lexicons (Bing, AFINN, NRC), constructs bigrams with negator-aware scoring, and evaluates results statistically. The goal of this project is to demonstrate that these findings are reproducible — the same pipeline, implemented in Python with equivalent libraries, produces consistent conclusions — and then to extend the study in two directions: new data and a transformer model.</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="fu"># 2. Data</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>Dataset is obtained with the means of scrapping reviews from the App Store and Google Play for the five major banks in US. The original dataset was collected in 2023, while the new dataset was scraped in mid-2026. Both datasets contain reviews in English, with metadata including star ratings, review text, date, platform, and storefront. The data is stored as CSV files per bank and platform, which are combined and preprocessed for analysis.</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>The major banks included in the dataset are some of the largest US financial institutions, which are: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo. Each has a significant mobile banking user base. The platforms covered are the two dominant mobile ecosystems: Apple's App Store (iOS) and Google's Play Store (Android). This allows for cross-platform comparisons and insights into whether user sentiment differs by operating system.</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>The method of scrapping differs for each platform due to their distinct APIs and structures. For the iOS App Store, the script uses Python's requests library to directly parse Apple's publicly accessible XML/JSON RSS feed endpoints, which are ordered by the most recent submissions. For the Google Play Store, it leverages an open-source web scraping library (google-play-scraper) that mimics browser requests to dynamically fetch and page through raw review payloads using continuation tokens. Both approaches process these external data streams in real time, converting the raw JSON responses into structured Pandas DataFrames before exporting them to CSV files.</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2.1 Exploratory Data Analysis of the Original Dataset (Old Data)</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>The original dataset was collected in 2025 using a combination of web scraping and API access methods. It includes reviews from the same five banks and both platforms, but covers a different time period than the new data. The dataset is stored as CSV files, one per bank and platform, with columns for review text, star rating, date, and other metadata. The original analysis applied lexicon-based sentiment scoring to this dataset to derive insights about user sentiment and its relationship to star ratings.</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2.2 Exploratory Data Analysis of the New Dataset (New Data)</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>The new dataset was collected using a dedicated scraper (<span class="in">`Dataset/scraper.ipynb`</span>) targeting the same five banks and both platforms. The scraping window covers a more recent period - *early 2026*. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window.</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>Upon checking, the rating distribution of the new data is similar to the original one, with the majority of reviews are at extreme positions, either 1 or 5 stars (@fig-star-dist-new).</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="al">![Rating distribution by platform — new dataset](plots/star_dist_new.png)</span>{#fig-star-dist-new width=90%}</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>The top 20 most frequent bigrams in the new dataset reveal a clear thematic structure in how users discuss their mobile banking experience (@fig-bigram-new). Customer service is by far the most frequent bigram (~220 occurrences), nearly 25% more common than the second-ranked Wells Fargo (~175), which appears frequently as a named entity within reviews of that bank. Credit card (~150) and user friendly (~115) round out the top four, reflecting that product features and usability remain central to how users articulate their experience.</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>Several bigrams signal recurring friction points: no longer (~65), bring back (~42), please fix (~38), and blank screen (~37) all indicate users reacting to feature removals or technical failures.</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="al">![Top 20 Most Frequent Bigrams in Mobile Banking Reviews — new dataset](plots/bigram_new.png)</span>{#fig-bigram-new width=90%}</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2.3 Data Preprocessing</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.3.1 Data Preprocessing for Lexicon-Based Methods</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>Preprocessing follows the same logical steps in both the R original and the Python replications:</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Import and combine** - all per-bank CSVs are concatenated into a single dataframe</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Bank and platform standardisation** — filenames are parsed to extract bank names; platform codes (<span class="in">`app_store`</span> → <span class="in">`iOS`</span>, <span class="in">`google_play`</span> → <span class="in">`Android`</span>) are mapped to readable labels</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Type coercion** — <span class="in">`rating`</span> is cast to numeric; <span class="in">`date`</span> is parsed to datetime</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Language detection** — reviews not detected as English are removed (using <span class="in">`langdetect`</span> in Python)</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Raw text construction** — <span class="in">`title`</span> and <span class="in">`review`</span> fields are concatenated into <span class="in">`raw_text`</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Tokenisation and stopword removal** — words are extracted using regex; a custom stopword list (NLTK English stopwords + domain terms: *app, bank, banking, mobile, iphone, apple, android, phone*) is applied</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>**Bigram construction** — adjacent word pairs are extracted from cleaned text, with negators (*not, never, no, cannot*, etc.) explicitly excluded from the stopword filter so they are preserved in bigrams</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.3.2 Data Preprocessing for Transformer Methods</span></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>For the transformer approach, an additional cleaning step keeps punctuation intact (since BERT tokenisers handle it natively) and removes URLs.</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="fu"># 3. Methodology</span></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3.1 Lexicon-Based Sentiment Analysis</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>Three lexicons are applied to the filtered tokens. Scores are computed at the review level and disaggregated by bank and platform.</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>**Bing (Opinion Lexicon):** A binary lexicon classifying words as positive or negative. Review sentiment is the count of positive words minus negative words.</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>**AFINN:** An integer-scored lexicon (−5 to +5) <span class="co">[</span><span class="ot">@nielsen2011new</span><span class="co">]</span>. Review scores are the sum of matched word scores. Pearson correlation between AFINN scores and star ratings serves as a validity check.</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>**NRC Emotion Lexicon:** Developed by @mohammad2013crowdsourcing, this lexicon maps words to 8 emotion categories (anger, anticipation, disgust, fear, joy, sadness, surprise, trust) and 2 polarity categories. One word may belong to multiple categories, enabling nuanced emotion profiling.</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3.2 Bigram Analysis and Negation Correction</span></span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>Unigram methods cannot handle negation: *not good* is scored as positive because *good* carries a positive AFINN score. To quantify this limitation, bigrams are constructed from the raw review text, with negators explicitly retained in the stopword filter. A set of 22 negators is defined (e.g., *no*, *not*, *n't*, *never*, *cannot*). Where the first token of a bigram is a negator and the second has an AFINN score, the score is sign-flipped. The magnitude of the resulting correction is reported by star-rating group.</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3.3 Transformer-Based Sentiment Analysis</span></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>As a complement to the lexicon methods, the pre-trained model <span class="in">`nlptown/bert-base-multilingual-uncased-sentiment`</span> <span class="co">[</span><span class="ot">@nlptown2019</span><span class="co">]</span> is applied via the Hugging Face <span class="in">`transformers`</span> pipeline. The model predicts a 1–5 star rating for each review; predictions are normalised to a continuous sentiment score:</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>$$\text{bert<span class="sc">\_</span>score} = \frac{\text{bert<span class="sc">\_</span>stars} - 1}{4} \in <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$$</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>Model validity is assessed by (1) Pearson correlation between <span class="in">`bert_score`</span> and the actual star rating (95% CI via Fisher's *z*-transformation), (2) boxplots of <span class="in">`bert_score`</span> stratified by star rating, bank, and platform, (3) exact star-level agreement and a full confusion matrix, and (4) a Mann–Whitney U test comparing platform distributions.</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="fu"># 4. Results</span></span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4.1 Results Python vs R</span></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>Yap yap yap here</span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a><span class="co"># WE CODE TO SHOW IMAGE</span></span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4.2 Results Old Data vs New Data - Lexicon Analysis</span></span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>This section compares lexicon-based sentiment results across three lexicons (Bing, AFINN, NRC)</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>between the original 2025 dataset and the newly scraped 2026 dataset. The new dataset contains</span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>**4,478 reviews**, covering the same five banks and two platforms but a different temporal window. </span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>***BING***</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>In the new data, the Bing lexicon identified **7,363 positive** and **3,657 negative**</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>word tokens, yielding an overall positive-to-negative ratio of approximately 2.01:1. The</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>directional pattern of results is consistent with the original study: positive words dominate in</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>aggregate, and the platform gap observed in the old data persists — Android reviews skew more</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>positive than iOS reviews across most banks (@fig-bing-word-new-pf and @fig-bing-word-new-bank).</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a><span class="al">![Top BING sentiment words by platform — new dataset](plots/bing_new_wordnplatform.png)</span>{#fig-bing-word-new-pf width=90% fig-pos="H"}</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a><span class="al">![Top BING sentiment words by bank — new dataset](plots/bing_new_wordnbank.png)</span>{#fig-bing-word-new-bank width=90% fig-pos="H"}</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>***AFINN***</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>The AFINN analysis of the new data yields a Pearson correlation between review-level AFINN sum</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>scores and star ratings of **r = 0.539** (n = 3,885; 95% CI: <span class="co">[</span><span class="ot">0.516, 0.561</span><span class="co">]</span>; p &lt; 0.001). This</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a>is a moderate-to-strong positive correlation, confirming that higher AFINN scores correspond to</span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>higher user ratings — the same directional conclusion as the original data.</span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>Compared to the old dataset, the correlation in the new data is **slightly lower** (the original study</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>reported a Pearson correlation at 0.59).</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>This small reduction in predictive alignment may reflect the greater temporal concentration of</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>recent reviews around extreme ratings (1 and 5 stars), which inflates the role of polarity</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>extremes and reduces mid-range discrimination. </span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>The per-bank AFINN mean-sum scores reveal an interesting structural shift (@fig-afinn-bank-new):</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>**Citi iOS** is the only bank–platform cell with a *negative* mean AFINN sum score (−0.724). All other bank–platform cells remain</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>positive. **Wells Fargo iOS** posts the highest mean AFINN sum (3.80) in the new data, followed</span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>by **Marcus by Goldman Sachs iOS** (3.12) and **Chase iOS** (2.99). On Android, scores are more</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>tightly clustered, ranging from approximately 1.9 (Chase) to 2.6 (Citi Android), which is broadly</span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a>consistent with the old data.</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a><span class="al">![Average AFINN sentiment by bank and platform — new dataset](plots/afin_bank_new.png)</span>{#fig-afinn-bank-new width=90% fig-pos="H"}</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>***NRC Emotion***</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>The NRC emotion profile in the new data is dominated by **positive** (6,941 tokens) and</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>**trust** (5,281 tokens), together accounting for over 44% of all matched tokens — a pattern</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>that mirrors the old data and is consistent with the service-oriented nature of banking apps, where</span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>trust vocabulary (*account*, *recommend*, *secure*) is naturally frequent.</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>The platform breakdown reveals a structurally important asymmetry</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>(@fig-nrc-dist): Android reviews show a markedly higher *positive* proportion (26.9% of</span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>tokens) compared to iOS (23.8%), while iOS shows higher *negative* (12.8% vs 9.8%), *anger*</span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>(5.9% vs 4.5%), *fear* (5.4% vs 3.8%), and *sadness* (5.7% vs 3.8%) proportions. This</span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>Android–iOS emotional gap is consistent across both datasets and reinforces the finding from the</span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>BERT analysis that Android users express systematically more positive sentiment than iOS users — a</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>pattern that warrants further investigation into whether it reflects genuine experience differences</span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>or platform-specific reviewer demographics.</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a><span class="al">![Distribution of NRC emotion composition by platform — new dataset](plots/nrc_new_distribution.png)</span>{#fig-nrc-dist width=90% fig-pos="H"}</span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a>***Bigram and Negation Analysis***</span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>The top bigrams in the new data are largely consistent with the old data: *customer service*,</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>*credit card*, *user friendly*, *savings account*, and *checking account* dominate the</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>co-occurrence table. Two new entries — *dark mode* (rank 13) and *blank screen* (rank 16) —</span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>suggest that UI/UX concerns specific to the late 2025 to early 2026 period have increased in salience.</span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>The negation correction analysis confirms the structural finding from the original study: 1-star</span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a>reviews show the largest total negation shift (−216 across the dataset, averaging −0.164 per</span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a>review), reflecting that negative reviews contain the most negator–sentiment bigrams. Crucially,</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a>the sign of the correction is *negative* for 1–4 star reviews but *positive* for 5-star reviews</span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>(total shift +63), meaning that naive unigram AFINN systematically underestimates negativity in</span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>low-rated reviews and underestimates positivity in top-rated reviews. This directional finding</span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a>holds in both the old and new data, confirming that negation correction is not a temporal artifact</span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a>but a structural property of this type of review language.</span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a>The most frequent negated bigrams are *no problems* (16 occurrences, flipped from −2 to +2),</span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>*not allow* (15), *not happy* (12), *no problem* (11), and *no help* (10) - indicating that</span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>both false-negative corrections (e.g., *not happy* correctly flipped to negative) and</span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a>false-positive corrections (e.g., *no problems* correctly flipped to positive) are present in</span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a>meaningful quantities, broadly consistent with the pattern in the original data.</span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4.3 Comparison of BERT Sentiment Results Across Preprocessing Approaches</span></span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a>This section compares the outputs of the BERT-based sentiment classifier <span class="in">`(nlptown/bert-base-multilingual-uncased-sentiment)`</span> applied to two versions of the dataset: one preprocessed using the original pipeline and one using the revised approach. Both versions were scored using identical model settings and scoring logic, with predicted star ratings mapped to a normalized sentiment score in the range <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>. The comparison focuses on whether the revised preprocessing affects the distribution of predicted sentiment, its alignment with actual star ratings, and the relative sentiment profiles across banks and platforms.</span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a>**Distribution of BERT Predicted Sentiment**</span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a>Both datasets produce a broadly similar bimodal distribution of BERT-predicted sentiment, with the majority of reviews classified at either the negative extreme (1 star) or the positive extreme (5 stars), and relatively few reviews falling in the middle ratings of 2 through 4 (@fig-bert-dist-old and @fig-bert-dist-new). However, a notable difference emerges in the balance between the two poles. In the older data, the 1-star predicted count (~1,550) is considerably closer to the 5-star predicted count (~2,000), whereas in the newer data the gap widens, with 1-star predictions declining to approximately 1,380 while 5-star predictions rise to around 2,100 (@fig-bert-dist-new). This suggests that the newer batch of reviews contains a higher proportion of positively-perceived content as classified by the model. The sentiment score density plots reinforce this pattern: both distributions are heavily concentrated at 0.0 and 1.0, reflecting the model's tendency toward confident polar predictions, with the overall shape of the density curve remaining consistent across both datasets (@fig-bert-dist-old and @fig-bert-dist-new).</span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a><span class="al">![Distribution of BERT predicted star ratings and sentiment scores — older dataset](plots/bert_old_distribution.png)</span>{#fig-bert-dist-old width=90%}</span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a><span class="al">![Distribution of BERT predicted star ratings and sentiment scores — newer dataset](plots/bert_new_distribution.png)</span>{#fig-bert-dist-new width=90%}</span>
+<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a>**Relationship Between BERT Scores and Actual Star Ratings**</span>
+<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a>The relationship between BERT sentiment scores and actual star ratings is consistent across both datasets (@fig-bert-box-old and @fig-bert-box-new). In both cases, the model assigns near-zero sentiment scores to 1-star reviews with very tight interquartile ranges, indicating high confidence in negative classifications. Scores rise progressively through 2- and 3-star ratings, with 3-star reviews showing the widest spread, reflecting the model's uncertainty around neutral or mixed-sentiment reviews. Reviews rated 4 and 5 stars are predominantly scored above the neutral threshold of 0.5, with 5-star reviews showing a highly compressed distribution concentrated at 1.0. The two datasets are visually near-identical in this regard (@fig-bert-box-old and @fig-bert-box-new), suggesting that the shift in review composition between the older and newer data did not meaningfully alter the model's ability to align predicted sentiment with actual star ratings.</span>
+<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a><span class="al">![BERT sentiment score by star rating — older dataset](plots/bert_old_sentiment_score_boxplot.png)</span>{#fig-bert-box-old width=90%}</span>
+<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a><span class="al">![BERT sentiment score by star rating — newer dataset](plots/bert_new_sentiment_score_boxplot.png)</span>{#fig-bert-box-new width=90%}</span>
+<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a>**Average BERT Sentiment Scores by Bank and Platform**</span>
+<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a>Across both datasets, a consistent platform gap is visible: Android reviews tend to receive higher BERT sentiment scores than iOS reviews for most banks (@fig-bert-bank-old and @fig-bert-bank-new). Citi stands out in both periods, with Android scores approaching 0.9 while iOS scores remain well below the neutral threshold of 0.5, making it the most polarised bank by platform in both the older and newer data. Bank of America shows a similar pattern, with strong Android sentiment but iOS scores falling below neutral in both datasets. Wells Fargo is the only bank where both platforms consistently score above neutral, and remains so across both periods. One notable structural difference between the two datasets is that Chase appears in the older data (@fig-bert-bank-old) with both platforms scoring above neutral, whereas in the newer data (@fig-bert-bank-new) Chase drops to the bottom of the ranking with iOS sentiment just at the neutral threshold. Marcus by Goldman Sachs remains relatively stable across both periods, with Android scores moderately above neutral and iOS scores hovering near 0.5.</span>
+<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a><span class="al">![Average BERT sentiment score by bank and platform — older dataset](plots/bert_old_banknplatform.png)</span>{#fig-bert-bank-old width=90%}</span>
+<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a><span class="al">![Average BERT sentiment score by bank and platform — newer dataset](plots/bert_new_banknplatform.png)</span>{#fig-bert-bank-new width=90%}</span>
+<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a>**Average BERT Sentiment Scores by Operating Platform**</span>
+<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a>The per-platform breakdown of BERT sentiment scores by star rating reveals a largely stable pattern across both datasets (@fig-bert-plat-old and @fig-bert-plat-new). On Android, both the older and newer data show near-identical distributions: 1-star reviews are tightly concentrated at 0.0, scores rise progressively through 2 and 3 stars with widening spread, and 4- and 5-star reviews sit predominantly above the neutral threshold. The iOS platform tells a slightly different story between the two periods. In the older data (@fig-bert-plat-old), the iOS 4-star distribution closely mirrors its Android counterpart, with a median around 0.75. In the newer data (@fig-bert-plat-new), the iOS 4-star box shifts noticeably, with a lower median of approximately 0.6 and a wider interquartile range, suggesting greater variability in how the model scores moderately positive iOS reviews in the newer period. Across both datasets and platforms, 1- and 2-star distributions remain consistently low and 5-star reviews remain compressed near 1.0, indicating that the model's confidence at the sentiment extremes is robust regardless of platform or time period.</span>
+<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a><span class="al">![BERT sentiment score by star rating per platform — older dataset](plots/bert_old_per_platform.png)</span>{#fig-bert-plat-old width=90%}</span>
+<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a><span class="al">![BERT sentiment score by star rating per platform — newer dataset](plots/bert_new_per_platform.png)</span>{#fig-bert-plat-new width=90%}</span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a>**Statistical Correlation Between BERT Scores and Star Ratings**</span>
+<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Metric <span class="pp">|</span> Old Data <span class="pp">|</span> New Data <span class="pp">|</span></span>
+<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> n <span class="pp">|</span> 4,518 <span class="pp">|</span> 4,478 <span class="pp">|</span></span>
+<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Pearson r <span class="pp">|</span> 0.8615 <span class="pp">|</span> 0.8660 <span class="pp">|</span></span>
+<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> p-value <span class="pp">|</span> &lt; 0.001 <span class="pp">|</span> &lt; 0.001 <span class="pp">|</span></span>
+<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 95% CI <span class="pp">|</span> <span class="co">[</span><span class="ot">0.8538, 0.8688</span><span class="co">]</span> <span class="pp">|</span> <span class="co">[</span><span class="ot">0.8585, 0.8731</span><span class="co">]</span> <span class="pp">|</span></span>
+<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a>Both datasets show a strong positive correlation between BERT sentiment scores and actual star ratings, with Pearson r values of 0.8615 and 0.8660 for the older and newer data respectively, both statistically significant (p &lt; 0.001). The marginal increase in r across the two periods suggests a slightly stronger alignment between model-predicted sentiment and user-assigned ratings in the newer dataset, though the difference is negligible given the overlapping confidence intervals (<span class="co">[</span><span class="ot">0.8538, 0.8688</span><span class="co">]</span> vs <span class="co">[</span><span class="ot">0.8585, 0.8731</span><span class="co">]</span>). Overall, these results confirm that the BERT model captures sentiment signal consistently across both time periods.</span>
+<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a>**Statistical Correlation Between BERT Scores and Users' Platforms**</span>
+<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Metric <span class="pp">|</span> Old Data <span class="pp">|</span> New Data <span class="pp">|</span></span>
+<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Platforms compared <span class="pp">|</span> Android vs iOS <span class="pp">|</span> Android vs iOS <span class="pp">|</span></span>
+<span id="cb1-272"><a href="#cb1-272" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> U statistic <span class="pp">|</span> 3,379,410.0000 <span class="pp">|</span> 3,174,169.0000 <span class="pp">|</span></span>
+<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> p-value <span class="pp">|</span> 3.23e-93 <span class="pp">|</span> 1.46e-63 <span class="pp">|</span></span>
+<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a>Both datasets show a statistically significant difference in BERT sentiment scores between Android and iOS platforms (p &lt; 0.001 in both cases), confirming that platform is a meaningful source of variation in user sentiment regardless of time period. The U statistic is larger in the older data (3,379,410 vs 3,174,169), which is consistent with the older dataset having slightly more observations (n = 4,518 vs 4,478). While both p-values are extremely small, the older data yields a more extreme test statistic, suggesting the platform gap in sentiment may have been marginally more pronounced in the earlier period, which aligns with what was observed in the bank-by-platform plots (@fig-bert-bank-old and @fig-bert-bank-new).</span>
+<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4.4 Results AFINN vs BERT - New Data</span></span>
+<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a><span class="fu"># 5 Discussion</span></span>
+<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5.1 Reproducibility Assessment</span></span>
+<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a>Something about environment in python</span>
+<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a>Overall assesment about reproducibility, minor differences, but overall conclusions hold</span>
+<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a>Slight conclusions about the original study's robustness to language and implementation choices</span>
+<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a>The R-to-Python translation demonstrates that the core analytical conclusions</span>
+<span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a>of the original study are reproducible across languages. Minor numerical</span>
+<span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a>differences arise from:</span>
+<span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Language detection:** <span class="in">`langdetect`</span> vs <span class="in">`cld3`</span> use different underlying</span>
+<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a>  models; the set of English-classified reviews may differ slightly</span>
+<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Stopword lists:** <span class="in">`tidytext::stop_words`</span> differs from NLTK's English list</span>
+<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Bing lexicon size:** NLTK <span class="in">`opinion_lexicon`</span> covers more words than the</span>
+<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a>  Bing lexicon embedded in tidytext</span>
+<span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a>These are expected cross-language reproducibility gaps and do not undermine</span>
+<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a>the directional conclusions.</span>
+<span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-302"><a href="#cb1-302" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5.2 Limitations - AGAS</span></span>
+<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-304"><a href="#cb1-304" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Lexicon coverage:** All three lexicons were built for general English, not</span>
+<span id="cb1-305"><a href="#cb1-305" aria-hidden="true" tabindex="-1"></a>  financial app reviews — domain terms (*overdraft, Zelle, wire transfer*) may</span>
+<span id="cb1-306"><a href="#cb1-306" aria-hidden="true" tabindex="-1"></a>  be absent</span>
+<span id="cb1-307"><a href="#cb1-307" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Negation scope:** The bigram correction handles only two-word negation;</span>
+<span id="cb1-308"><a href="#cb1-308" aria-hidden="true" tabindex="-1"></a>  longer-range negation is not captured</span>
+<span id="cb1-309"><a href="#cb1-309" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Temporal confounding:** Old and new data cover different time windows, so</span>
+<span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a>  observed differences may reflect temporal trends, not genuine quality changes</span>
+<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Label imbalance:** App Store reviews skew heavily toward 5 stars; without</span>
+<span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a>  class-weighting, the transformer may over-predict "positive"</span>
+<span id="cb1-313"><a href="#cb1-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-314"><a href="#cb1-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-315"><a href="#cb1-315" aria-hidden="true" tabindex="-1"></a><span class="fu"># 6 Generative AI Disclosure</span></span>
+<span id="cb1-316"><a href="#cb1-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-317"><a href="#cb1-317" aria-hidden="true" tabindex="-1"></a>In accordance with course policy (dr Jakub Michańków, Reproducible Research</span>
+<span id="cb1-318"><a href="#cb1-318" aria-hidden="true" tabindex="-1"></a>2026), generative AI (Claude AI) was used to assist with coding tasks, refine the code.</span>
+<span id="cb1-319"><a href="#cb1-319" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-320"><a href="#cb1-320" aria-hidden="true" tabindex="-1"></a>All analytical decisions, interpretations, and research design are the</span>
+<span id="cb1-321"><a href="#cb1-321" aria-hidden="true" tabindex="-1"></a>team's own work.</span>
+<span id="cb1-322"><a href="#cb1-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-323"><a href="#cb1-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-324"><a href="#cb1-324" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+<span id="cb1-325"><a href="#cb1-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-326"><a href="#cb1-326" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
+<span id="cb1-327"><a href="#cb1-327" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

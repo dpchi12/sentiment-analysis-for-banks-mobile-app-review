@@ -6,7 +6,8 @@ author:
   - name: "I Putu Agastya Harta Pratama"
   - name: "Si Tang Lin"
   - name: "Zuzanna Uljasz"
-date: today
+date: 06-01-2026
+bibliography: references.bib
 format:
   html:
     toc: true
@@ -37,7 +38,6 @@ jupyter: python3
 
 This report documents a reproducible research project that translates an original R-based sentiment analysis of mobile banking app reviews into Python, extends it with newly scraped data, and augments the lexicon-based methods with a transformer (BERT) approach. The project covers five major US banks: Bank of America, Chase, Citi, Marcus by Goldman Sachs, and Wells Fargo across the Apple App Store (iOS) and Google Play (Android). The core research questions are: (1) Can the original R findings be faithfully reproduced in Python? (2) Do the results change with a fresh data scrape? (3) Does a transformer model produce sentiment classifications consistent with the lexicon approach?
 
----
 
 # 1. Introduction and Motivation
 
@@ -51,7 +51,6 @@ There are two motivations for this study. Academically, it provides an opportuni
 
 The project is inspired by the tidytext-based workflow popularised by @silge2017text, which applies lexicon-based sentiment scoring to tokenised text in a tidy data format. The original analysis follows this approach: it imports and cleans review data, performs unigram sentiment analysis using three lexicons (Bing, AFINN, NRC), constructs bigrams with negator-aware scoring, and evaluates results statistically. The goal of this project is to demonstrate that these findings are reproducible — the same pipeline, implemented in Python with equivalent libraries, produces consistent conclusions — and then to extend the study in two directions: new data and a transformer model.
 
----
 
 # 2. Data
 
@@ -63,63 +62,29 @@ The method of scrapping differs for each platform due to their distinct APIs and
 
 ## 2.1 Exploratory Data Analysis of the Original Dataset (Old Data)
 
-The original dataset was collected in 2023 using a combination of web scraping and API access methods. It includes reviews from the same five banks and both platforms, but covers a different time period than the new data. The dataset is stored as CSV files, one per bank and platform, with columns for review text, star rating, date, and other metadata. The original analysis applied lexicon-based sentiment scoring to this dataset to derive insights about user sentiment and its relationship to star ratings.
+The original dataset was collected in 2025 using a combination of web scraping and API access methods. It includes reviews from the same five banks and both platforms, but covers a different time period than the new data. The dataset is stored as CSV files, one per bank and platform, with columns for review text, star rating, date, and other metadata. The original analysis applied lexicon-based sentiment scoring to this dataset to derive insights about user sentiment and its relationship to star ratings.
 
-```{python}
-#| label: tbl-old-overview
-#| tbl-cap: "Overview of the original dataset"
-
-from pathlib import Path
-import pandas as pd
-
-DATA_OLD = Path("Dataset/data_old_approach")
-raw_old = pd.concat(
-    [pd.read_csv(p, dtype=str).assign(source_file=p.name)
-     for p in DATA_OLD.glob("*.csv")],
-    ignore_index=True
-)
-
-pd.DataFrame({
-    "Total reviews":  [len(raw_old)],
-    "Banks":          [raw_old["source_file"].nunique()],
-    "Platforms":      [raw_old["platform"].nunique()],
-    "Date range": [
-        f"{pd.to_datetime(raw_old['date'], errors='coerce').min().date()} – "
-        f"{pd.to_datetime(raw_old['date'], errors='coerce').max().date()}"
-    ]
-})
-```
 
 ## 2.2 Exploratory Data Analysis of the New Dataset (New Data)
 
-The new dataset was collected using a dedicated scraper (`Dataset/scraper.ipynb`) targeting the same five banks and both platforms. The scraping window covers a more recent period *(2024-2026)* than the original data. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window.
+The new dataset was collected using a dedicated scraper (`Dataset/scraper.ipynb`) targeting the same five banks and both platforms. The scraping window covers a more recent period - *early 2026*. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window.
+Upon checking, the rating distribution of the new data is similar to the original one, with the majority of reviews are at extreme positions, either 1 or 5 stars (@fig-star-dist-new).
 
-```{python}
-#| label: tbl-new-overview
-#| tbl-cap: "Overview of the newly scraped dataset"
-#| echo: false
+![Rating distribution by platform — new dataset](plots/star_dist_new.png){#fig-star-dist-new width=90%}
 
-DATA_NEW = Path("Dataset/data_new_approach")
-raw_new = pd.concat(
-    [pd.read_csv(p, dtype=str).assign(source_file=p.name)
-     for p in DATA_NEW.glob("*.csv")],
-    ignore_index=True
-)
+The top 20 most frequent bigrams in the new dataset reveal a clear thematic structure in how users discuss their mobile banking experience (@fig-bigram-new). Customer service is by far the most frequent bigram (~220 occurrences), nearly 25% more common than the second-ranked Wells Fargo (~175), which appears frequently as a named entity within reviews of that bank. Credit card (~150) and user friendly (~115) round out the top four, reflecting that product features and usability remain central to how users articulate their experience.
 
-pd.DataFrame({
-    "Total reviews": [len(raw_new)],
-    "Banks":         [raw_new["source_file"].nunique()],
-    "Platforms":     [raw_new["platform"].nunique()],
-})
-```
+Several bigrams signal recurring friction points: no longer (~65), bring back (~42), please fix (~38), and blank screen (~37) all indicate users reacting to feature removals or technical failures.
+
+![Top 20 Most Frequent Bigrams in Mobile Banking Reviews — new dataset](plots/bigram_new.png){#fig-bigram-new width=90%}
 
 ## 2.3 Data Preprocessing
-### 2.3 Data Preprocessing for Lexicon-Based Methods
+### 2.3.1 Data Preprocessing for Lexicon-Based Methods
 
 
 Preprocessing follows the same logical steps in both the R original and the Python replications:
 
-1. **Import and combine** — all per-bank CSVs are concatenated into a single dataframe
+1. **Import and combine** - all per-bank CSVs are concatenated into a single dataframe
 2. **Bank and platform standardisation** — filenames are parsed to extract bank names; platform codes (`app_store` → `iOS`, `google_play` → `Android`) are mapped to readable labels
 3. **Type coercion** — `rating` is cast to numeric; `date` is parsed to datetime
 4. **Language detection** — reviews not detected as English are removed (using `langdetect` in Python)
@@ -127,30 +92,28 @@ Preprocessing follows the same logical steps in both the R original and the Pyth
 6. **Tokenisation and stopword removal** — words are extracted using regex; a custom stopword list (NLTK English stopwords + domain terms: *app, bank, banking, mobile, iphone, apple, android, phone*) is applied
 7. **Bigram construction** — adjacent word pairs are extracted from cleaned text, with negators (*not, never, no, cannot*, etc.) explicitly excluded from the stopword filter so they are preserved in bigrams
 
-### 2.3 Data Preprocessing for Lexicon-Based Methods
+### 2.3.2 Data Preprocessing for Transformer Methods
 
 For the transformer approach, an additional cleaning step keeps punctuation intact (since BERT tokenisers handle it natively) and removes URLs.
 
----
+
 
 # 3. Methodology
 ## 3.1 Lexicon-Based Sentiment Analysis
 
 Three lexicons are applied to the filtered tokens. Scores are computed at the review level and disaggregated by bank and platform.
 
-**Bing (Opinion Lexicon):** A binary lexicon classifying words as positive or negative [@hu2004mining]. Review sentiment is the count of positive words minus negative words.
+**Bing (Opinion Lexicon):** A binary lexicon classifying words as positive or negative. Review sentiment is the count of positive words minus negative words.
 
 **AFINN:** An integer-scored lexicon (−5 to +5) [@nielsen2011new]. Review scores are the sum of matched word scores. Pearson correlation between AFINN scores and star ratings serves as a validity check.
 
 **NRC Emotion Lexicon:** Developed by @mohammad2013crowdsourcing, this lexicon maps words to 8 emotion categories (anger, anticipation, disgust, fear, joy, sadness, surprise, trust) and 2 polarity categories. One word may belong to multiple categories, enabling nuanced emotion profiling.
 
----
 
 ## 3.2 Bigram Analysis and Negation Correction
 
 Unigram methods cannot handle negation: *not good* is scored as positive because *good* carries a positive AFINN score. To quantify this limitation, bigrams are constructed from the raw review text, with negators explicitly retained in the stopword filter. A set of 22 negators is defined (e.g., *no*, *not*, *n't*, *never*, *cannot*). Where the first token of a bigram is a negator and the second has an AFINN score, the score is sign-flipped. The magnitude of the resulting correction is reported by star-rating group.
 
----
 
 ## 3.3 Transformer-Based Sentiment Analysis
 
@@ -160,7 +123,6 @@ $$\text{bert\_score} = \frac{\text{bert\_stars} - 1}{4} \in [0, 1]$$
 
 Model validity is assessed by (1) Pearson correlation between `bert_score` and the actual star rating (95% CI via Fisher's *z*-transformation), (2) boxplots of `bert_score` stratified by star rating, bank, and platform, (3) exact star-level agreement and a full confusion matrix, and (4) a Mann–Whitney U test comparing platform distributions.
 
----
 
 # 4. Results
 ## 4.1 Results Python vs R
@@ -172,6 +134,83 @@ Yap yap yap here
 
 
 ## 4.2 Results Old Data vs New Data - Lexicon Analysis
+This section compares lexicon-based sentiment results across three lexicons (Bing, AFINN, NRC)
+between the original 2025 dataset and the newly scraped 2026 dataset. The new dataset contains
+**4,478 reviews**, covering the same five banks and two platforms but a different temporal window. 
+
+
+***BING***
+
+In the new data, the Bing lexicon identified **7,363 positive** and **3,657 negative**
+word tokens, yielding an overall positive-to-negative ratio of approximately 2.01:1. The
+directional pattern of results is consistent with the original study: positive words dominate in
+aggregate, and the platform gap observed in the old data persists — Android reviews skew more
+positive than iOS reviews across most banks (@fig-bing-word-new-pf and @fig-bing-word-new-bank).
+
+![Top BING sentiment words by platform — new dataset](plots/bing_new_wordnplatform.png){#fig-bing-word-new-pf width=90% fig-pos="H"}
+
+![Top BING sentiment words by bank — new dataset](plots/bing_new_wordnbank.png){#fig-bing-word-new-bank width=90% fig-pos="H"}
+
+***AFINN***
+
+The AFINN analysis of the new data yields a Pearson correlation between review-level AFINN sum
+scores and star ratings of **r = 0.539** (n = 3,885; 95% CI: [0.516, 0.561]; p < 0.001). This
+is a moderate-to-strong positive correlation, confirming that higher AFINN scores correspond to
+higher user ratings — the same directional conclusion as the original data.
+
+Compared to the old dataset, the correlation in the new data is **slightly lower** (the original study
+reported a Pearson correlation at 0.59).
+This small reduction in predictive alignment may reflect the greater temporal concentration of
+recent reviews around extreme ratings (1 and 5 stars), which inflates the role of polarity
+extremes and reduces mid-range discrimination. 
+
+The per-bank AFINN mean-sum scores reveal an interesting structural shift (@fig-afinn-bank-new):
+**Citi iOS** is the only bank–platform cell with a *negative* mean AFINN sum score (−0.724). All other bank–platform cells remain
+positive. **Wells Fargo iOS** posts the highest mean AFINN sum (3.80) in the new data, followed
+by **Marcus by Goldman Sachs iOS** (3.12) and **Chase iOS** (2.99). On Android, scores are more
+tightly clustered, ranging from approximately 1.9 (Chase) to 2.6 (Citi Android), which is broadly
+consistent with the old data.
+
+![Average AFINN sentiment by bank and platform — new dataset](plots/afin_bank_new.png){#fig-afinn-bank-new width=90% fig-pos="H"}
+
+***NRC Emotion***
+The NRC emotion profile in the new data is dominated by **positive** (6,941 tokens) and
+**trust** (5,281 tokens), together accounting for over 44% of all matched tokens — a pattern
+that mirrors the old data and is consistent with the service-oriented nature of banking apps, where
+trust vocabulary (*account*, *recommend*, *secure*) is naturally frequent.
+
+The platform breakdown reveals a structurally important asymmetry
+(@fig-nrc-dist): Android reviews show a markedly higher *positive* proportion (26.9% of
+tokens) compared to iOS (23.8%), while iOS shows higher *negative* (12.8% vs 9.8%), *anger*
+(5.9% vs 4.5%), *fear* (5.4% vs 3.8%), and *sadness* (5.7% vs 3.8%) proportions. This
+Android–iOS emotional gap is consistent across both datasets and reinforces the finding from the
+BERT analysis that Android users express systematically more positive sentiment than iOS users — a
+pattern that warrants further investigation into whether it reflects genuine experience differences
+or platform-specific reviewer demographics.
+
+![Distribution of NRC emotion composition by platform — new dataset](plots/nrc_new_distribution.png){#fig-nrc-dist width=90% fig-pos="H"}
+
+***Bigram and Negation Analysis***
+
+The top bigrams in the new data are largely consistent with the old data: *customer service*,
+*credit card*, *user friendly*, *savings account*, and *checking account* dominate the
+co-occurrence table. Two new entries — *dark mode* (rank 13) and *blank screen* (rank 16) —
+suggest that UI/UX concerns specific to the late 2025 to early 2026 period have increased in salience.
+
+The negation correction analysis confirms the structural finding from the original study: 1-star
+reviews show the largest total negation shift (−216 across the dataset, averaging −0.164 per
+review), reflecting that negative reviews contain the most negator–sentiment bigrams. Crucially,
+the sign of the correction is *negative* for 1–4 star reviews but *positive* for 5-star reviews
+(total shift +63), meaning that naive unigram AFINN systematically underestimates negativity in
+low-rated reviews and underestimates positivity in top-rated reviews. This directional finding
+holds in both the old and new data, confirming that negation correction is not a temporal artifact
+but a structural property of this type of review language.
+
+The most frequent negated bigrams are *no problems* (16 occurrences, flipped from −2 to +2),
+*not allow* (15), *not happy* (12), *no problem* (11), and *no help* (10) - indicating that
+both false-negative corrections (e.g., *not happy* correctly flipped to negative) and
+false-positive corrections (e.g., *no problems* correctly flipped to positive) are present in
+meaningful quantities, broadly consistent with the pattern in the original data.
 
 ## 4.3 Comparison of BERT Sentiment Results Across Preprocessing Approaches
 This section compares the outputs of the BERT-based sentiment classifier `(nlptown/bert-base-multilingual-uncased-sentiment)` applied to two versions of the dataset: one preprocessed using the original pipeline and one using the revised approach. Both versions were scored using identical model settings and scoring logic, with predicted star ratings mapped to a normalized sentiment score in the range [0, 1]. The comparison focuses on whether the revised preprocessing affects the distribution of predicted sentiment, its alignment with actual star ratings, and the relative sentiment profiles across banks and platforms.
@@ -181,36 +220,36 @@ This section compares the outputs of the BERT-based sentiment classifier `(nlpto
 Both datasets produce a broadly similar bimodal distribution of BERT-predicted sentiment, with the majority of reviews classified at either the negative extreme (1 star) or the positive extreme (5 stars), and relatively few reviews falling in the middle ratings of 2 through 4 (@fig-bert-dist-old and @fig-bert-dist-new). However, a notable difference emerges in the balance between the two poles. In the older data, the 1-star predicted count (~1,550) is considerably closer to the 5-star predicted count (~2,000), whereas in the newer data the gap widens, with 1-star predictions declining to approximately 1,380 while 5-star predictions rise to around 2,100 (@fig-bert-dist-new). This suggests that the newer batch of reviews contains a higher proportion of positively-perceived content as classified by the model. The sentiment score density plots reinforce this pattern: both distributions are heavily concentrated at 0.0 and 1.0, reflecting the model's tendency toward confident polar predictions, with the overall shape of the density curve remaining consistent across both datasets (@fig-bert-dist-old and @fig-bert-dist-new).
 
 
-![Distribution of BERT predicted star ratings and sentiment scores — older dataset](../plots/bert_old_distribution.png){#fig-bert-dist-old width=90%}
+![Distribution of BERT predicted star ratings and sentiment scores — older dataset](plots/bert_old_distribution.png){#fig-bert-dist-old width=90%}
 
-![Distribution of BERT predicted star ratings and sentiment scores — newer dataset](../plots/bert_new_distribution.png){#fig-bert-dist-new width=90%}
+![Distribution of BERT predicted star ratings and sentiment scores — newer dataset](plots/bert_new_distribution.png){#fig-bert-dist-new width=90%}
 
 
 **Relationship Between BERT Scores and Actual Star Ratings**
 
 The relationship between BERT sentiment scores and actual star ratings is consistent across both datasets (@fig-bert-box-old and @fig-bert-box-new). In both cases, the model assigns near-zero sentiment scores to 1-star reviews with very tight interquartile ranges, indicating high confidence in negative classifications. Scores rise progressively through 2- and 3-star ratings, with 3-star reviews showing the widest spread, reflecting the model's uncertainty around neutral or mixed-sentiment reviews. Reviews rated 4 and 5 stars are predominantly scored above the neutral threshold of 0.5, with 5-star reviews showing a highly compressed distribution concentrated at 1.0. The two datasets are visually near-identical in this regard (@fig-bert-box-old and @fig-bert-box-new), suggesting that the shift in review composition between the older and newer data did not meaningfully alter the model's ability to align predicted sentiment with actual star ratings.
 
-![BERT sentiment score by star rating — older dataset](../plots/bert_old_sentiment_score_boxplot.png){#fig-bert-box-old width=90%}
+![BERT sentiment score by star rating — older dataset](plots/bert_old_sentiment_score_boxplot.png){#fig-bert-box-old width=90%}
 
-![BERT sentiment score by star rating — newer dataset](../plots/bert_new_sentiment_score_boxplot.png){#fig-bert-box-new width=90%}
+![BERT sentiment score by star rating — newer dataset](plots/bert_new_sentiment_score_boxplot.png){#fig-bert-box-new width=90%}
 
 
 **Average BERT Sentiment Scores by Bank and Platform**
 
 Across both datasets, a consistent platform gap is visible: Android reviews tend to receive higher BERT sentiment scores than iOS reviews for most banks (@fig-bert-bank-old and @fig-bert-bank-new). Citi stands out in both periods, with Android scores approaching 0.9 while iOS scores remain well below the neutral threshold of 0.5, making it the most polarised bank by platform in both the older and newer data. Bank of America shows a similar pattern, with strong Android sentiment but iOS scores falling below neutral in both datasets. Wells Fargo is the only bank where both platforms consistently score above neutral, and remains so across both periods. One notable structural difference between the two datasets is that Chase appears in the older data (@fig-bert-bank-old) with both platforms scoring above neutral, whereas in the newer data (@fig-bert-bank-new) Chase drops to the bottom of the ranking with iOS sentiment just at the neutral threshold. Marcus by Goldman Sachs remains relatively stable across both periods, with Android scores moderately above neutral and iOS scores hovering near 0.5.
 
-![Average BERT sentiment score by bank and platform — older dataset](../plots/bert_old_banknplatform.png){#fig-bert-bank-old width=90%}
+![Average BERT sentiment score by bank and platform — older dataset](plots/bert_old_banknplatform.png){#fig-bert-bank-old width=90%}
 
-![Average BERT sentiment score by bank and platform — newer dataset](../plots/bert_new_banknplatform.png){#fig-bert-bank-new width=90%}
+![Average BERT sentiment score by bank and platform — newer dataset](plots/bert_new_banknplatform.png){#fig-bert-bank-new width=90%}
 
 
 **Average BERT Sentiment Scores by Operating Platform**
 
 The per-platform breakdown of BERT sentiment scores by star rating reveals a largely stable pattern across both datasets (@fig-bert-plat-old and @fig-bert-plat-new). On Android, both the older and newer data show near-identical distributions: 1-star reviews are tightly concentrated at 0.0, scores rise progressively through 2 and 3 stars with widening spread, and 4- and 5-star reviews sit predominantly above the neutral threshold. The iOS platform tells a slightly different story between the two periods. In the older data (@fig-bert-plat-old), the iOS 4-star distribution closely mirrors its Android counterpart, with a median around 0.75. In the newer data (@fig-bert-plat-new), the iOS 4-star box shifts noticeably, with a lower median of approximately 0.6 and a wider interquartile range, suggesting greater variability in how the model scores moderately positive iOS reviews in the newer period. Across both datasets and platforms, 1- and 2-star distributions remain consistently low and 5-star reviews remain compressed near 1.0, indicating that the model's confidence at the sentiment extremes is robust regardless of platform or time period.
 
-![BERT sentiment score by star rating per platform — older dataset](../plots/bert_old_per_platform.png){#fig-bert-plat-old width=90%}
+![BERT sentiment score by star rating per platform — older dataset](plots/bert_old_per_platform.png){#fig-bert-plat-old width=90%}
 
-![BERT sentiment score by star rating per platform — newer dataset](../plots/bert_new_per_platform.png){#fig-bert-plat-new width=90%}
+![BERT sentiment score by star rating per platform — newer dataset](plots/bert_new_per_platform.png){#fig-bert-plat-new width=90%}
 
 **Statistical Correlation Between BERT Scores and Star Ratings**
 
@@ -236,7 +275,6 @@ Both datasets show a statistically significant difference in BERT sentiment scor
 ## 4.4 Results AFINN vs BERT - New Data
 
 
----
 
 # 5 Discussion
 
@@ -271,7 +309,6 @@ the directional conclusions.
 - **Label imbalance:** App Store reviews skew heavily toward 5 stars; without
   class-weighting, the transformer may over-predict "positive"
 
----
 
 # 6 Generative AI Disclosure
 
@@ -281,7 +318,6 @@ In accordance with course policy (dr Jakub Michańków, Reproducible Research
 All analytical decisions, interpretations, and research design are the
 team's own work.
 
----
 
 # References
 
