@@ -61,7 +61,7 @@ The major banks included in the dataset are some of the largest US financial ins
 
 The method of scrapping differs for each platform due to their distinct APIs and structures. For the iOS App Store, the script uses Python's requests library to directly parse Apple's publicly accessible XML/JSON RSS feed endpoints, which are ordered by the most recent submissions. For the Google Play Store, it leverages an open-source web scraping library (google-play-scraper) that mimics browser requests to dynamically fetch and page through raw review payloads using continuation tokens. Both approaches process these external data streams in real time, converting the raw JSON responses into structured Pandas DataFrames before exporting them to CSV files.
 
-### 2.1 Original Dataset (Old Data)
+### 2.1 Exploratory Data Analysis of the Original Dataset (Old Data)
 
 The original dataset was collected in 2023 using a combination of web scraping and API access methods. It includes reviews from the same five banks and both platforms, but covers a different time period than the new data. The dataset is stored as CSV files, one per bank and platform, with columns for review text, star rating, date, and other metadata. The original analysis applied lexicon-based sentiment scoring to this dataset to derive insights about user sentiment and its relationship to star ratings.
 
@@ -91,7 +91,7 @@ pd.DataFrame({
 })
 ```
 
-### 2.2 Newly Scraped Dataset (New Data)
+### 2.2 Exploratory Data Analysis of the New Dataset (New Data)
 
 The new dataset was collected using a dedicated scraper (`Dataset/scraper.ipynb`) targeting the same five banks and both platforms. The scraping window covers a more recent period *(2024-2026)* than the original data. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window.
 
