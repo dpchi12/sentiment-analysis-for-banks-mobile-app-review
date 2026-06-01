@@ -146,30 +146,30 @@ Lastly, we decided to extend the Python study by including lemmatization, which 
 
 Both the R and Python plots show that positive Bing words appear more often than negative Bing words (@fig-r-bing-distribution and @fig-lexicon-old-bing-distribution). However, the difference between positive and negative words is much larger in the Python plot. In the original R version, the two bars are relatively close, while in the Python version the positive bar is almost twice as high as the negative bar. Python preprocessing kept or created more positive sentiment matches, especially after using a different stopword list and lemmatization.
 
-![Distribution of Bing Sentiment Words in R](../plots/r_bing_distribution.png){#fig-r-bing-distribution width=90%}
+![Distribution of Bing Sentiment Words in R](plots/r_bing_distribution.png){#fig-r-bing-distribution width=90%}
 
-![Distribution of Bing Sentiment Words in Python](../plots/old_lexicon_bing_distribution.png){#fig-lexicon-old-bing-distribution width=90%}
+![Distribution of Bing Sentiment Words in Python](plots/old_lexicon_bing_distribution.png){#fig-lexicon-old-bing-distribution width=90%}
 
 Results show that most review-level Bing sentiment scores are close to zero or slightly positive (@fig-r-bing-review-lvl and @fig-lexicon-old-bing-review-lvl). The Python distribution is more concentrated around small positive values and has a wider range of extreme scores. The R version appears more spread around both negative and positive values. This suggests that the Python preprocessing may have increased positive matches at the review level.
 
-![Distribution of Review-Level Bing Sentiment Scores in R](../plots/r_bing_review_lvl_sentiment.png){#fig-r-bing-review-lvl width=90%}
+![Distribution of Review-Level Bing Sentiment Scores in R](plots/r_bing_review_lvl_sentiment.png){#fig-r-bing-review-lvl width=90%}
 
-![Distribution of Review-Level Bing Sentiment Scores in Python](../plots/old_lexicon_bing_review_lvl_sentiment.png){#fig-lexicon-old-bing-review-lvl width=90%}
+![Distribution of Review-Level Bing Sentiment Scores in Python](plots/old_lexicon_bing_review_lvl_sentiment.png){#fig-lexicon-old-bing-review-lvl width=90%}
 
 Both versions reproduce the expected relationship between star rating and Bing sentiment score (@fig-r-bing-review-sentiment-star and @fig-lexicon-old-bing-sentiment-star). Lower-rated reviews generally have more negative sentiment scores, while higher-rated reviews have more positive sentiment scores. However, the Python plot shows slightly higher sentiment scores for 3-star reviews and a positive shift for 4- and 5-star reviews.
 
-![Review-Level Bing Sentiment Score by Star Rating in R](../plots/r_bing_review_sentiment_by_star.png){#fig-r-bing-review-sentiment-star width=90%}
+![Review-Level Bing Sentiment Score by Star Rating in R](plots/r_bing_review_sentiment_by_star.png){#fig-r-bing-review-sentiment-star width=90%}
 
-![Review-Level Bing Sentiment Score by Star Rating in Python](../plots/old_lexicon_bing_sentiment_by_star.png){#fig-lexicon-old-bing-sentiment-star width=90%}
+![Review-Level Bing Sentiment Score by Star Rating in Python](plots/old_lexicon_bing_sentiment_by_star.png){#fig-lexicon-old-bing-sentiment-star width=90%}
 
 **AFINN Sentiment Analysis**
 
 The bank and platform plot shows one of the clearest differences between the R and Python results (@fig-r-afinn_avg_sentiment and @fig-lexicon-old-afinn_avg_sentiment). In the R version, some iOS results are negative, especially for Citi, Bank of America, and Chase. In the Python version, most bank-platform combinations become positive, with only Citi on iOS remaining slightly negative. This suggests that the Python version changes the strength of the bank-level interpretation.
 
 
-![Average AFINN Sentiment by Bank and Platform in R](../plots/r_afinn_avg_sentiment_bank_platform.png){#fig-r-afinn_avg_sentiment width=90%}
+![Average AFINN Sentiment by Bank and Platform in R](plots/r_afinn_avg_sentiment_bank_platform.png){#fig-r-afinn_avg_sentiment width=90%}
 
-![Average AFINN Sentiment by Bank and Platform in Python](../plots/old_lexicon_afinn_avg_sentiment_bank_platform.png){#fig-lexicon-old-afinn_avg_sentiment width=90%}
+![Average AFINN Sentiment by Bank and Platform in Python](plots/old_lexicon_afinn_avg_sentiment_bank_platform.png){#fig-lexicon-old-afinn_avg_sentiment width=90%}
 
 **NRC Sentiment Analysis**
 
@@ -177,9 +177,9 @@ Both versions show the same overall ranking of NRC emotion categories (@fig-r-nr
 
 However, the Python plot shows higher counts overall. For example, positive NRC matches increased from 5,809 in R to 6,852 in Python, and trust increased from 4,417 to 5,160. Therefore, this result can be considered reproducible in terms of the general category ranking, but not in terms of the exact values.
 
-![Distribution of NRC Emotion Categories in R](../plots/r_nrc_emotion_distriution.png){#fig-r-nrc_emotion width=90%}
+![Distribution of NRC Emotion Categories in R](plots/r_nrc_emotion_distriution.png){#fig-r-nrc_emotion width=90%}
 
-![Distribution of NRC Emotion Categories in Python](../plots/old_lexicon_nrc_emotion_distribution.png){#fig-lexicon-old-nrc_emotion width=90%}
+![Distribution of NRC Emotion Categories in Python](plots/old_lexicon_nrc_emotion_distribution.png){#fig-lexicon-old-nrc_emotion width=90%}
 
 **Bigrams**
 
@@ -188,27 +188,26 @@ Both versions show that *customer service* is the most frequent bigram (@fig-r-b
 However, the Python plot includes additional bigrams such as *don t*, *doesn t*, *won t*, and *t work*. These phrases come from contractions being split during tokenization. In the R version, contractions were handled differently, so these forms are less visible in the top bigrams. 
 
 
-![Top 20 Most Frequent Bigrams in R](../plots/r_bigrams_top_20.png){#fig-r-bigrams width=90%}
+![Top 20 Most Frequent Bigrams in R](plots/r_bigrams_top_20.png){#fig-r-bigrams width=90%}
 
-![Top 20 Most Frequent Bigrams in Python](../plots/old_lexicon_bigrams_top_20.png){#fig-lexicon-old-bigrams width=90%}
+![Top 20 Most Frequent Bigrams in Python](plots/old_lexicon_bigrams_top_20.png){#fig-lexicon-old-bigrams width=90%}
 
 **Quantifying Negation Effect**
 
 The plot shows that negation has the strongest effect on lower-rated reviews (@fig-r-negation and @fig-lexicon-old-negation). In both R and Python, 1-star and 2-star reviews receive the largest negative correction. The Python plot shows a stronger negative correction than the R plot, especially for 1-star and 2-star reviews. For higher-rated reviews, the negation effect is much smaller. 
 
 
-![Average Negation-Induced Sentiment Correction by Star Rating in R](../plots/r_average_negation_sentiment.png){#fig-r-negation width=90%}
+![Average Negation-Induced Sentiment Correction by Star Rating in R](plots/r_average_negation_sentiment.png){#fig-r-negation width=90%}
 
-![Average Negation-Induced Sentiment Correction by Star Rating in Python](../plots/old_lexicon_average_negation_sentiment.png){#fig-lexicon-old-negation width=90%}
+![Average Negation-Induced Sentiment Correction by Star Rating in Python](plots/old_lexicon_average_negation_sentiment.png){#fig-lexicon-old-negation width=90%}
 
 **Comparing Unigram vs Bigram with Negation**
 
 Both versions show the same general pattern: reviews with lower star ratings have more negative sentiment scores, while reviews with higher star ratings have more positive scores (@fig-r-overall and @fig-lexicon-overall). However, the Python plot shows a stronger negation effect than the R plot. The difference between unigram sentiment and bigram-adjusted sentiment is larger in Python, especially for low-rated reviews. For higher-rated reviews, both R and Python show a smaller difference between unigram and bigram sentiment. 
 
-![Comparison of Unigram and Bigram Sentiment Scores with Negation Handling in R](../plots/r_overall_sentiment.png){#fig-r-overall width=90%}
+![Comparison of Unigram and Bigram Sentiment Scores with Negation Handling in R](plots/r_overall_sentiment.png){#fig-r-overall width=90%}
 
-
-![Comparison of Unigram and Bigram Sentiment Scores with Negation Handling in Python](../plots/old_lexicon_overall_sentiment.png){#fig-lexicon-overall width=90%}
+![Comparison of Unigram and Bigram Sentiment Scores with Negation Handling in Python](plots/old_lexicon_overall_sentiment.png){#fig-lexicon-overall width=90%}
 
 ## 4.2 Results Old Data vs New Data - Lexicon Analysis
 This section compares lexicon-based sentiment results across three lexicons (Bing, AFINN, NRC)
