@@ -125,13 +125,90 @@ Model validity is assessed by (1) Pearson correlation between `bert_score` and t
 
 
 # 4. Results
-## 4.1 Results Python vs R
-Yap yap yap here
-```{python}
-#| echo: false
-# WE CODE TO SHOW IMAGE
-```
 
+## 4.1 Results Python vs R
+
+This section aims to answer the first research question of our study: **Can the original R findings be faithfully reproduced in Python?** The Python results are compared with the file `original-sentiment-analysis-report`, stored in the folder `original_r_report`. The project aimed to directly replicate the R results in Python. However, due to several methodological and technical limitations, full reproduction was not possible.
+
+**Data Pre-processing**
+
+The first differences appeared already at the data pre-processing stage, especially during language detection. The original R analysis used the function `cld3::detect_language(raw_text)`, which comes from the R package `cld3`. This function cannot be directly used in standard Python code because it belongs to the R ecosystem. Therefore, in the Python version, we used the `langdetect` package instead.
+
+However, `langdetect` and R’s `cld3` are different language detection tools. They use different models and rules when classifying the language. As a result, Python identified 4,518 English reviews, while R’s `cld3` identified 4,213 English reviews. Since different tools had to be used, this part of the analysis could not be fully reproduced. In Python, only 17.1% of reviews were removed as non-English, while in R, 22.7% of reviews were treated as non-English and removed from the dataset.
+
+This difference also affects the following stopword removal step. The R project used `tidytext::stop_words`, while the Python project used scikit-learn’s `ENGLISH_STOP_WORDS`. These stopword lists are not identical. This changes the token list before sentiment lexicon matching.
+
+Tokenization methods also differ between the two workflows. R used `unnest_tokens()`, while Python used regular-expression-based tokenization. This limitation affected the number of tokens.
+
+Lastly, we decided to extend the Python study by including lemmatization, which is a common technique in lexicon-based sentiment analysis. Lemmatization was not included in the original R preprocessing pipeline. We hoped that including this step will make our results more reliable compared to the R project, which skipped this part of data pre-processing.
+
+**Bing Sentiment Analysis**
+
+Both the R and Python plots show that positive Bing words appear more often than negative Bing words (@fig-r-bing-distribution and @fig-lexicon-old-bing-distribution). However, the difference between positive and negative words is much larger in the Python plot. In the original R version, the two bars are relatively close, while in the Python version the positive bar is almost twice as high as the negative bar. Python preprocessing kept or created more positive sentiment matches, especially after using a different stopword list and lemmatization.
+
+![Distribution of Bing Sentiment Words in R](../plots/r_bing_distribution.png){#fig-r-bing-distribution width=90%}
+
+![Distribution of Bing Sentiment Words in Python](../plots/old_lexicon_bing_distribution.png){#fig-lexicon-old-bing-distribution width=90%}
+
+Results show that most review-level Bing sentiment scores are close to zero or slightly positive (@fig-r-bing-review-lvl and @fig-lexicon-old-bing-review-lvl). The Python distribution is more concentrated around small positive values and has a wider range of extreme scores. The R version appears more spread around both negative and positive values. This suggests that the Python preprocessing may have increased positive matches at the review level.
+
+![Distribution of Review-Level Bing Sentiment Scores in R](../plots/r_bing_review_lvl_sentiment.png){#fig-r-bing-review-lvl width=90%}
+
+![Distribution of Review-Level Bing Sentiment Scores in Python](../plots/old_lexicon_bing_review_lvl_sentiment.png){#fig-lexicon-old-bing-review-lvl width=90%}
+
+Both versions reproduce the expected relationship between star rating and Bing sentiment score (@fig-r-bing-review-sentiment-star and @fig-lexicon-old-bing-sentiment-star). Lower-rated reviews generally have more negative sentiment scores, while higher-rated reviews have more positive sentiment scores. However, the Python plot shows slightly higher sentiment scores for 3-star reviews and a positive shift for 4- and 5-star reviews.
+
+![Review-Level Bing Sentiment Score by Star Rating in R](../plots/r_bing_review_sentiment_by_star.png){#fig-r-bing-review-sentiment-star width=90%}
+
+![Review-Level Bing Sentiment Score by Star Rating in Python](../plots/old_lexicon_bing_sentiment_by_star.png){#fig-lexicon-old-bing-sentiment-star width=90%}
+
+**AFINN Sentiment Analysis**
+
+The bank and platform plot shows one of the clearest differences between the R and Python results (@fig-r-afinn_avg_sentiment and @fig-lexicon-old-afinn_avg_sentiment). In the R version, some iOS results are negative, especially for Citi, Bank of America, and Chase. In the Python version, most bank-platform combinations become positive, with only Citi on iOS remaining slightly negative. This suggests that the Python version changes the strength of the bank-level interpretation.
+
+
+![Average AFINN Sentiment by Bank and Platform in R](../plots/r_afinn_avg_sentiment_bank_platform.png){#fig-r-afinn_avg_sentiment width=90%}
+
+![Average AFINN Sentiment by Bank and Platform in Python](../plots/old_lexicon_afinn_avg_sentiment_bank_platform.png){#fig-lexicon-old-afinn_avg_sentiment width=90%}
+
+**NRC Sentiment Analysis**
+
+Both versions show the same overall ranking of NRC emotion categories (@fig-r-nrc_emotion and @fig-lexicon-old-nrc_emotion). In both R and Python, *positive* is the most common category, followed by *trust*. The categories *negative*, *anticipation*, and *joy* also remain important in both versions, while *disgust* appears the least often.
+
+However, the Python plot shows higher counts overall. For example, positive NRC matches increased from 5,809 in R to 6,852 in Python, and trust increased from 4,417 to 5,160. Therefore, this result can be considered reproducible in terms of the general category ranking, but not in terms of the exact values.
+
+![Distribution of NRC Emotion Categories in R](../plots/r_nrc_emotion_distriution.png){#fig-r-nrc_emotion width=90%}
+
+![Distribution of NRC Emotion Categories in Python](../plots/old_lexicon_nrc_emotion_distribution.png){#fig-lexicon-old-nrc_emotion width=90%}
+
+**Bigrams**
+
+Both versions show that *customer service* is the most frequent bigram (@fig-r-bigrams and @fig-lexicon-old-bigrams). This means that customer service remains one of the main themes in mobile banking reviews in both R and Python. Other important phrases, such as *credit card*, *user friendly*, *savings account*, and *dark mode*, also appear in both versions. Therefore, the main topic-level findings were reproduced.
+
+However, the Python plot includes additional bigrams such as *don t*, *doesn t*, *won t*, and *t work*. These phrases come from contractions being split during tokenization. In the R version, contractions were handled differently, so these forms are less visible in the top bigrams. 
+
+
+![Top 20 Most Frequent Bigrams in R](../plots/r_bigrams_top_20.png){#fig-r-bigrams width=90%}
+
+![Top 20 Most Frequent Bigrams in Python](../plots/old_lexicon_bigrams_top_20.png){#fig-lexicon-old-bigrams width=90%}
+
+**Quantifying Negation Effect**
+
+The plot shows that negation has the strongest effect on lower-rated reviews (@fig-r-negation and @fig-lexicon-old-negation). In both R and Python, 1-star and 2-star reviews receive the largest negative correction. The Python plot shows a stronger negative correction than the R plot, especially for 1-star and 2-star reviews. For higher-rated reviews, the negation effect is much smaller. 
+
+
+![Average Negation-Induced Sentiment Correction by Star Rating in R](../plots/r_average_negation_sentiment.png){#fig-r-negation width=90%}
+
+![Average Negation-Induced Sentiment Correction by Star Rating in Python](../plots/old_lexicon_average_negation_sentiment.png){#fig-lexicon-old-negation width=90%}
+
+**Comparing Unigram vs Bigram with Negation**
+
+Both versions show the same general pattern: reviews with lower star ratings have more negative sentiment scores, while reviews with higher star ratings have more positive scores (@fig-r-overall and @fig-lexicon-overall). However, the Python plot shows a stronger negation effect than the R plot. The difference between unigram sentiment and bigram-adjusted sentiment is larger in Python, especially for low-rated reviews. For higher-rated reviews, both R and Python show a smaller difference between unigram and bigram sentiment. 
+
+![Comparison of Unigram and Bigram Sentiment Scores with Negation Handling in R](../plots/r_overall_sentiment.png){#fig-r-overall width=90%}
+
+
+![Comparison of Unigram and Bigram Sentiment Scores with Negation Handling in Python](../plots/old_lexicon_overall_sentiment.png){#fig-lexicon-overall width=90%}
 
 ## 4.2 Results Old Data vs New Data - Lexicon Analysis
 This section compares lexicon-based sentiment results across three lexicons (Bing, AFINN, NRC)
@@ -212,13 +289,14 @@ both false-negative corrections (e.g., *not happy* correctly flipped to negative
 false-positive corrections (e.g., *no problems* correctly flipped to positive) are present in
 meaningful quantities, broadly consistent with the pattern in the original data.
 
+yap yap yap
+
 ## 4.3 Comparison of BERT Sentiment Results Across Preprocessing Approaches
 This section compares the outputs of the BERT-based sentiment classifier `(nlptown/bert-base-multilingual-uncased-sentiment)` applied to two versions of the dataset: one preprocessed using the original pipeline and one using the revised approach. Both versions were scored using identical model settings and scoring logic, with predicted star ratings mapped to a normalized sentiment score in the range [0, 1]. The comparison focuses on whether the revised preprocessing affects the distribution of predicted sentiment, its alignment with actual star ratings, and the relative sentiment profiles across banks and platforms.
 
 **Distribution of BERT Predicted Sentiment**
 
 Both datasets produce a broadly similar bimodal distribution of BERT-predicted sentiment, with the majority of reviews classified at either the negative extreme (1 star) or the positive extreme (5 stars), and relatively few reviews falling in the middle ratings of 2 through 4 (@fig-bert-dist-old and @fig-bert-dist-new). However, a notable difference emerges in the balance between the two poles. In the older data, the 1-star predicted count (~1,550) is considerably closer to the 5-star predicted count (~2,000), whereas in the newer data the gap widens, with 1-star predictions declining to approximately 1,380 while 5-star predictions rise to around 2,100 (@fig-bert-dist-new). This suggests that the newer batch of reviews contains a higher proportion of positively-perceived content as classified by the model. The sentiment score density plots reinforce this pattern: both distributions are heavily concentrated at 0.0 and 1.0, reflecting the model's tendency toward confident polar predictions, with the overall shape of the density curve remaining consistent across both datasets (@fig-bert-dist-old and @fig-bert-dist-new).
-
 
 ![Distribution of BERT predicted star ratings and sentiment scores — older dataset](plots/bert_old_distribution.png){#fig-bert-dist-old width=90%}
 
@@ -272,8 +350,50 @@ Both datasets show a strong positive correlation between BERT sentiment scores a
 
 Both datasets show a statistically significant difference in BERT sentiment scores between Android and iOS platforms (p < 0.001 in both cases), confirming that platform is a meaningful source of variation in user sentiment regardless of time period. The U statistic is larger in the older data (3,379,410 vs 3,174,169), which is consistent with the older dataset having slightly more observations (n = 4,518 vs 4,478). While both p-values are extremely small, the older data yields a more extreme test statistic, suggesting the platform gap in sentiment may have been marginally more pronounced in the earlier period, which aligns with what was observed in the bank-by-platform plots (@fig-bert-bank-old and @fig-bert-bank-new).
 
-## 4.4 Results AFINN vs BERT - New Data
+## 4.4 Comparison of AFINN and BERT Sentiment — New Data
 
+This section compares the outputs of the AFINN lexicon-based model and the BERT-based sentiment classifier (`nlptown/bert-base-multilingual-uncased-sentiment`) applied to the newer dataset. AFINN assigns integer scores (−5 to +5) to matched tokens and aggregates them at the review level, while BERT predicts a 1–5 star rating from full review text, normalised to a sentiment score in [0, 1]. The comparison focuses on validity against actual star ratings, score distributions, and sentiment profiles across banks and platforms.
+
+**Distribution of Predicted Sentiment**
+
+The two models produce structurally different distributions. AFINN sum scores are unimodal and centred near zero, with a continuous range driven by review length and word count variation. BERT scores are strongly bimodal, with sharp density spikes at 0 - 1, reflecting the model's tendency to assign confident polar predictions (@fig-bert-box-new). AFINN therefore captures gradations of sentiment intensity across a wide unbounded scale, while BERT tends to classify reviews as clearly positive or clearly negative with little ambiguity in between.
+
+A secondary structural difference is coverage: AFINN matched scored tokens in 86.8% of reviews, leaving 13.2% unscored due to out-of-vocabulary words. BERT scores all 4,478 reviews without missing values, as it operates on full review text rather than word-by-word lexicon lookup.
+
+**Relationship Between Sentiment Scores and Actual Star Ratings**
+
+Both models produce sentiment scores that increase monotonically with star ratings, confirming convergent validity. However, BERT outperforms AFINN in alignment with user-assigned ratings. AFINN achieves a Pearson correlation of r = 0.539, while BERT achieves r = 0.866 — a difference of 0.33 correlation points, reflecting BERT's capacity to capture contextual meaning beyond individual word scores.
+
+Boxplots by star rating reveal a shared weakness at the 3-star midpoint: for genuinely mixed reviews, both AFINN and BERT show high variance and overlap with adjacent star categories. Neither model reliably distinguishes neutral sentiment from mildly positive or mildly negative reviews.
+
+![BERT sentiment score by star rating — newer dataset](plots/bert_new_sentiment_score_boxplot.png){#fig-bert-box-new width=90%}
+
+**Average Sentiment Scores by Bank and Platform**
+
+Both models agree on the direction of cross-bank sentiment differences in most cases. The strongest point of agreement is Wells Fargo iOS, which ranks highest under both models, and Citi iOS, which ranks lowest under both (AFINN mean_sum = −0.72, the only negative cell across all bank–platform combinations; BERT score ≈ 0.15).
+
+The Citi platform is the most striking finding shared by both models: Citi Android reviews score positively under AFINN (mean_sum = 2.62) and very highly under BERT (≈ 0.90), while Citi iOS reviews are rated negatively by AFINN and near-zero by BERT. The magnitude of this divergence is more extreme under BERT.
+
+For Bank of America, both models find Android reviews more positive than iOS, with the gap amplified under BERT. For Chase and Marcus by Goldman Sachs, both models find iOS reviews slightly more positive than Android (Chase AFINN: 2.99 vs 1.93; Chase BERT: ≈ 0.62 vs ≈ 0.59; Marcus AFINN: 3.12 vs 2.46; Marcus BERT: ≈ 0.50 vs ≈ 0.60), with consistent direction and small absolute differences.
+
+![Average BERT sentiment score by bank and platform — newer dataset](plots/bert_new_banknplatform.png){#fig-bert-bank-new width=90%}
+
+![Average AFINN sentiment score by bank and platform — newer dataset](plots/AFINN_new_sentiment_barchart.png){#fig-afinn-bank-new width=90%}
+
+**Summary**
+
+| Dimension | AFINN | BERT |
+|---|---|---|
+| Correlation with star rating | r = 0.539 | r = 0.866 |
+| 95% CI | [0.516, 0.561] | [0.859, 0.873] |
+| Review coverage | 86.8% (3,885 / 4,478) | 100% (4,478 / 4,478) |
+| Score distribution | Unimodal, centred near 0 | Bimodal, peaks at 0 and 1 |
+| 3-star reviews | High variance, unreliable | High variance, unreliable |
+| Citi iOS | −0.72 (only negative cell) | ≈ 0.15 (lowest cell) |
+| Wells Fargo iOS | 3.80 (highest cell) | ≈ 0.95 (highest cell) |
+| Platform direction agreement | — | Consistent across all banks |
+
+Both models consistently identify the same outlier patterns — Citi's platform asymmetry and Wells Fargo iOS's high sentiment — suggesting these findings are robust to method choice. Where they diverge most is in resolving ambiguous mid-range reviews and in overall alignment with star ratings, where BERT's higher correlation (r = 0.866 vs 0.539) and full coverage make it the more reliable instrument for this dataset.
 
 
 # 5 Discussion
