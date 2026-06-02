@@ -469,13 +469,12 @@ the directional conclusions.
 
 - **Lexicon domain mismatch:** all three lexicons were built for general English, not financial app reviews; domain terms like *overdraft*, *Zelle*, and *wire transfer* are likely absent, leaving financially-specific sentiment unscored.
 - **Negation scope:** the bigram correction only handles two-word negation windows; longer-range constructions like *I can no longer trust this app* are not captured.
-- **Asymmetric preprocessing:** the old pipeline includes lemmatisation while the new does not; bigram construction exists in the new pipeline but not the old, making cross-dataset lexicon comparisons not strictly like-for-like.
 - **Temporal confounding:** the two datasets cover different time windows, so observed sentiment differences may reflect app updates or service changes rather than stable bank-level properties.
 - **Non-representative sampling:** both scrapers return reviews ordered by recency, not randomly, introducing recency bias and over-representing users who review immediately after major updates or outages.
 - **Text sparsity in old data:** the older dataset has a median review length of 0 words, meaning the majority of observations carry no text; token-level sentiment analysis operates on a small, potentially non-representative subset.
 - **Label imbalance:** both datasets skew heavily toward 1-star and 5-star ratings, leaving 3-star neutral reviews underrepresented, consistent with the high variance observed at the midpoint under both models.
 - **BERT domain mismatch:** the `nlptown` model was fine-tuned on general product reviews, not banking app reviews specifically; banking-specific language may fall outside its training distribution.
-- **Platform label inconsistency:** the old dataset's rating distribution plot was generated before platform mapping, producing four panels instead of two and reflecting a preprocessing artefact rather than a genuine structural difference from the new data.
+- **Lack of human validation:** no manual annotation was performed to validate the sentiment classifications or to identify domain-specific sentiment expressions that may be missed by lexicon or model-based approaches.
 
 # 6 Generative AI Disclosure
 
