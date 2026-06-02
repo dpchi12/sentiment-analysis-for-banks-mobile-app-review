@@ -47,6 +47,9 @@ sentiment-analysis-for-banks-mobile-app-review/
 │   │
 │   └── scraper.ipynb                 # scraper used to collect the new dataset
 │
+├── original_r_report
+│   ├──original-sentiment-analysis-report.html  #previous sentiment analysis project in R
+│  
 ├── Model (old data)/
 │   ├── old_preprocessing.ipynb       # Python preprocessing for the original dataset
 │   └── old_approach_sentiment_analysis.ipynb
