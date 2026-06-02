@@ -14,6 +14,7 @@ format:
     number-sections: false
     fig-width: 7
     fig-height: 4
+    fig-pos: "H"
 execute:
   echo: true
   warning: false
@@ -73,10 +74,9 @@ The raw review texts in the older dataset are notably short on average, with a m
 ## 2.2 Exploratory Data Analysis of the New Dataset (New Data)
 
 The new dataset was collected using a dedicated scraper (`Dataset/scraper.ipynb`) targeting the same five banks and both platforms. The scraping window covers a more recent period - *early 2026*. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window.
-Upon checking, the rating distribution of the new data is similar to the original one, with the majority of reviews are at extreme positions, either 1 or 5 stars (@fig-star-dist-new).
+Upon checking, the rating distribution of the new data is similar to the original one, with the majority of reviews are at extreme positions, either 1 or 5 stars (@fig-eda-rating-new).
 
 ![Rating distribution by platform — newer dataset (raw data)](plots/rating_dist_platform_new.png){#fig-eda-rating-new width=90%}
-
 
 The newer dataset contains only two platforms, app_store and google_play, in contrast to the four platforms present in the older data (@fig-eda-rating-old and @fig-eda-rating-new). Both platforms follow the same J-shaped pattern seen previously, with google_play showing a more pronounced positive skew, approximately 2,100 five-star reviews against 500 one-star reviews — while app_store shows a more balanced split of roughly 900 one-star and 1,200 five-star reviews.
 
@@ -241,9 +241,9 @@ The plot shows that negation has the strongest effect on lower-rated reviews (@f
 Both versions show the same general pattern: reviews with lower star ratings have more negative sentiment scores, while reviews with higher star ratings have more positive scores (@fig-r-overall and @fig-lexicon-overall). However, the Python plot shows a stronger negation effect than the R plot. The difference between unigram sentiment and bigram-adjusted sentiment is larger in Python, especially for low-rated reviews. For higher-rated reviews, both R and Python show a smaller difference between unigram and bigram sentiment. 
 
 ::: {layout-ncol=2 fig-pos="H"}
-![Comparison of Unigram and Bigram Sentiment Scores with Negation Handling in R](plots/r_overall_sentiment.png){#fig-r-overall width=90% fig-pos="H"}
+![Comparison of Unigram and Bigram Sentiment Scores with Negation Handling in R](plots/r_overall_sentiment.png){#fig-r-overall width=90% }
 
-![Comparison of Unigram and Bigram Sentiment Scores with Negation Handling in Python](plots/old_lexicon_overall_sentiment.png){#fig-lexicon-overall width=90% fig-pos="H"}
+![Comparison of Unigram and Bigram Sentiment Scores with Negation Handling in Python](plots/old_lexicon_overall_sentiment.png){#fig-lexicon-overall width=90%}
 :::
 
 ## 4.2 Results Old Data vs New Data - Lexicon Analysis
@@ -332,36 +332,36 @@ This section compares the outputs of the BERT-based sentiment classifier `(nlpto
 
 Both datasets produce a broadly similar bimodal distribution of BERT-predicted sentiment, with the majority of reviews classified at either the negative extreme (1 star) or the positive extreme (5 stars), and relatively few reviews falling in the middle ratings of 2 through 4 (@fig-bert-dist-old and @fig-bert-dist-new). However, a notable difference emerges in the balance between the two poles. In the older data, the 1-star predicted count (~1,550) is considerably closer to the 5-star predicted count (~2,000), whereas in the newer data the gap widens, with 1-star predictions declining to approximately 1,380 while 5-star predictions rise to around 2,100 (@fig-bert-dist-new). This suggests that the newer batch of reviews contains a higher proportion of positively-perceived content as classified by the model. The sentiment score density plots reinforce this pattern: both distributions are heavily concentrated at 0.0 and 1.0, reflecting the model's tendency toward confident polar predictions, with the overall shape of the density curve remaining consistent across both datasets (@fig-bert-dist-old and @fig-bert-dist-new).
 
-![Distribution of BERT predicted star ratings and sentiment scores — older dataset](plots/bert_old_distribution.png){#fig-bert-dist-old width=90%}
+![Distribution of BERT predicted star ratings and sentiment scores — older dataset](plots/bert_old_distribution.png){#fig-bert-dist-old width=90% fig-pos="H"}
 
-![Distribution of BERT predicted star ratings and sentiment scores — newer dataset](plots/bert_new_distribution.png){#fig-bert-dist-new width=90%}
+![Distribution of BERT predicted star ratings and sentiment scores — newer dataset](plots/bert_new_distribution.png){#fig-bert-dist-new width=90% fig-pos="H"}
 
 
 **Relationship Between BERT Scores and Actual Star Ratings**
 
 The relationship between BERT sentiment scores and actual star ratings is consistent across both datasets (@fig-bert-box-old and @fig-bert-box-new). In both cases, the model assigns near-zero sentiment scores to 1-star reviews with very tight interquartile ranges, indicating high confidence in negative classifications. Scores rise progressively through 2- and 3-star ratings, with 3-star reviews showing the widest spread, reflecting the model's uncertainty around neutral or mixed-sentiment reviews. Reviews rated 4 and 5 stars are predominantly scored above the neutral threshold of 0.5, with 5-star reviews showing a highly compressed distribution concentrated at 1.0. The two datasets are visually near-identical in this regard (@fig-bert-box-old and @fig-bert-box-new), suggesting that the shift in review composition between the older and newer data did not meaningfully alter the model's ability to align predicted sentiment with actual star ratings.
 
-![BERT sentiment score by star rating — older dataset](plots/bert_old_sentiment_score_boxplot.png){#fig-bert-box-old width=90%}
+![BERT sentiment score by star rating — older dataset](plots/bert_old_sentiment_score_boxplot.png){#fig-bert-box-old width=90% fig-pos="H"}
 
-![BERT sentiment score by star rating — newer dataset](plots/bert_new_sentiment_score_boxplot.png){#fig-bert-box-new width=90%}
+![BERT sentiment score by star rating — newer dataset](plots/bert_new_sentiment_score_boxplot.png){#fig-bert-box-new width=90% fig-pos="H"}
 
 
 **Average BERT Sentiment Scores by Bank and Platform**
 
 Across both datasets, a consistent platform gap is visible: Android reviews tend to receive higher BERT sentiment scores than iOS reviews for most banks (@fig-bert-bank-old and @fig-bert-bank-new). Citi stands out in both periods, with Android scores approaching 0.9 while iOS scores remain well below the neutral threshold of 0.5, making it the most polarised bank by platform in both the older and newer data. Bank of America shows a similar pattern, with strong Android sentiment but iOS scores falling below neutral in both datasets. Wells Fargo is the only bank where both platforms consistently score above neutral, and remains so across both periods. One notable structural difference between the two datasets is that Chase appears in the older data (@fig-bert-bank-old) with both platforms scoring above neutral, whereas in the newer data (@fig-bert-bank-new) Chase drops to the bottom of the ranking with iOS sentiment just at the neutral threshold. Marcus by Goldman Sachs remains relatively stable across both periods, with Android scores moderately above neutral and iOS scores hovering near 0.5.
 
-![Average BERT sentiment score by bank and platform — older dataset](plots/bert_old_banknplatform.png){#fig-bert-bank-old width=90%}
+![Average BERT sentiment score by bank and platform — older dataset](plots/bert_old_banknplatform.png){#fig-bert-bank-old width=90% fig-pos="H"}
 
-![Average BERT sentiment score by bank and platform — newer dataset](plots/bert_new_banknplatform.png){#fig-bert-bank-new width=90%}
+![Average BERT sentiment score by bank and platform — newer dataset](plots/bert_new_banknplatform.png){#fig-bert-bank-new width=90% fig-pos="H"}
 
 
 **Average BERT Sentiment Scores by Operating Platform**
 
 The per-platform breakdown of BERT sentiment scores by star rating reveals a largely stable pattern across both datasets (@fig-bert-plat-old and @fig-bert-plat-new). On Android, both the older and newer data show near-identical distributions: 1-star reviews are tightly concentrated at 0.0, scores rise progressively through 2 and 3 stars with widening spread, and 4- and 5-star reviews sit predominantly above the neutral threshold. The iOS platform tells a slightly different story between the two periods. In the older data (@fig-bert-plat-old), the iOS 4-star distribution closely mirrors its Android counterpart, with a median around 0.75. In the newer data (@fig-bert-plat-new), the iOS 4-star box shifts noticeably, with a lower median of approximately 0.6 and a wider interquartile range, suggesting greater variability in how the model scores moderately positive iOS reviews in the newer period. Across both datasets and platforms, 1- and 2-star distributions remain consistently low and 5-star reviews remain compressed near 1.0, indicating that the model's confidence at the sentiment extremes is robust regardless of platform or time period.
 
-![BERT sentiment score by star rating per platform — older dataset](plots/bert_old_per_platform.png){#fig-bert-plat-old width=90%}
+![BERT sentiment score by star rating per platform — older dataset](plots/bert_old_per_platform.png){#fig-bert-plat-old width=90% fig-pos="H"}
 
-![BERT sentiment score by star rating per platform — newer dataset](plots/bert_new_per_platform.png){#fig-bert-plat-new width=90%}
+![BERT sentiment score by star rating per platform — newer dataset](plots/bert_new_per_platform.png){#fig-bert-plat-new width=90% fig-pos="H"}
 
 **Statistical Correlation Between BERT Scores and Star Ratings**
 
@@ -400,7 +400,7 @@ Both models produce sentiment scores that increase monotonically with star ratin
 
 Boxplots by star rating reveal a shared weakness at the 3-star midpoint: for genuinely mixed reviews, both AFINN and BERT show high variance and overlap with adjacent star categories. Neither model reliably distinguishes neutral sentiment from mildly positive or mildly negative reviews.
 
-![BERT sentiment score by star rating — newer dataset](plots/bert_new_sentiment_score_boxplot.png){#fig-bert-box-new width=90%}
+![BERT sentiment score by star rating — newer dataset](plots/bert_new_sentiment_score_boxplot.png){#fig-bert-box-new width=90% fig-pos="H"}
 
 **Average Sentiment Scores by Bank and Platform**
 
@@ -410,9 +410,9 @@ The Citi platform is the most striking finding shared by both models: Citi Andro
 
 For Bank of America, both models find Android reviews more positive than iOS, with the gap amplified under BERT. For Chase and Marcus by Goldman Sachs, both models find iOS reviews slightly more positive than Android (Chase AFINN: 2.99 vs 1.93; Chase BERT: ≈ 0.62 vs ≈ 0.59; Marcus AFINN: 3.12 vs 2.46; Marcus BERT: ≈ 0.50 vs ≈ 0.60), with consistent direction and small absolute differences.
 
-![Average BERT sentiment score by bank and platform — newer dataset](plots/bert_new_banknplatform.png){#fig-bert-bank-new width=90%}
+![Average BERT sentiment score by bank and platform — newer dataset](plots/bert_new_banknplatform.png){#fig-bert-bank-new width=90% fig-pos="H"}
 
-![Average AFINN sentiment score by bank and platform — newer dataset](plots/AFINN_new_sentiment_barchart.png){#fig-afinn-bank-new width=90% fig-pos="H"}
+![Average AFINN sentiment score by bank and platform — newer dataset](plots/AFINN_new_sentiment_barchart.png){#fig-afinn-sent-bank-new width=90% fig-pos="H"}
 
 **Summary**
 
