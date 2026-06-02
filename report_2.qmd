@@ -325,8 +325,6 @@ both false-negative corrections (e.g., *not happy* correctly flipped to negative
 false-positive corrections (e.g., *no problems* correctly flipped to positive) are present in
 meaningful quantities, broadly consistent with the pattern in the original data.
 
-yap yap yap
-
 ## 4.3 Comparison of BERT Sentiment Results Across Preprocessing Approaches
 This section compares the outputs of the BERT-based sentiment classifier `(nlptown/bert-base-multilingual-uncased-sentiment)` applied to two versions of the dataset: one preprocessed using the original pipeline and one using the revised approach. Both versions were scored using identical model settings and scoring logic, with predicted star ratings mapped to a normalized sentiment score in the range [0, 1]. The comparison focuses on whether the revised preprocessing affects the distribution of predicted sentiment, its alignment with actual star ratings, and the relative sentiment profiles across banks and platforms.
 
@@ -414,7 +412,7 @@ For Bank of America, both models find Android reviews more positive than iOS, wi
 
 ![Average BERT sentiment score by bank and platform — newer dataset](plots/bert_new_banknplatform.png){#fig-bert-bank-new width=90%}
 
-![Average AFINN sentiment score by bank and platform — newer dataset](plots/AFINN_new_sentiment_barchart.png){#fig-afinn-bank-new width=90%}
+![Average AFINN sentiment score by bank and platform — newer dataset](plots/AFINN_new_sentiment_barchart.png){#fig-afinn-bank-new width=90% fig-pos="H"}
 
 **Summary**
 
@@ -436,9 +434,7 @@ Both models consistently identify the same outlier patterns — Citi's platform 
 
 ## 5.1 Reproducibility Assessment
 
-Something about environment in python
-Overall assesment about reproducibility, minor differences, but overall conclusions hold
-Slight conclusions about the original study's robustness to language and implementation choices
+The R-to-Python reproduction was successful when interpreting the main conclusions, but the numerical results were not identical. In both versions, the same general patterns appeared. Positive sentiment was more common than negative sentiment, higher star ratings were linked to higher sentiment scores, Android reviews were usually more positive than iOS reviews, and negation correction had the strongest effect on low-rated reviews. However, some differences were expected due to a different programming environment. The Python version used different packages than R.
 
 The R-to-Python translation demonstrates that the core analytical conclusions
 of the original study are reproducible across languages. Minor numerical
