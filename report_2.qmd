@@ -64,39 +64,75 @@ The method of scrapping differs for each platform due to their distinct APIs and
 
 The original dataset was collected in 2025 using a combination of web scraping and API access methods. It includes reviews from the same five banks and both platforms, but covers a different time period than the new data. The dataset is stored as CSV files, one per bank and platform, with columns for review text, star rating, date, and other metadata. The original analysis applied lexicon-based sentiment scoring to this dataset to derive insights about user sentiment and its relationship to star ratings.
 
+![Rating distribution by platform — older dataset (raw data)](../plots/rating_dist_platform_old.png){#fig-eda-rating-old width=95%}
+
+The raw rating distribution across platforms in the older dataset reveals a consistent J-shaped pattern, where 1-star and 5-star reviews dominate across all four platforms (@fig-eda-rating-old). Android and iOS show the largest review volumes overall, with Android having approximately 3,000 five-star reviews and around 1,000 one-star reviews, while iOS shows a more balanced split between the two extremes with roughly 2,000 one-star and 1,500 five-star reviews. The app_store and google_play platforms follow a similar J-shaped pattern but at lower volumes, each contributing around 1,000 reviews at both the 1-star and 5-star ends. Mid-range ratings of 2, 3, and 4 stars are consistently sparse across all platforms, which is a common characteristic of app store review data where users tend to leave reviews only when strongly satisfied or dissatisfied.
+
+| Statistic | Value |
+|---|---|
+| count | 14,485 |
+| mean | 8.63 |
+| std | 21.80 |
+| min | 0.0 |
+| 25% | 0.0 |
+| 50% | 0.0 |
+| 75% | 6.0 |
+| max | 411.0 |
+
+
+The raw review texts in the older dataset are notably short on average, with a mean of 8.63 words and a median of 0.0, indicating that the majority of reviews contain no text at all and consist only of a star rating. Among reviews that do contain text, length varies considerably, ranging from a single word up to 411 words with a standard deviation of 21.80.
 
 ## 2.2 Exploratory Data Analysis of the New Dataset (New Data)
 
 The new dataset was collected using a dedicated scraper (`Dataset/scraper.ipynb`) targeting the same five banks and both platforms. The scraping window covers a more recent period - *early 2026*. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window.
 Upon checking, the rating distribution of the new data is similar to the original one, with the majority of reviews are at extreme positions, either 1 or 5 stars (@fig-star-dist-new).
 
-![Rating distribution by platform — new dataset](plots/star_dist_new.png){#fig-star-dist-new width=90%}
+![Rating distribution by platform — newer dataset (raw data)](../plots/rating_dist_platform_new.png){#fig-eda-rating-new width=90%}
 
-The top 20 most frequent bigrams in the new dataset reveal a clear thematic structure in how users discuss their mobile banking experience (@fig-bigram-new). Customer service is by far the most frequent bigram (~220 occurrences), nearly 25% more common than the second-ranked Wells Fargo (~175), which appears frequently as a named entity within reviews of that bank. Credit card (~150) and user friendly (~115) round out the top four, reflecting that product features and usability remain central to how users articulate their experience.
 
-Several bigrams signal recurring friction points: no longer (~65), bring back (~42), please fix (~38), and blank screen (~37) all indicate users reacting to feature removals or technical failures.
+The newer dataset contains only two platforms, app_store and google_play, in contrast to the four platforms present in the older data (@fig-eda-rating-old and @fig-eda-rating-new). Both platforms follow the same J-shaped pattern seen previously, with google_play showing a more pronounced positive skew, approximately 2,100 five-star reviews against 500 one-star reviews — while app_store shows a more balanced split of roughly 900 one-star and 1,200 five-star reviews.
 
-![Top 20 Most Frequent Bigrams in Mobile Banking Reviews — new dataset](plots/bigram_new.png){#fig-bigram-new width=90%}
+| Statistic | Value |
+|---|---|
+| count | 5,450 |
+| mean | 22.04 |
+| std | 29.05 |
+| min | 1.0 |
+| 25% | 4.0 |
+| 50% | 11.0 |
+| 75% | 28.0 |
+| max | 377.0 |
+
+Unlike the older dataset, the newer data contains no empty reviews, with a minimum length of 1 word and a median of 11 words, suggesting the newer collection was filtered to retain only reviews with actual text. Review length still varies considerably, ranging up to 377 words with a mean of 22.04 and a standard deviation of 29.05.
 
 ## 2.3 Data Preprocessing
+
 ### 2.3.1 Data Preprocessing for Lexicon-Based Methods
-
-
 Preprocessing follows the same logical steps in both the R original and the Python replications:
 
-1. **Import and combine** - all per-bank CSVs are concatenated into a single dataframe
-2. **Bank and platform standardisation** — filenames are parsed to extract bank names; platform codes (`app_store` → `iOS`, `google_play` → `Android`) are mapped to readable labels
-3. **Type coercion** — `rating` is cast to numeric; `date` is parsed to datetime
-4. **Language detection** — reviews not detected as English are removed (using `langdetect` in Python)
-5. **Raw text construction** — `title` and `review` fields are concatenated into `raw_text`
-6. **Tokenisation and stopword removal** — words are extracted using regex; a custom stopword list (NLTK English stopwords + domain terms: *app, bank, banking, mobile, iphone, apple, android, phone*) is applied
-7. **Bigram construction** — adjacent word pairs are extracted from cleaned text, with negators (*not, never, no, cannot*, etc.) explicitly excluded from the stopword filter so they are preserved in bigrams
+1. **Import and combine** — per-bank CSV files are loaded and concatenated into a single dataframe, with a `source_file` column added to retain the origin filename.
+2. **Bank and platform standardisation** — bank names are extracted from filenames by stripping the `__combined_us.csv` suffix and converting underscores to title case; platform codes are mapped from `app_store` → `iOS` and `google_play` → `Android`.
+3. **Type coercion** — `rating` is cast to numeric and `date` is parsed to datetime, with invalid values coerced to `NaN`.
+4. **Raw text construction** — the `title` and `review` fields are concatenated into a single `raw_text` column, with missing values filled as empty strings.
+5. **Language detection** — `langdetect` is applied to `raw_text` with a fixed seed (`DetectorFactory.seed = 0`) for reproducibility; only reviews detected as English (`"en"`) are retained.
+6. **Tokenisation and stopword removal** — text is lowercased and tokenised using the regex pattern `\b[a-z]+\b`; a custom stopword list combining scikit-learn's `ENGLISH_STOP_WORDS` with eight domain-specific terms (*app, bank, banking, mobile, iphone, apple, android, phone*) is applied.
+7. **Lemmatisation** *(old data only)* — tokens are lemmatised using NLTK's `WordNetLemmatizer` with POS-aware tagging, mapping adjectives, verbs, nouns, and adverbs to their base forms before sentiment matching.
+8. **Bigram construction** *(new data only)* — adjacent word pairs are extracted from `raw_text` using a separate stopword list that explicitly excludes 25 negators (*no, not, never, cannot*, etc.) so they are preserved in bigrams for downstream negation correction.
 
 ### 2.3.2 Data Preprocessing for Transformer Methods
 
-For the transformer approach, an additional cleaning step keeps punctuation intact (since BERT tokenisers handle it natively) and removes URLs.
+For the transformer approach, an additional cleaning step keeps punctuation intact (since BERT tokenisers handle it natively) and removes URLs, which includes: 
 
+Preprocessing for the transformer-based method follows these steps, applied identically to both the original and new datasets:
 
+1. **Emoji demojization** — emojis are converted to their text equivalents using the `emoji.demojize()` function, preserving the semantic content of emoji-heavy reviews rather than discarding it.
+2. **Lowercasing** — all text is converted to lowercase for consistency.
+3. **URL removal** — HTTP and WWW URLs are stripped using regex (`http\S+|www\S+`).
+4. **HTML tag removal** — any HTML tags are removed using regex (`<.*?>`).
+5. **Unicode cleaning** — non-printable and special unicode characters are filtered out by removing characters whose unicode category falls in `So`, `Cs`, `Co`, or `Cn`.
+6. **Repeated character normalisation** — sequences of three or more identical characters are collapsed to two (e.g. *sooooo* → *soo*), reducing noise from informal writing.
+7. **Punctuation removal** — all non-word, non-whitespace characters are stripped, keeping only alphanumeric tokens and spaces.
+8. **Whitespace normalisation** — multiple consecutive spaces are collapsed to a single space and leading/trailing whitespace is removed.
 
 # 3. Methodology
 ## 3.1 Lexicon-Based Sentiment Analysis
