@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# R
+.Rhistory
+.RData
+
+# Generated plots
+plots/
+
+# Quarto generated files
+*.html
+report_2_files/
+report_2.pdf
+fix_rendering.py
+
+# Python
+__pycache__/
+*.pyc
