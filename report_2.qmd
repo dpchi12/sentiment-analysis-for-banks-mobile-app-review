@@ -9,18 +9,6 @@ author:
 date: 06-01-2026
 bibliography: references.bib
 format:
-  html:
-    toc: true
-    toc-depth: 3
-    toc-float: true
-    toc-title: "Contents"
-    theme: lumen
-    smooth-scroll: true
-    code-fold: true
-    code-tools: true
-    number-sections: false
-    fig-width: 9
-    fig-height: 5
   pdf:
     toc: true
     number-sections: false
@@ -64,7 +52,7 @@ The method of scrapping differs for each platform due to their distinct APIs and
 
 The original dataset was collected in 2025 using a combination of web scraping and API access methods. It includes reviews from the same five banks and both platforms, but covers a different time period than the new data. The dataset is stored as CSV files, one per bank and platform, with columns for review text, star rating, date, and other metadata. The original analysis applied lexicon-based sentiment scoring to this dataset to derive insights about user sentiment and its relationship to star ratings.
 
-![Rating distribution by platform — older dataset (raw data)](../plots/rating_dist_platform_old.png){#fig-eda-rating-old width=95%}
+![Rating distribution by platform — older dataset (raw data)](plots/rating_dist_platform_old.png){#fig-eda-rating-old width=95%}
 
 The raw rating distribution across platforms in the older dataset reveals a consistent J-shaped pattern, where 1-star and 5-star reviews dominate across all four platforms (@fig-eda-rating-old). Android and iOS show the largest review volumes overall, with Android having approximately 3,000 five-star reviews and around 1,000 one-star reviews, while iOS shows a more balanced split between the two extremes with roughly 2,000 one-star and 1,500 five-star reviews. The app_store and google_play platforms follow a similar J-shaped pattern but at lower volumes, each contributing around 1,000 reviews at both the 1-star and 5-star ends. Mid-range ratings of 2, 3, and 4 stars are consistently sparse across all platforms, which is a common characteristic of app store review data where users tend to leave reviews only when strongly satisfied or dissatisfied.
 
@@ -87,7 +75,7 @@ The raw review texts in the older dataset are notably short on average, with a m
 The new dataset was collected using a dedicated scraper (`Dataset/scraper.ipynb`) targeting the same five banks and both platforms. The scraping window covers a more recent period - *early 2026*. While the column structure is identical to the old dataset, the new data captures a different temporal slice of user opinions and may reflect changes in app features, service quality, or competitive dynamics that occurred after the original collection window.
 Upon checking, the rating distribution of the new data is similar to the original one, with the majority of reviews are at extreme positions, either 1 or 5 stars (@fig-star-dist-new).
 
-![Rating distribution by platform — newer dataset (raw data)](../plots/rating_dist_platform_new.png){#fig-eda-rating-new width=90%}
+![Rating distribution by platform — newer dataset (raw data)](plots/rating_dist_platform_new.png){#fig-eda-rating-new width=90%}
 
 
 The newer dataset contains only two platforms, app_store and google_play, in contrast to the four platforms present in the older data (@fig-eda-rating-old and @fig-eda-rating-new). Both platforms follow the same J-shaped pattern seen previously, with google_play showing a more pronounced positive skew, approximately 2,100 five-star reviews against 500 one-star reviews — while app_store shows a more balanced split of roughly 900 one-star and 1,200 five-star reviews.
@@ -111,7 +99,7 @@ Unlike the older dataset, the newer data contains no empty reviews, with a minim
 Preprocessing follows the same logical steps in both the R original and the Python replications:
 
 1. **Import and combine** — per-bank CSV files are loaded and concatenated into a single dataframe, with a `source_file` column added to retain the origin filename.
-2. **Bank and platform standardisation** — bank names are extracted from filenames by stripping the `__combined_us.csv` suffix and converting underscores to title case; platform codes are mapped from `app_store` → `iOS` and `google_play` → `Android`.
+2. **Bank and platform name standardisation** — bank names are extracted from filenames by stripping the `__combined_us.csv` suffix and converting underscores to title case; platform codes are mapped from `app_store` → `iOS` and `google_play` → `Android`.
 3. **Type coercion** — `rating` is cast to numeric and `date` is parsed to datetime, with invalid values coerced to `NaN`.
 4. **Raw text construction** — the `title` and `review` fields are concatenated into a single `raw_text` column, with missing values filled as empty strings.
 5. **Language detection** — `langdetect` is applied to `raw_text` with a fixed seed (`DetectorFactory.seed = 0`) for reproducibility; only reviews detected as English (`"en"`) are retained.
