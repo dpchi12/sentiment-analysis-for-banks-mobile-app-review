@@ -56,8 +56,9 @@ sentiment-analysis-for-banks-mobile-app-review/
 │   ├── new_preprocessing.ipynb       # Preprocessing for the new dataset 
 │   └── new_data_sentiment_analysis.ipynb
 │       # Lexicon + transformer analysis on new data
-│
-├── report.qmd                        
+│ 
+├── final_report.pdf                  #final report in pdf ready format
+├── final_report.qmd                        
 ├── requirements.txt                  # Python dependencies 
 └── README.md                         
 ```
